@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuh uh</title>
+    <style>
+        * {
+            font-family: "Inter", sans-serif;
+            color: white;
+            margin: 0;
+        }
+
+        h1 {
+            width: 100%;
+            text-align: center;
+        }
+
+        body, html {
+            display: flex;
+            height: 100%;
+
+            flex-direction: column;
+            align-content: stretch;
+
+            background-color: $$default_bg_color;
+        }
+
+        body > * {
+            flex: 1;
+
+            align-self: center;
+
+            margin: 0 auto;
+        }
+
+        p {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            margin-left: 5px;
+            background-color: transparent;
+            border: none;
+            color: #4040FF;
+            text-decoration: underline;
+            font-size: 1em;
+        }
+
+        .vertical-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        #cdiv {
+            display: flex;
+        }
+
+        #game-container {         
+            width: min(80vw, 80vh, 800px);
+
+            aspect-ratio: 1 / 1;
+
+            background-color: black;
+
+            border-radius: 10px;
+        }
+
+        .char-row {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="vertical-center">¯\_(ツ)_/¯</h1>
+    <div id="cdiv">
+        <canvas id="game-container">
+
+        </canvas>
+    </div>
+    <div class="vertical-center">
+        <p class="vertical-center">This is a 404 page, if it wasn't obvious by now.</p>
+        <button id="more-button">Learn more</button>
+    </div>
+    <script>
+        const rows = 20;
+        const columns = 20;
+
+        const canvas = document.getElementById("game-container");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        const tileWidth = canvas.width / columns;
+        const tileHeight = canvas.height / rows;
+
+        let snakeDir = "r";
+        let snakeTargetDir = "r";
+        let snakeLength = 3;
+
+        const snake = [
+            { x: Math.round(columns / 2 - 1), y: Math.round(rows / 2) },
+            { x: Math.round(columns / 2),     y: Math.round(rows / 2) },
+            { x: Math.round(columns / 2 + 1), y: Math.round(rows / 2) }
+        ];
+
+        for (const segment of snake) {
+            ctx.fillRect(
+                Math.round(segment.x * tileWidth),
+                Math.round(segment.y * tileHeight),
+                Math.round(tileWidth),
+                Math.round(tileHeight)
+            );
+        }
+
+        let shouldGrow = false;
+
+        const foodPos = { x: Math.floor(Math.random() * columns), y: Math.floor(Math.random() * rows) };
+        ctx.fillStyle = "red";
+        ctx.fillRect(
+            Math.round(foodPos.x * tileWidth),
+            Math.round(foodPos.y * tileHeight),
+            Math.round(tileWidth),
+            Math.round(tileHeight)
+        );
+
+        function updateSnake() {
+            const modifyField = snakeDir === "l" || snakeDir === "r" ? "x" : "y";
+
+            let newSegment = { x: snake[snake.length - 1].x, y: snake[snake.length - 1].y };
+
+            newSegment[modifyField] += (snakeDir === "l" || snakeDir === "u") ? -1 : 1;
+
+            snake.push(newSegment);
+
+            ctx.clearRect(
+                Math.round(snake[0].x * tileWidth),
+                Math.round(snake[0].y * tileHeight),
+                Math.round(tileWidth),
+                Math.round(tileHeight)
+            );
+
+            ctx.fillStyle = "lime";
+            ctx.fillRect(
+                Math.round(snake[snake.length - 1].x * tileWidth),
+                Math.round(snake[snake.length - 1].y * tileHeight),
+                Math.round(tileWidth),
+                Math.round(tileHeight)
+            );
+
+            if (snake[snake.length - 1].x === foodPos.x && snake[snake.length - 1].y === foodPos.y) {
+                shouldGrow = true;
+                snakeLength++;
+                foodPos.x = Math.floor(Math.random() * columns);
+                foodPos.y = Math.floor(Math.random() * rows);
+                ctx.fillStyle = "red";
+                ctx.fillRect(
+                    Math.round(foodPos.x * tileWidth),
+                    Math.round(foodPos.y * tileHeight),
+                    Math.round(tileWidth),
+                    Math.round(tileHeight)
+                );
+            }
+
+            if (!shouldGrow)
+                snake.shift();
+            
+            shouldGrow = false;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        document.getElementById("more-button").addEventListener("click", () => {
+           document.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; 
+        });
+
+        document.addEventListener("keydown", (event) => {
+            let target = null
+            switch (event.key) {
+                case "ArrowLeft":
+                case "a":
+                    target = "l";
+                    break;
+                case "ArrowRight":
+                case "d":
+                    target = "r";
+                    break;
+                case "ArrowUp":
+                case "w":
+                    target = "u";
+                    break;
+                case "ArrowDown":
+                case "s":
+                    target = "d";
+                    break;
+                default:
+                    target = snakeTargetDir;
+            }
+
+            if (
+                target !== null &&
+                (target === "l" || target === "r") === (snakeDir === "l" || snakeDir === "r") &&
+                (target === "u" || target === "d") === (snakeDir === "u" || snakeDir === "d")
+                ) {
+                return;
+            }
+
+            snakeTargetDir = target
+        });
+
+        (async () => {
+            while (true) {
+                snakeDir = snakeTargetDir;
+                updateSnake();
+                await sleep(200);
+            }
+        })();
+    </script>
+</body>
+</html>
