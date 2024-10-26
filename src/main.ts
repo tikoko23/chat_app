@@ -23,6 +23,8 @@ await parseHtml();
 
 const dynamicPages = await loadDynamicPages();
 
+const rickrollDetector = /never.*gonna.*give.*you.*up/gi;
+
 Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo): Promise<Response> => {
     const now = new Date(Date.now());
     console.log(`${(now.toUTCString())} @${(now.getMilliseconds() / 1e3).toFixed(3)} | ${req.method} ${info.remoteAddr.hostname}:${info.remoteAddr.port} -> ${req.url}`);
@@ -36,7 +38,7 @@ Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo): Promise<Response> 
             }
         });
 
-    if (url.pathname.startsWith("/info"))
+    if (url.pathname.startsWith("/info") || /*rickrollDetector.test(url.pathname)*/ false)
         return new Response(null, {
             status: 302,
             headers: {
@@ -50,14 +52,15 @@ Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo): Promise<Response> 
     if (url.pathname.startsWith("/cdn"))
         return serveFile(req, url.pathname.replace(/^\/cdn/g, ""));
 
+    if (url.pathname.startsWith("/asset"))
+        return serveFile(req, url.pathname.replace(/^\/asset/g, ""), "./asset");
+
     if (url.pathname.startsWith("/styles")) {
         if (url.pathname !== url.pathname.replace(/\.\.\/|\/\.\.|\\|\.\.\\/g, ""))
             return new Response("Forbidden", { status: 403 });
 
-        console.log("path:", `.${url.pathname}`);
         try {
             const content = await Deno.readFile(`.${url.pathname}`);
-            console.log("content:", String.fromCharCode(...content));
             return new Response(content, { status: 200, headers: { "Content-Type": "text/css" }});
         } catch (_e) {
             return new Response("Not found", { status: 404 });

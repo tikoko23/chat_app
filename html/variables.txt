@@ -1,6 +1,7 @@
-load_style = <link rel="stylesheet" type="text/css" href="/styles/{}.css">
+load_style = <link rel="stylesheet" type="text/css" href="/styles/[].css">
 
-msg_box = <div class="msg-container">{}</div>
+msg_box = <div class="base-msg-container normal-msg-container" []>{}</div>
+large_msg_box = <div class="base-msg-container large-msg-container" []>{}</div>
 
 bright_main_color = #54FF5A
 

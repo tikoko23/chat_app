@@ -30,7 +30,7 @@ def log_response(response: requests.Response, fieldToPrint: str | None = None) -
 
 def create_user(username, password, displayName = None, email = None) -> None:
     response = requests.post(
-        f"{api_subdir}/user/create-user",
+        f"{api_subdir}/user/create",
         json={
             "username": username,
             "displayName": displayName,

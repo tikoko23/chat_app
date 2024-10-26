@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    $$load_style[main]
+    $$load_style[msg_box]
+    $$load_style[button]
+    $$load_style[text_box]
+    $$load_style[background_image]
+
+    <style>
+        #error {
+            color: rgb(255, 100, 100);
+        }
+    </style>
+</head>
+<body>
+    $$large_msg_box {
+        <h1>Login to Your Account</h1>
+        <div style="width: 90%;">
+            <span class="tiny-label">Username:</span>
+            <input type="text" id="username" class="base-text-box glass-text-box">
+        </div>
+        <div style="width: 90%;">
+            <span class="tiny-label">Password:</span>
+            <input type="password" id="password" class="base-text-box glass-text-box">
+        </div>
+        <span id="error">&nbsp;</span>
+        <button id="login" class="glass-bright-button fill-button" style="font-size: 0.75em;" disabled>Login</button>
+    }
+
+    <script type="module">
+        import { REGEX } from "/scripts/regex.js";
+        import { ENDPOINTS } from "/scripts/api-endpoints.js";
+        import { LINKS } from "/scripts/links.js";
+        import { readAll } from "/scripts/read-all.js";
+        import { getCookie, setCookie } from "/scripts/cookie.js";
+
+        console.log(document.cookie);
+
+        if (getCookie("auth_token"))
+            window.location.href = LINKS.home;
+
+        const button = document.getElementById("login");
+        const errorDisplay = document.getElementById("error");
+
+        const usernameField = document.getElementById("username");
+        const passwordField = document.getElementById("password");
+
+        function updateButton() {
+            const usernameValid = REGEX.username.test(usernameField.value);
+            const passwordValid = REGEX.password.test(passwordField.value);
+
+            if (usernameValid)
+                usernameField.classList.remove("invalid");
+            else
+                usernameField.classList.add("invalid");
+
+            if (passwordValid)
+                passwordField.classList.remove("invalid");
+            else
+                passwordField.classList.add("invalid");
+
+            if (usernameValid && passwordValid)
+                button.disabled = false;
+            else
+                button.disabled = true;
+        }
+
+        usernameField.addEventListener("input", updateButton);
+        passwordField.addEventListener("input", updateButton);
+
+        button.addEventListener("click", async () => {
+            const username = usernameField.value;
+            const password = passwordField.value;
+
+            const response = await fetch(`${ENDPOINTS.user}/get-access-token`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+            const text = String.fromCharCode(...(await readAll(response.body)));
+
+            if (response.status === 200) {
+                try {
+                    const object = JSON.parse(text);
+                    const token = object.token;
+
+                    setCookie("auth_token", token);
+                    console.log(document.cookie);
+                    
+                    window.location.href = LINKS.home;
+                    
+                } catch (_e) {
+                    errorDisplay.innerText = "Server returned faulty data";
+                }
+            } else
+                errorDisplay.innerText = text;
+        });
+    </script>
+</body>
+</html>

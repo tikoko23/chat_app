@@ -8,7 +8,7 @@ const USER_UPLOAD_SUBDIR = "user_upload";
 const MAX_UPLOAD_SIZE_BYTES = 8388608;
 const MAX_FILENAME_LENGTH = 255;
 
-export async function serveFile(req: Request, path: string): Promise<Response> {
+export async function serveFile(req: Request, path: string, root: string = CDN_ROOT): Promise<Response> {
     const url = new URL(req.url);
 
     if (req.method !== "GET")
@@ -19,7 +19,7 @@ export async function serveFile(req: Request, path: string): Promise<Response> {
 
     const forcedMIME = url.searchParams.get("mime");
 
-    const contentPath = `${CDN_ROOT}${path}`;
+    const contentPath = `${root}${path}`;
     
     try {
         const lstat = await Deno.lstat(contentPath);

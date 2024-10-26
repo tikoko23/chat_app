@@ -10,30 +10,46 @@ body {
     background-color: #232323;
 }
 
-.msg-container {
+.base-msg-container {
     display: flex;
-
+    
     flex-wrap: nowrap;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-
-    height: 400px;
-    min-height: 200px;
-    max-height: 600px;
-
-    width: 600px;
-    min-width: 200px;
-    max-width: 1000px;
-
-    border: none;
+    
+    border: 2px solid rgba(200, 200, 200, 0.1);
     border-radius: 5px;
 
     padding: 10px;
-
+    
     font-size: 2em;
+    
+    background-color: rgba(200, 200, 200, 0.1);
+    backdrop-filter: blur(100px);
 
-    background-color: #353535;
+    box-shadow: 0px 0px 10px black;
+    margin: 20px;
+}
+
+.normal-msg-container {
+    min-height: 200px;
+    height: 400px;
+    max-height: min(600px, calc(100% - 80px));
+
+    min-width: 100px;
+    width: 500px;
+    max-width: min(1000px, calc(100% - 80px));
+}
+
+.large-msg-container {
+    min-height: 200px;
+    height: 600px;
+    max-height: min(1000px, calc(100% - 80px));
+    
+    min-width: 100px;
+    width: 800px;
+    max-width: min(1600px, calc(100% - 80px));
 }
 
 h1, p {
