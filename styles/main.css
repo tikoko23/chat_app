@@ -1,5 +1,10 @@
 * {
     font-family: "Inter", sans-serif;
+    outline: none;
+}
+
+a {
+    color: #2B98FF;
 }
 
 .hmar {
@@ -10,4 +15,60 @@
 .tiny-label {
     color: #CCC;
     font-size: 0.75em;
+}
+
+.normal-label {
+    color: #CCC;
+    font-size: 1em;
+}
+
+.fully-fill {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.dark-glass {
+    background-color: rgba(0, 0, 0, 0.5);
+
+    backdrop-filter: blur(100px);
+
+    border: none;
+}
+
+.darker-glass {
+    background-color: rgba(0, 0, 0, 0.8);
+
+    backdrop-filter: blur(100px);
+
+    border: none;
+}
+
+.center-children {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-children-grid {
+    display: grid;
+    place-items: center;
+}
+
+.fs-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.glassify {
+    border: 2px solid rgba(200, 200, 200, 0.1);
+    border-radius: 5px;
+    
+    background-color: rgba(200, 200, 200, 0.1);
+    backdrop-filter: blur(100px);
+
+    box-shadow: 0px 0px 10px black;
 }

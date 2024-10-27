@@ -5,8 +5,274 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="/styles/main.css">
+    <link rel="stylesheet" type="text/css" href="/styles/background_image.css">
+    <link rel="stylesheet" type="text/css" href="/styles/spinner.css">
+    <link rel="stylesheet" type="text/css" href="/styles/text_box.css">
+
+    <style>        
+        #center-container {
+            min-width: 80px;
+            width: 400px;
+            max-width: min(800px, calc(100% - 80px));
+
+            min-height: 80px;
+            max-height: min(800px, calc(100% - 80px));
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            aspect-ratio: 1 / 1;
+        }
+
+        #load-anim-frame {
+            height: 100%;
+
+            aspect-ratio: 1 / 1;
+        }
+
+        #load-anim-frame > * {
+            transition: all 0.5s ease-in-out;
+        }
+
+        #progress-display {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 2em;
+            font-size: 1em;
+            text-align: center;
+            color: #CCC;
+        }
+
+        #real-ui-root {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+
+        #message-flex {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            min-width: 400px;
+        }
+
+        #message-input {
+            width: 100%;
+        }
+
+        #message-input > textarea {
+            resize: none;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        #message-display {
+            flex-grow: 8;
+            width: 100%;
+        }
+
+        #left-panel {
+            position: relative;
+            height: 100%;
+            width: min(400px, 90%);
+            z-index: 10;
+            background-color: red;
+            min-width: min(400px, 90%);
+            max-width: 90%;
+            padding-left: 20px;
+            padding-top: 20px;
+            transition: all 1s ease-in-out;
+        }
+
+        #lpanel-title {
+            font-size: 2em;
+            height: 1em;
+            font-weight: bold;
+            color: white;
+            width: 100%;
+            text-align: left;
+        }
+
+        #lpanel-menu {
+            position: absolute;
+            top: 20px;
+            left: calc(100% - 1.5em);
+            color: white;
+            background-color: red;
+            border-radius: 50%;
+            height: 3em;
+            width: 3em;
+            aspect-ratio: 1 / 1;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lpanel-toggle {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: transparent;
+        }
+
+        #lpanel-menu-svg {
+            transition: all 1s ease-in-out;
+            transform: rotate(0deg);
+        }
+
+    </style>
 </head>
 <body>
-    
+    <div id="load-ui-root" class="fully-fill dark-glass">
+        <div class="fully-fill center-children">
+            <div id="center-container">
+                <div id="load-anim-frame" class="center-children" style="flex-direction: column;">
+                    <div class="spinner" style="margin-bottom: 20px;"></div>
+                    <span id="motd" class="normal-label" style="text-align: center;"></span>
+                </div>
+            </div>
+        </div>
+        <span id="progress-display"></span>
+    </div>
+    <div id="real-ui-root" class="fully-fill darker-glass">
+        <div id="left-panel">
+            <span id="lpanel-title">Groups</span>
+            <div id="lpanel-menu">
+                <svg
+                    id="lpanel-menu-svg"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 30 30"
+                    fill="none"
+                >
+                    <rect width="30" height="4" rx="2" fill="#FFF" />
+                    <rect y="13" width="30" height="4" rx="2" fill="#FFF" />
+                    <rect y="26" width="30" height="4" rx="2" fill="#FFF" />
+                </svg>
+                <button id="lpanel-toggle"></button>
+            </div>
+        </div>
+        <div style="height: calc(100% - 40px); width: calc(100% - 40px); padding: 20px; overflow: hidden;">
+            <div id="message-flex" style="padding-left: 10px;">
+                <div id="message-display" class="glassify"></div>
+                <div id="message-input" style="padding-top: 20px; padding-bottom: 20px;">
+                    <textarea class="highlight-text-box glass-text-box"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const panel = document.getElementById("left-panel");
+        const svg = document.getElementById("lpanel-menu-svg");
+        const button = document.getElementById("lpanel-toggle");
+
+        let enabled = true;
+        function toggleMenu() {
+            if (enabled) {
+                button.disabled = true;
+
+                panel.style.marginRight = `-${panel.clientWidth}px`
+                panel.style.transform = "translateX(-100%)";
+
+                svg.style.transform = "rotate(90deg)";
+            } else {
+                button.disabled = true;
+
+                panel.style.removeProperty("margin-right");
+                panel.style.removeProperty("transform");
+
+                svg.style.transform = "rotate(0deg)"; 
+            
+            }
+
+            setTimeout(() => button.disabled = false, 1000);
+
+            enabled = !enabled;
+        }
+
+        button.addEventListener("click", toggleMenu);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module">
+        import { MOTD } from "/scripts/motd.js";
+
+        const message = MOTD[Math.floor(Math.random() * (MOTD.length))];
+        const parsedMessage = marked.parse(message);
+
+        const motdDisplay = document.getElementById("motd");
+
+        motdDisplay.innerHTML = parsedMessage;
+    </script>
+
+    <script type="module">
+        import { getCookie } from "/scripts/cookie.js";
+        import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
+        import { LINKS } from "/scripts/links.js";
+
+        const body = document.querySelector("body");
+        const luiRoot = document.getElementById("load-ui-root");
+        const progress = document.getElementById("progress-display");
+
+        async function moveAway() {
+            body.style.transition = "all 1.5s cubic-bezier(0.5, 0, 0.50, 1.0)";
+            body.style.transform = "translateY(-100%)";
+
+            await new Promise(r => setTimeout(r, 1550));
+            body.style.removeProperty("transition");
+            luiRoot.innerHTML = "";
+        }
+
+        async function setupGroups(token) {
+            
+        }
+
+        async function setupMessages(token) {
+
+        }
+
+        (async () => {
+
+            progress.innerText = "Getting cookie...";
+            const token = getCookie("auth_token");
+            
+            if (token === null) {
+                progress.innerText = "Your cookie has a skill issue";
+                window.location.href = LINKS.login;
+                return;
+            }
+
+            progress.innerText = "Fetching self...";
+            const result = await fetchJSON(`${ENDPOINTS.user}/fetch-self`, {
+                headers: { "Authorization": token }
+            });
+
+            // Valid token
+            if (result.response.status === 200 && result.obj) {
+                progress.innerText = "Setting up groups...";
+                await setupGroups(token);
+                progress.innerText = "Setting up messages...";
+                await setupMessages(token);
+                progress.innerText = "Moving away...";
+                await moveAway();
+            } else {
+                progress.innerText = "Your token has a skill issue";
+                window.location.href = LINKS.login;
+            }
+
+        })();
+    </script>
 </body>
 </html>

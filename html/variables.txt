@@ -3,6 +3,8 @@ load_style = <link rel="stylesheet" type="text/css" href="/styles/[].css">
 msg_box = <div class="base-msg-container normal-msg-container" []>{}</div>
 large_msg_box = <div class="base-msg-container large-msg-container" []>{}</div>
 
+marked = <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 bright_main_color = #54FF5A
 
 default_bg_color = #232323

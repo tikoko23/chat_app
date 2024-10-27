@@ -26,8 +26,8 @@ const requestMeta: EndpointMeta = {
             generatedToken = await pullTokenFromDatabase(username, password);
         } catch (e) {
             switch (e.message) {
-            case "Invalid creditentials":
-                return new Response("Invalid creditentials", { status: 401 });
+            case "Invalid credentials":
+                return new Response("Invalid credentials", { status: 401 });
             case "Token is not a string":
                 return new Response("Broken database entry", { status: 400 });
             case "User does not exist":
@@ -55,7 +55,7 @@ export default requestMeta;
 export async function generateAccessToken(username: string, password: string, firstTime: boolean = false): Promise<string> {
 
     if (!firstTime && !await isValidUser(username, password))
-        throw new Error("Invalid creditentials");
+        throw new Error("Invalid credentials");
 
     const tokenSource = `${username}:${crypto.randomUUID()}@${Date.now()}`;
     const token = await hashString(tokenSource);
@@ -64,7 +64,7 @@ export async function generateAccessToken(username: string, password: string, fi
 
 export async function pullTokenFromDatabase(username: string, password: string): Promise<string> {
     if (!await isValidUser(username, password))
-        throw new Error("Invalid creditentials");
+        throw new Error("Invalid credentials");
 
     const user = fetchUser("name", username);
 

@@ -114,3 +114,21 @@ export async function createUser(
 
     return fetchUser("name", username) as User;
 }
+
+interface ResponseUser {
+    id: number,
+    name: string,
+    displayName: Nullable<string>,
+    email: Nullable<string>,
+    createdAt?: string
+}
+
+export function userToResponse(user: User): ResponseUser {
+    return {
+        id: user.id,
+        name: user.name,
+        displayName: user.displayName,
+        email: user.email,
+        createdAt: user.createdAt
+    };
+}

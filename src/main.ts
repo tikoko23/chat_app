@@ -38,7 +38,7 @@ Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo): Promise<Response> 
             }
         });
 
-    if (url.pathname.startsWith("/info") || /*rickrollDetector.test(url.pathname)*/ false)
+    if (url.pathname.startsWith("/info") || rickrollDetector.test(url.pathname))
         return new Response(null, {
             status: 302,
             headers: {
