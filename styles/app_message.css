@@ -1,0 +1,70 @@
+.message {
+    width: calc(100% - 10px);
+    height: fit-content;
+    display: flex;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.message:hover {
+    backdrop-filter: brightness(75%);
+}
+
+.message > * {
+    display: inline;
+    color: white;
+}
+
+.message > .name-display {
+    font-weight: bolder;
+    min-width: 12em;
+    max-width: 12em;
+    text-overflow: ellipsis;
+}
+
+.message > *:not(.name-display) {
+    flex-grow: 14;
+    font-weight: normal;
+}
+
+#message-flex {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    min-width: 400px;
+}
+
+#message-input {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+#message-input > textarea {
+    resize: none;
+    flex-grow: 10;
+    margin-left: -3px;
+    width: 100%;
+
+    transition: all 0.5s ease-in-out;
+}
+
+#message-holder {
+    flex-grow: 8;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+#message-display {
+    padding: 20px;
+    width: calc(100% - 40px);
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}

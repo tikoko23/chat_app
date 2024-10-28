@@ -4,7 +4,8 @@ export const API_PATH = "https://tikoko-dev.site/api";
 
 export const ENDPOINTS = {
     group: `${API_PATH}/group`,
-    user: `${API_PATH}/user`
+    user: `${API_PATH}/user`,
+    message: `${API_PATH}/message`
 };
 
 export async function fetchJSON(url, param) {

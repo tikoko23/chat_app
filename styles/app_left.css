@@ -1,0 +1,52 @@
+#left-panel {
+    position: relative;
+    height: 100%;
+    width: min(300px, 90%);
+    z-index: 10;
+    background-color: #232323;
+    min-width: min(300px, 90%);
+    max-width: 90%;
+    padding-left: 20px;
+    padding-top: 20px;
+    transition: all 1s ease-in-out;
+}
+
+#lpanel-title {
+    font-size: 2em;
+    height: 1em;
+    font-weight: bolder;
+    color: white;
+    width: 100%;
+    text-align: left;
+}
+
+#lpanel-menu {
+    position: absolute;
+    top: 20px;
+    left: calc(100% - 1.5em);
+    color: white;
+    background-color: #232323;
+    border-radius: 50%;
+    height: 3em;
+    width: 3em;
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#lpanel-toggle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+}
+
+#lpanel-menu-svg {
+    transition: all 1s ease-in-out;
+    transform: rotate(0deg);
+}

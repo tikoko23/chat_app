@@ -1,0 +1,26 @@
+#right-container {
+    height: calc(100% - 40px);
+    width: calc(100% - 40px);
+    padding: 20px;
+    padding-left: 30px;
+    overflow: hidden;
+}
+
+#send-message {
+    border-radius: 25%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    flex-grow: 1;
+
+    margin-left: 10px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+#send-message > svg {
+    pointer-events: none;
+
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+}

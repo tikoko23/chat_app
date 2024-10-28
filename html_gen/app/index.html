@@ -9,234 +9,11 @@
     <link rel="stylesheet" type="text/css" href="/styles/spinner.css">
     <link rel="stylesheet" type="text/css" href="/styles/text_box.css">
     <link rel="stylesheet" type="text/css" href="/styles/button.css">
-
-    <style>        
-        #center-container {
-            min-width: 80px;
-            width: 400px;
-            max-width: min(800px, calc(100% - 80px));
-
-            min-height: 80px;
-            max-height: min(800px, calc(100% - 80px));
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            aspect-ratio: 1 / 1;
-        }
-
-        #load-anim-frame {
-            height: 100%;
-
-            aspect-ratio: 1 / 1;
-        }
-
-        #load-anim-frame > * {
-            transition: all 0.5s ease-in-out;
-        }
-
-        #progress-display {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 2em;
-            font-size: 1em;
-            text-align: center;
-            color: #CCC;
-        }
-
-        #real-ui-root {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-        }
-
-        #message-flex {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: nowrap;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            min-width: 400px;
-        }
-
-        #message-input {
-            margin-top: 10px;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-        }
-
-        #message-input > textarea {
-            resize: none;
-            flex-grow: 10;
-            margin-left: -3px;
-            width: 100%;
-
-            transition: all 0.5s ease-in-out;
-        }
-
-        #message-holder {
-            flex-grow: 8;
-            width: 100%;
-            margin-bottom: 50px;
-        }
-        
-        #message-display {
-            padding: 20px;
-            width: calc(100% - 40px);
-            height: 100%;
-            overflow-x: hidden;
-            overflow-y: scroll;
-        }
-
-        #left-panel {
-            position: relative;
-            height: 100%;
-            width: min(300px, 90%);
-            z-index: 10;
-            background-color: #232323;
-            min-width: min(300px, 90%);
-            max-width: 90%;
-            padding-left: 20px;
-            padding-top: 20px;
-            transition: all 1s ease-in-out;
-        }
-
-        #lpanel-title {
-            font-size: 2em;
-            height: 1em;
-            font-weight: bolder;
-            color: white;
-            width: 100%;
-            text-align: left;
-        }
-
-        #lpanel-menu {
-            position: absolute;
-            top: 20px;
-            left: calc(100% - 1.5em);
-            color: white;
-            background-color: #232323;
-            border-radius: 50%;
-            height: 3em;
-            width: 3em;
-            aspect-ratio: 1 / 1;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #lpanel-toggle {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: transparent;
-        }
-
-        #lpanel-menu-svg {
-            transition: all 1s ease-in-out;
-            transform: rotate(0deg);
-        }
-
-        #right-container {
-            height: calc(100% - 40px);
-            width: calc(100% - 40px);
-            padding: 20px;
-            padding-left: 30px;
-            overflow: hidden;
-        }
-
-        #send-message {
-            border-radius: 25%;
-            height: 100%;
-            aspect-ratio: 1 / 1;
-            flex-grow: 1;
-
-            margin-left: 10px;
-            border-style: solid;
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-
-        #send-message > svg {
-            pointer-events: none;
-
-            width: 100%;
-            height: 100%;
-            aspect-ratio: 1 / 1;
-        }
-
-        .message {
-            width: calc(100% - 10px);
-            height: fit-content;
-            display: flex;
-            padding: 5px;
-            border-radius: 5px;
-        }
-
-        .message:hover {
-            backdrop-filter: brightness(75%);
-        }
-
-        .message > * {
-            display: inline;
-            color: white;
-        }
-
-        .message > .name-display {
-            font-weight: bolder;
-            min-width: 12em;
-            max-width: 12em;
-            text-overflow: ellipsis;
-        }
-
-        .message > *:not(.name-display) {
-            flex-grow: 14;
-            font-weight: normal;
-        }
-
-        #group-list {
-            margin-top: 10px;
-            margin-right: 20px;
-            height: 100%;
-        }
-
-        .group {
-            height: fit-content;
-            width: 100%;
-            border-radius: 5px;
-            margin-top: 0.5em;
-            margin-bottom: 0.5em;
-        }
-
-        .group.active {
-            backdrop-filter: brightness(125%);
-        }
-
-        .group > .name-display {
-            color: white;
-            font-size: 1.5em;
-            margin: 0.5em;
-            text-overflow: ellipsis;
-        }
-
-        .group:hover {
-            backdrop-filter: brightness(75%);
-        }
-
-        .group > .owned {
-            color: #AFA;
-        }
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="/styles/app.css">
+    <link rel="stylesheet" type="text/css" href="/styles/app_left.css">
+    <link rel="stylesheet" type="text/css" href="/styles/app_right.css">
+    <link rel="stylesheet" type="text/css" href="/styles/app_group.css">
+    <link rel="stylesheet" type="text/css" href="/styles/app_message.css">
 </head>
 <body>
     <div id="load-ui-root" class="fully-fill dark-glass">
@@ -277,12 +54,12 @@
         <div id="right-container">
             <div id="message-flex">
                 <div id="message-holder">
-                    <div id="message-display" class="glassify">
+                    <!-- <div id="message-display" class="glassify">
                         <div class="message">
                             <span class="name-display">tikoko_</span>
                             <p class="no-margin">message content here!<br>bruh</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div id="message-input">
                     <textarea class="fill-text-box highlight-text-box glass-text-box"></textarea>
@@ -304,170 +81,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
-    <script>
-        const groupsContainer = document.getElementById("group-list");
 
-        function addMessage(sender, content, id, messageContainer) {
-            const holder = document.createElement("div");
-            const nameDisplay = document.createElement("span");
-            
-            const parsed = marked.parse(content);
-            const sanitized = DOMPurify.sanitize(parsed);
+    <script type="module" src="/scripts/left-menu-ui.js"></script>
 
-            holder.id = `msg_${id}`;
-
-            holder.classList.add("message");
-            nameDisplay.classList.add("name-display");
-
-            nameDisplay.innerText = sender;
-            holder.appendChild(nameDisplay);
-            holder.innerHTML += sanitized;
-
-            const messageContent = Array.from(holder.children).filter(e => e.tagName === "P");
-
-            messageContent.forEach(e => e.classList.add("no-margin"));
-
-            messageContainer.appendChild(holder);
-
-            if (Math.abs(messageContainer.scrollHeight - messageContainer.clientHeight - messageContainer.scrollTop) <= 50)
-                messageContainer.scroll({
-                    behavior: "instant",
-                    top: 99999
-                });
-
-            return {
-                holder: holder,
-                nameDisplay: nameDisplay,
-                messageContent: messageContent
-            };
-        }
-
-        function addGroup(name, ownerId, id) {
-            const holder = document.createElement("div");
-            const nameDisplay = document.createElement("span");
-
-            holder.classList.add("group");
-            nameDisplay.classList.add("name-display");
-
-            groupsContainer.appendChild(holder);
-            holder.appendChild(nameDisplay);
-            nameDisplay.innerText = name;
-
-            holder.id = `grp_${id}`;
-
-            if (ownerId === window.thisUser.id)
-                nameDisplay.classList.add("owned");
-        }
-    </script>
-
-    <script>
-        const panel = document.getElementById("left-panel");
-        const svg = document.getElementById("lpanel-menu-svg");
-        const button = document.getElementById("lpanel-toggle");
-
-        let enabled = true;
-        function toggleMenu() {
-            if (enabled) {
-                button.disabled = true;
-
-                panel.style.marginRight = `-${panel.clientWidth}px`
-                panel.style.transform = "translateX(-100%)";
-
-                svg.style.transform = "rotate(90deg)";
-            } else {
-                button.disabled = true;
-
-                panel.style.removeProperty("margin-right");
-                panel.style.removeProperty("transform");
-
-                svg.style.transform = "rotate(0deg)"; 
-            
-            }
-
-            setTimeout(() => button.disabled = false, 1000);
-
-            enabled = !enabled;
-        }
-
-        button.addEventListener("click", toggleMenu);
+    <script type="module">
+        import { displayMOTD } from "/scripts/motd.js";
+        displayMOTD();
     </script>
 
     <script type="module">
-        import { MOTD } from "/scripts/motd.js";
+        import { appLogin } from "/scripts/app-login.js";
+        import { switchActiveGroup } from "/scripts/group-ui.js";
 
-        const message = MOTD[Math.floor(Math.random() * (MOTD.length))];
-        const parsedMessage = marked.parse(message);
-
-        const motdDisplay = document.getElementById("motd");
-
-        motdDisplay.innerHTML = parsedMessage;
-    </script>
-
-    <script type="module">
-        import { getCookie } from "/scripts/cookie.js";
-        import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
-        import { LINKS } from "/scripts/links.js";
-
-        const body = document.querySelector("body");
-        const luiRoot = document.getElementById("load-ui-root");
-        const progress = document.getElementById("progress-display");
+        appLogin();
 
         window.thisUser = null;
         window.groupMessages = {};
         window.activeGroup = -1;
-
-        async function moveAway() {
-            body.style.transition = "all 1.5s cubic-bezier(0.5, 0, 0.50, 1.0)";
-            body.style.transform = "translateY(-100%)";
-
-            await new Promise(r => setTimeout(r, 1550));
-            body.style.removeProperty("transition");
-            luiRoot.innerHTML = "";
-
-            addMessage("orz", "bruh", 5, window.groupMessages[1]);
-            addMessage("not_orz", "not_bruh", 6, window.groupMessages[2]);
-        }
-
-        async function setupGroups(token) {
-            const result = await fetchJSON(`${ENDPOINTS.group}/fetch-joined`, {
-                method: "GET",
-                headers: {
-                    "Authorization": token
-                }
-            });
-
-            if (result.response.status === 200) {
-                result.obj.forEach(g => {
-                    addGroup(g.name, g.owner, g.id);
-                    const div = document.createElement("div");
-                    div.classList.add("glassify");
-                    div.id = "message-display";
-                });
-
-                switchActiveGroup(result.obj[result.obj.length - 1].id);
-            }
-        }
-        
-        function switchActiveGroup(newId) {
-            const newGroup = document.getElementById(`grp_${newId}`);
-
-            if (newGroup === null)
-                return;
-
-            newGroup.classList.add("active");
-
-            const holder = document.getElementById("message-holder");
-
-            if (window.activeGroup !== -1) {
-                const element = document.getElementById(`grp_${window.activeGroup}`);
-                element.classList.remove("active");
-                holder.removeChild(window.groupMessages[window.activeGroup]);
-            }
-            
-            holder.appendChild(window.groupMessages[newId]);
-
-            window.activeGroup = newId;
-        }
 
         const groupList = document.getElementById("group-list");
 
@@ -478,40 +108,13 @@
             if (!e.target.classList.contains("group"))
                 return;
 
-            switchActiveGroup(parseInt(e.target.id.substring(4)));
+            const newGroupId = parseInt(e.target.id.substring(4));
+
+            console.log(newGroupId);
+
+            switchActiveGroup(newGroupId);
         });
 
-        (async () => {
-
-            progress.innerText = "Getting cookie...";
-            const token = getCookie("auth_token");
-
-            if (token === null) {
-                progress.innerText = "Your cookie has a skill issue";
-                window.location.href = LINKS.login;
-                return;
-            }
-
-            progress.innerText = "Fetching self...";
-            const result = await fetchJSON(`${ENDPOINTS.user}/fetch-self`, {
-                headers: { "Authorization": token }
-            });
-
-            // Valid token
-            if (result.response.status === 200 && result.obj) {
-                window.thisUser = result.obj;
-                
-                progress.innerText = "Setting up groups...";
-                await setupGroups(token);
-                progress.innerText = "Setting up messages...";
-                await setupMessages(token);
-                progress.innerText = "Moving away...";
-                await moveAway();
-            } else {
-                progress.innerText = "Your token has a skill issue";
-                window.location.href = LINKS.login;
-            }
-        })();
     </script>
 </body>
 </html>
