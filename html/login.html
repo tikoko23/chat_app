@@ -14,11 +14,24 @@
         #error {
             color: rgb(255, 100, 100);
         }
+
+        .msg {
+            font-size: 0.75em;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
     $$large_msg_box {
         <h1>Login to Your Account</h1>
+        
+        <div class="msg" style="width: 90%;">
+            <span class="tiny-label">Don't have an account? <a href="/register">Register!</a></span>
+        </div>
         <div style="width: 90%;">
             <span class="tiny-label">Username:</span>
             <input type="text" id="username" class="highlight-text-box base-text-box glass-text-box">
@@ -28,7 +41,7 @@
             <input type="password" id="password" class="highlight-text-box base-text-box glass-text-box">
         </div>
         <span id="error">&nbsp;</span>
-        <button id="login" class="glass-bright-button fill-button" style="font-size: 0.75em;" disabled>Login</button>
+        <button id="login" class="glass-bright-button fill-button color-button" style="font-size: 0.75em;" disabled>Login</button>
     }
 
     <script type="module">
@@ -38,9 +51,10 @@
         import { readAll } from "/scripts/read-all.js";
         import { getCookie, setCookie } from "/scripts/cookie.js";
 
-
         (async () => {
-            if (getCookie("auth_token")) {
+            const token = getCookie("auth_token");
+
+            if (token !== null) {
                 const result = await fetchJSON(`${ENDPOINTS.user}/fetch-self`, {
                     headers: { "Authorization": token }
                 });
@@ -100,7 +114,6 @@
                         const token = object.token;
 
                         setCookie("auth_token", token);
-                        console.log(document.cookie);
                         
                         window.location.href = LINKS.home;
                         

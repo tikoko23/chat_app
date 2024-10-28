@@ -28,7 +28,7 @@ const requestMeta: EndpointMeta = {
         if (typeof email !== "string" && email !== null && email !== undefined)
             return new Response("Email must be a string or null or undefined", { status: 400 });
 
-        const added = await createUser(username, password, displayName);
+        const added = await createUser(username, password, displayName, email);
 
         if (added === null)
             return new Response("User already exists", { status: 400 });

@@ -8,6 +8,8 @@ import { createMessage, editMessage, fetchMessage } from "./message.ts";
 import { Group, User } from "./types.d.ts";
 import { fetchUser } from "./user.ts";
 
+const KILL_SWITCH = false;
+
 console.log("Activating API");
 {
     const count = await loadApi(true, "   ");
@@ -30,6 +32,14 @@ Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo): Promise<Response> 
     console.log(`${(now.toUTCString())} @${(now.getMilliseconds() / 1e3).toFixed(3)} | ${req.method} ${info.remoteAddr.hostname}:${info.remoteAddr.port} -> ${req.url}`);
 
     const url = new URL(req.url);
+
+    if (KILL_SWITCH)
+        return new Response(null, {
+            status: 302,
+            headers: {
+                "Location": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            }
+        });
 
     if (url.pathname === "/")
         return new Response(getHtml("/index.html"), {

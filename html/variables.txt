@@ -4,6 +4,7 @@ msg_box = <div class="base-msg-container normal-msg-container" []>{}</div>
 large_msg_box = <div class="base-msg-container large-msg-container" []>{}</div>
 
 marked = <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+purify = <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
 
 bright_main_color = #54FF5A
 

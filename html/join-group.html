@@ -32,7 +32,7 @@
             <h1 id="title">&nbsp;</h1>
         </div>
         <a class="subtext" href="/info/joining-a-group">Click me to cry about it</a>
-        <button class="glass-bright-button fill-button" id="join" disabled>Join</button>
+        <button class="glass-bright-button fill-button color-button" id="join" disabled>Join</button>
     }
 
     <script type="module">
@@ -45,14 +45,11 @@
         const topText = document.getElementById("top-text");
         const button = document.getElementById("join");
         const title = document.getElementById("title");
-
-        button.setAttribute("disabled", "disabled");
         
         if (invite === null)
             title.textContent = "Invite parameter should be provided";
         else (async () => {
             const response = await fetch(`${ENDPOINTS.group}/fetch?invite=${invite}`);
-            console.log(response);
 
             const text = String.fromCharCode(...(await readAll(response.body)));
 

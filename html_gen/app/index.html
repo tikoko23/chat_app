@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/styles/background_image.css">
     <link rel="stylesheet" type="text/css" href="/styles/spinner.css">
     <link rel="stylesheet" type="text/css" href="/styles/text_box.css">
+    <link rel="stylesheet" type="text/css" href="/styles/button.css">
 
     <style>        
         #center-container {
@@ -63,27 +64,43 @@
         }
 
         #message-input {
+            margin-top: 10px;
             width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
         }
 
         #message-input > textarea {
             resize: none;
-            flex-grow: 1;
+            flex-grow: 10;
+            margin-left: -3px;
             width: 100%;
+
+            transition: all 0.5s ease-in-out;
         }
 
-        #message-display {
+        #message-holder {
             flex-grow: 8;
             width: 100%;
+            margin-bottom: 50px;
+        }
+        
+        #message-display {
+            padding: 20px;
+            width: calc(100% - 40px);
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: scroll;
         }
 
         #left-panel {
             position: relative;
             height: 100%;
-            width: min(400px, 90%);
+            width: min(300px, 90%);
             z-index: 10;
-            background-color: red;
-            min-width: min(400px, 90%);
+            background-color: #232323;
+            min-width: min(300px, 90%);
             max-width: 90%;
             padding-left: 20px;
             padding-top: 20px;
@@ -93,7 +110,7 @@
         #lpanel-title {
             font-size: 2em;
             height: 1em;
-            font-weight: bold;
+            font-weight: bolder;
             color: white;
             width: 100%;
             text-align: left;
@@ -104,7 +121,7 @@
             top: 20px;
             left: calc(100% - 1.5em);
             color: white;
-            background-color: red;
+            background-color: #232323;
             border-radius: 50%;
             height: 3em;
             width: 3em;
@@ -128,6 +145,95 @@
         #lpanel-menu-svg {
             transition: all 1s ease-in-out;
             transform: rotate(0deg);
+        }
+
+        #right-container {
+            height: calc(100% - 40px);
+            width: calc(100% - 40px);
+            padding: 20px;
+            padding-left: 30px;
+            overflow: hidden;
+        }
+
+        #send-message {
+            border-radius: 25%;
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            flex-grow: 1;
+
+            margin-left: 10px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        #send-message > svg {
+            pointer-events: none;
+
+            width: 100%;
+            height: 100%;
+            aspect-ratio: 1 / 1;
+        }
+
+        .message {
+            width: calc(100% - 10px);
+            height: fit-content;
+            display: flex;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .message:hover {
+            backdrop-filter: brightness(75%);
+        }
+
+        .message > * {
+            display: inline;
+            color: white;
+        }
+
+        .message > .name-display {
+            font-weight: bolder;
+            min-width: 12em;
+            max-width: 12em;
+            text-overflow: ellipsis;
+        }
+
+        .message > *:not(.name-display) {
+            flex-grow: 14;
+            font-weight: normal;
+        }
+
+        #group-list {
+            margin-top: 10px;
+            margin-right: 20px;
+            height: 100%;
+        }
+
+        .group {
+            height: fit-content;
+            width: 100%;
+            border-radius: 5px;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .group.active {
+            backdrop-filter: brightness(125%);
+        }
+
+        .group > .name-display {
+            color: white;
+            font-size: 1.5em;
+            margin: 0.5em;
+            text-overflow: ellipsis;
+        }
+
+        .group:hover {
+            backdrop-filter: brightness(75%);
+        }
+
+        .group > .owned {
+            color: #AFA;
         }
 
     </style>
@@ -162,16 +268,97 @@
                 </svg>
                 <button id="lpanel-toggle"></button>
             </div>
+            <br>
+            <hr style="margin-right: 20px;">
+            <div id="group-list">
+
+            </div>
         </div>
-        <div style="height: calc(100% - 40px); width: calc(100% - 40px); padding: 20px; overflow: hidden;">
-            <div id="message-flex" style="padding-left: 10px;">
-                <div id="message-display" class="glassify"></div>
-                <div id="message-input" style="padding-top: 20px; padding-bottom: 20px;">
-                    <textarea class="highlight-text-box glass-text-box"></textarea>
+        <div id="right-container">
+            <div id="message-flex">
+                <div id="message-holder">
+                    <div id="message-display" class="glassify">
+                        <div class="message">
+                            <span class="name-display">tikoko_</span>
+                            <p class="no-margin">message content here!<br>bruh</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="message-input">
+                    <textarea class="fill-text-box highlight-text-box glass-text-box"></textarea>
+                    <button id="send-message" class="color-button glass-bright-button">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="40"
+                        height="40"
+                        viewBox="0 0 40 40"
+                        fill="none"
+                    >
+                        <path d="M 10 10 L 30 20 L 10 30 L 15 20 Z" fill="white" stroke="transparent"/>
+                    </svg>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js"></script>
+    <script>
+        const groupsContainer = document.getElementById("group-list");
+
+        function addMessage(sender, content, id, messageContainer) {
+            const holder = document.createElement("div");
+            const nameDisplay = document.createElement("span");
+            
+            const parsed = marked.parse(content);
+            const sanitized = DOMPurify.sanitize(parsed);
+
+            holder.id = `msg_${id}`;
+
+            holder.classList.add("message");
+            nameDisplay.classList.add("name-display");
+
+            nameDisplay.innerText = sender;
+            holder.appendChild(nameDisplay);
+            holder.innerHTML += sanitized;
+
+            const messageContent = Array.from(holder.children).filter(e => e.tagName === "P");
+
+            messageContent.forEach(e => e.classList.add("no-margin"));
+
+            messageContainer.appendChild(holder);
+
+            if (Math.abs(messageContainer.scrollHeight - messageContainer.clientHeight - messageContainer.scrollTop) <= 50)
+                messageContainer.scroll({
+                    behavior: "instant",
+                    top: 99999
+                });
+
+            return {
+                holder: holder,
+                nameDisplay: nameDisplay,
+                messageContent: messageContent
+            };
+        }
+
+        function addGroup(name, ownerId, id) {
+            const holder = document.createElement("div");
+            const nameDisplay = document.createElement("span");
+
+            holder.classList.add("group");
+            nameDisplay.classList.add("name-display");
+
+            groupsContainer.appendChild(holder);
+            holder.appendChild(nameDisplay);
+            nameDisplay.innerText = name;
+
+            holder.id = `grp_${id}`;
+
+            if (ownerId === window.thisUser.id)
+                nameDisplay.classList.add("owned");
+        }
+    </script>
 
     <script>
         const panel = document.getElementById("left-panel");
@@ -205,7 +392,6 @@
         button.addEventListener("click", toggleMenu);
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script type="module">
         import { MOTD } from "/scripts/motd.js";
 
@@ -226,6 +412,10 @@
         const luiRoot = document.getElementById("load-ui-root");
         const progress = document.getElementById("progress-display");
 
+        window.thisUser = null;
+        window.groupMessages = {};
+        window.activeGroup = -1;
+
         async function moveAway() {
             body.style.transition = "all 1.5s cubic-bezier(0.5, 0, 0.50, 1.0)";
             body.style.transform = "translateY(-100%)";
@@ -233,21 +423,69 @@
             await new Promise(r => setTimeout(r, 1550));
             body.style.removeProperty("transition");
             luiRoot.innerHTML = "";
+
+            addMessage("orz", "bruh", 5, window.groupMessages[1]);
+            addMessage("not_orz", "not_bruh", 6, window.groupMessages[2]);
         }
 
         async function setupGroups(token) {
+            const result = await fetchJSON(`${ENDPOINTS.group}/fetch-joined`, {
+                method: "GET",
+                headers: {
+                    "Authorization": token
+                }
+            });
+
+            if (result.response.status === 200) {
+                result.obj.forEach(g => {
+                    addGroup(g.name, g.owner, g.id);
+                    const div = document.createElement("div");
+                    div.classList.add("glassify");
+                    div.id = "message-display";
+                });
+
+                switchActiveGroup(result.obj[result.obj.length - 1].id);
+            }
+        }
+        
+        function switchActiveGroup(newId) {
+            const newGroup = document.getElementById(`grp_${newId}`);
+
+            if (newGroup === null)
+                return;
+
+            newGroup.classList.add("active");
+
+            const holder = document.getElementById("message-holder");
+
+            if (window.activeGroup !== -1) {
+                const element = document.getElementById(`grp_${window.activeGroup}`);
+                element.classList.remove("active");
+                holder.removeChild(window.groupMessages[window.activeGroup]);
+            }
             
+            holder.appendChild(window.groupMessages[newId]);
+
+            window.activeGroup = newId;
         }
 
-        async function setupMessages(token) {
+        const groupList = document.getElementById("group-list");
 
-        }
+        groupList.addEventListener("click", e => {
+            if (e.target === null)
+                return;
+
+            if (!e.target.classList.contains("group"))
+                return;
+
+            switchActiveGroup(parseInt(e.target.id.substring(4)));
+        });
 
         (async () => {
 
             progress.innerText = "Getting cookie...";
             const token = getCookie("auth_token");
-            
+
             if (token === null) {
                 progress.innerText = "Your cookie has a skill issue";
                 window.location.href = LINKS.login;
@@ -261,6 +499,8 @@
 
             // Valid token
             if (result.response.status === 200 && result.obj) {
+                window.thisUser = result.obj;
+                
                 progress.innerText = "Setting up groups...";
                 await setupGroups(token);
                 progress.innerText = "Setting up messages...";
@@ -271,7 +511,6 @@
                 progress.innerText = "Your token has a skill issue";
                 window.location.href = LINKS.login;
             }
-
         })();
     </script>
 </body>

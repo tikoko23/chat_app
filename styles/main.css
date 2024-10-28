@@ -7,6 +7,24 @@ a {
     color: #2B98FF;
 }
 
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(204, 204, 204, 0.5);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(80, 80, 80, 0.8);
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
 .hmar {
     margin-left: 5%;
     margin-right: 5%;
@@ -71,4 +89,8 @@ a {
     backdrop-filter: blur(100px);
 
     box-shadow: 0px 0px 10px black;
+}
+
+.no-margin {
+    margin: 0;
 }

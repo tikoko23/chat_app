@@ -18,6 +18,8 @@ export async function processApiRequest(req: Request, url: URL): Promise<Respons
     if (req.method === "POST" && req.headers.get("Content-Type") === "application/json") {
         try {
             postArgs = await req.json();
+            if (Array.isArray(postArgs))
+                throw new Error();
         } catch (_e) {
             postArgs = undefined
         }

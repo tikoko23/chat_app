@@ -38,8 +38,7 @@ export type MessageQueryResult = {
     body: string,
     fullJson: string,
     attachments: Nullable<string>,
-    edited: number,
-    editedAt: string
+    editedAt: Nullable<string>
 }
 
 export let DB: SQLite.DB;
@@ -91,7 +90,6 @@ export function initDefaultTables(): void {
             body TEXT NOT NULL,
             fullJson TEXT NOT NULL,
             attachments TEXT,
-            edited BOOLEAN NOT NULL,
             editedAt TEXT
         ) 
     `);

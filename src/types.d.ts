@@ -65,7 +65,6 @@ export interface Message {
     content: MessageContent,
     createdAt: Nullable<string>,
     attachments: Nullable<Attachment[]>,
-    edited: boolean,
     editedAt: Nullable<string>
 }
 

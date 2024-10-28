@@ -1,7 +1,7 @@
 import { QueryParameterSet } from "https://deno.land/x/sqlite@v3.9.1/src/query.ts";
 import { DB, MessageQueryResult, MAXIMUM_DB_FETCH_SIZE } from "./db.ts";
 import { fetchGroup, isInGroup } from "./group.ts";
-import { Attachment, AttachmentType, BatchMessageFetchOptions, Group, Message, MessageContent, Nullable, Optional, User, SQLiteDateRange } from "./types.d.ts";
+import { Attachment, AttachmentType, BatchMessageFetchOptions, Group, Message, MessageContent, Nullable, Optional, User, SQLiteDateRange, JSONValue } from "./types.d.ts";
 import { fetchUser } from "./user.ts";
 
 export function createMessage(group: Group, sender: User, content: MessageContent, replyTo?: Optional<number>, attachments?: Attachment[]): Message {
@@ -27,7 +27,7 @@ export function createMessage(group: Group, sender: User, content: MessageConten
         attachmentLinks = attachments.map(a => a.path);
 
     const result = DB.queryEntries<MessageQueryResult>(
-        "INSERT INTO messages (groupId, authorId, replyId, body, fullJson, attachments, edited, editedAt, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now')) RETURNING *",
+        "INSERT INTO messages (groupId, authorId, replyId, body, fullJson, attachments, editedAt, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now')) RETURNING *",
         [
             group.id,
             sender.id,
@@ -35,7 +35,6 @@ export function createMessage(group: Group, sender: User, content: MessageConten
             content.body,
             JSON.stringify(content),
             JSON.stringify(attachmentLinks),
-            false,
             null
         ]
     );
@@ -48,7 +47,7 @@ export function createMessage(group: Group, sender: User, content: MessageConten
 
 export function editMessage(message: Message, newContent: MessageContent): void {
     DB.query(
-        "UPDATE messages SET body = ?, fullJson = ?, edited = 1, editedAt = datetime('now') WHERE id = ?",
+        "UPDATE messages SET body = ?, fullJson = ?, editedAt = datetime('now') WHERE id = ?",
         [
             newContent.body,
             JSON.stringify(newContent),
@@ -174,7 +173,6 @@ export function parseMessageFromResult(result: MessageQueryResult): Message {
         createdAt: result.createdAt,
         content: content,
         attachments: attachments,
-        edited: Number(result.edited) !== 0,
         editedAt: result.editedAt
     };
 }
@@ -205,4 +203,8 @@ export function getAttachmentTypeFromFilename(name: string): AttachmentType {
         default:
             return "binary";
     }
+}
+
+export function isMessageContent(object: JSONValue): boolean {
+    return typeof object === "object" && object !== null && !Array.isArray(object) && object.body !== undefined;
 }

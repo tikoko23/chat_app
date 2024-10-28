@@ -11,5 +11,8 @@ export const MOTD = [
     "no.",
     "Never gonna give you up!",
     "Hi!",
-    "Ddi u know tha tthe erath was flat but it bceame a sphere cuz it wnated to disporve flta earthesr?<br>😱😱😱🤯🤯🤯"
+    "Ddi u know tha tthe erath was flat but it bceame a sphere cuz it wnated to disporve flta earthesr?<br>😱😱😱🤯🤯🤯",
+    "You are breathing manually now (im sorr- im actually not sorry lol)",
+    "You are blinking manually now (im sorr- im actually not sorry lol)",
+    "👁️👃"
 ];

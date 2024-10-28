@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    $$load_style[main]
+    $$load_style[button]
+    $$load_style[msg_box]
+    $$load_style[text_box]
+    $$load_style[background_image]
+
+    <style>
+        #register {
+            margin-top: 20px;
+        }
+
+        .text-field {
+            width: 90%;
+
+        }
+
+        #holder {
+            max-width: 90%;
+            max-height: 90%;
+            font-size: 2em;
+
+            overflow-x: hidden;
+            overflow-y: scroll;
+            scrollbar-width: 0;
+        }
+
+        #error {
+            margin-top: 10px;
+            color: rgb(255, 100, 100);
+        }
+
+    </style>
+</head>
+<body>
+    <div id="holder" class="base-msg-container fit-msg-container">
+        <h1>Register an Account</h1>
+        <div class="text-field">
+            <span class="tiny-label">Username</span>
+            <input type="text" id="username" class="highlight-text-box base-text-box glass-text-box">
+        </div>
+        <div class="text-field">
+            <span class="tiny-label">Display name (optional)</span>
+            <input type="text" id="display-name" class="highlight-text-box base-text-box glass-text-box">
+        </div>
+        <div class="text-field">
+            <span class="tiny-label">Email (optional)</span>
+            <input type="text" id="email" class="highlight-text-box base-text-box glass-text-box">
+        </div>
+        <div class="text-field">
+            <span class="tiny-label">Password</span>
+            <input type="password" id="password" class="highlight-text-box base-text-box glass-text-box">
+        </div>
+        <div class="text-field">
+            <span class="tiny-label">Password (repeat)</span>
+            <input type="password" id="password-repeat" class="highlight-text-box base-text-box glass-text-box">
+        </div>
+        <span id="error" class="tiny-label">&nbsp;</span>
+        <button id="register" class="glass-bright-button fill-button color-button" style="font-size: 0.75em;" disabled>Register</button>
+    </div>
+
+    <script type="module">
+        import { REGEX } from "/scripts/regex.js";
+        import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
+        import { LINKS } from "/scripts/links.js";
+        import { readAll } from "/scripts/read-all.js";
+        import { getCookie, setCookie } from "/scripts/cookie.js";
+
+        (async () => {
+            const token = getCookie("auth_token");
+
+            if (token !== null) {
+                const result = await fetchJSON(`${ENDPOINTS.user}/fetch-self`, {
+                    headers: { "Authorization": token }
+                });
+
+                if (result.obj)
+                    window.location.href = LINKS.home;
+            }
+
+            const username = document.getElementById("username");
+            const displayName = document.getElementById("display-name");
+            const email = document.getElementById("email");
+            const password = document.getElementById("password");
+            const passwordRepeat = document.getElementById("password-repeat");
+            const button = document.getElementById("register");
+
+            const error = document.getElementById("error");
+
+            function updateButton() {
+                const valid = [];
+                const invalid = [];
+
+                if (REGEX.username.test(username.value))
+                    valid.push(username);
+                else
+                    invalid.push(username);
+
+                if (REGEX.password.test(password.value))
+                    valid.push(password);
+                else
+                    invalid.push(password);
+
+                if (passwordRepeat.value !== password.value)
+                    invalid.push(passwordRepeat);
+                else
+                    valid.push(passwordRepeat);
+
+                if (email.value !== "" && !REGEX.email.test(email.value))
+                    invalid.push(email);
+                else
+                    valid.push(email);
+
+                if (displayName.value !== "" && !REGEX.displayName.test(displayName.value) || /^\s+$/.test(displayName.value))
+                    invalid.push(displayName);
+                else
+                    valid.push(displayName);
+
+                valid.forEach(e => {
+                    e.classList.remove("invalid");
+
+                    if (e.id === "password-repeat" && error.innerText === "Passwords do not match")
+                        error.innerHTML = "&nbsp;";
+                });
+                invalid.forEach(e => {
+                    e.classList.add("invalid");
+
+                    if (e.id === "password-repeat")
+                        error.innerText = "Passwords do not match";
+                });
+
+                if (invalid.length === 0)
+                    button.disabled = false;
+                else
+                    button.disabled = true;
+            }
+
+            [ username, displayName, email, password, passwordRepeat ].forEach(e => e.addEventListener("input", updateButton));
+
+            button.addEventListener("click", async () => {
+                const result = await fetchJSON(`${ENDPOINTS.user}/create`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username.value,
+                        displayName: displayName.value || null,
+                        email: email.value || null,
+                        password: password.value
+                    })
+                });
+
+                if (result.response.status === 201) {
+                    const tokenResult = await fetchJSON(`${ENDPOINTS.user}/get-access-token`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username: username.value,
+                            password: password.value
+                        })
+                    });
+
+                    if (tokenResult.response.status === 200) {
+                        const token = tokenResult.obj.token;
+
+                        setCookie("auth_token", token);
+                        
+                        window.location.href = LINKS.home;
+                    } else
+                        error.innerText = `Token: ${tokenResult.body}`;
+                } else
+                    error.innerText = result.body;
+            });
+        })();
+    </script>
+</body>
+</html>
