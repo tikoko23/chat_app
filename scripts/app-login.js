@@ -30,6 +30,7 @@ export async function appLogin() {
         await setupGroups(token);
         progress.innerText = "Moving away...";
         await moveAway();
+        return token;
     } else {
         progress.innerText = "Your token has a skill issue";
         window.location.href = LINKS.login;

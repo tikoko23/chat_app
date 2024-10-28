@@ -1,3 +1,3 @@
 # chat_app
 
-Uploading of the database is intentional, as it's an automatically generated test database.
+idk what to write here rn

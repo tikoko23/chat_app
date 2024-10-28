@@ -23,6 +23,7 @@
     "https://deno.land/x/sqlite/mod.ts": "https://deno.land/x/sqlite@v3.9.1/mod.ts"
   },
   "remote": {
+    "https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.4/purify.min.js": "d2ccff1f1ef51cdca903584593c1f5baf923de449a951eb1499438582fa01a54",
     "https://deno.land/std@0.202.0/assert/assert.ts": "9a97dad6d98c238938e7540736b826440ad8c1c1e54430ca4c4e623e585607ee",
     "https://deno.land/std@0.202.0/assert/assertion_error.ts": "4d0bde9b374dfbcbe8ac23f54f567b77024fb67dbb1906a852d67fe050d42f56",
     "https://deno.land/std@0.202.0/path/_basename.ts": "057d420c9049821f983f784fd87fa73ac471901fb628920b67972b0f44319343",

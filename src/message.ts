@@ -1,8 +1,8 @@
 import { QueryParameterSet } from "https://deno.land/x/sqlite@v3.9.1/src/query.ts";
 import { DB, MessageQueryResult, MAXIMUM_DB_FETCH_SIZE } from "./db.ts";
-import { fetchGroup, isInGroup } from "./group.ts";
-import { Attachment, AttachmentType, BatchMessageFetchOptions, Group, Message, MessageContent, Nullable, Optional, User, SQLiteDateRange, JSONValue } from "./types.d.ts";
-import { fetchUser } from "./user.ts";
+import { fetchGroup, groupToResponse, isInGroup } from "./group.ts";
+import { Attachment, AttachmentType, BatchMessageFetchOptions, Group, Message, MessageContent, Nullable, Optional, User, SQLiteDateRange, JSONValue, ResponseMessage } from "./types.d.ts";
+import { fetchUser, userToResponse } from "./user.ts";
 
 export function createMessage(group: Group, sender: User, content: MessageContent, replyTo?: Optional<number>, attachments?: Attachment[]): Message {
     if (!isInGroup(group, sender))
@@ -207,4 +207,17 @@ export function getAttachmentTypeFromFilename(name: string): AttachmentType {
 
 export function isMessageContent(object: JSONValue): boolean {
     return typeof object === "object" && object !== null && !Array.isArray(object) && object.body !== undefined;
+}
+
+export function messageToResponse(message: Message): ResponseMessage {
+    return {
+        id: message.id,
+        content: message.content,
+        group: groupToResponse(message.group),
+        author: userToResponse(message.author),
+        replyId: message.replyId,
+        createdAt: message.createdAt,
+        editedAt: message.editedAt,
+        attachments: message.attachments
+    };
 }

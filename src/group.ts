@@ -1,7 +1,7 @@
 import { DB, GroupQueryResult } from "./db.ts";
-import { Optional } from "./types.d.ts";
+import { Optional, ResponseGroup } from "./types.d.ts";
 import { Group, User, Nullable } from "./types.d.ts";
-import { fetchUser } from "./user.ts";
+import { fetchUser, userToResponse } from "./user.ts";
 import { generateSalt } from "./crypt.ts";
 
 export function createGroup(name: string, owner: Optional<User>): Group {
@@ -139,10 +139,10 @@ export function leaveGroup(group: Group, user: User): void {
     DB.query("DELETE FROM members WHERE groupId = ? AND userId = ?", [ group.id, user.id ]);
 }
 
-export function groupToResponse(group: Group): { id: number, name: string, owner: number | null } {
+export function groupToResponse(group: Group): ResponseGroup {
     return {
         id: group.id,
         name: group.name,
-        owner: group.owner !== null ? group.owner.id : null
+        owner: group.owner === null ? null : userToResponse(group.owner)
     };
 }

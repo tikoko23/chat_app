@@ -29,12 +29,27 @@ export interface User {
     createdAt?: string
 }
 
+export interface ResponseUser {
+    id: number,
+    name: string,
+    displayName: Nullable<string>,
+    email: Nullable<string>,
+    createdAt?: string
+}
+
+
 export interface Group {
     id: number,
     name: string,
     owner: Nullable<User>,
     createdAt?: string,
     inviteLink: string
+}
+
+export interface ResponseGroup {
+    id: number,
+    name: string,
+    owner: Nullable<ResponseUser>
 }
 
 export type AttachmentType = 
@@ -61,6 +76,17 @@ export interface Message {
     id: number,
     group: Group,
     author: User,
+    replyId: Nullable<number>,
+    content: MessageContent,
+    createdAt: Nullable<string>,
+    attachments: Nullable<Attachment[]>,
+    editedAt: Nullable<string>
+}
+
+export interface ResponseMessage {
+    id: number,
+    group: ResponseGroup,
+    author: ResponseUser,
     replyId: Nullable<number>,
     content: MessageContent,
     createdAt: Nullable<string>,

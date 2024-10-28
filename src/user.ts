@@ -1,7 +1,7 @@
 import { getCookies } from "https://deno.land/std@0.224.0/http/cookie.ts";
 import { DB, UserQueryResult } from "./db.ts";
 import { generateSalt, hashString } from "./crypt.ts";
-import { User, Optional, Nullable } from "./types.d.ts";
+import { User, Optional, Nullable, ResponseUser } from "./types.d.ts";
 import { generateAccessToken } from "./api/user/get-access-token.ts";
 
 export function getTokenFromRequest(req: Request, cookie: boolean = false): Nullable<string> {
@@ -113,14 +113,6 @@ export async function createUser(
     );
 
     return fetchUser("name", username) as User;
-}
-
-interface ResponseUser {
-    id: number,
-    name: string,
-    displayName: Nullable<string>,
-    email: Nullable<string>,
-    createdAt?: string
 }
 
 export function userToResponse(user: User): ResponseUser {

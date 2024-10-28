@@ -94,7 +94,7 @@
         import { switchActiveGroup } from "/scripts/group-ui.js";
         import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
 
-        appLogin();
+        const tokenPromise = appLogin();
 
         window.thisUser = null;
         window.groupMessages = {};
@@ -116,9 +116,29 @@
             switchActiveGroup(newGroupId);
         });
 
+        /* TESTING */
         setTimeout(async () => {
+            const token = await tokenPromise;
             for (const [ groupId, holder ] of window.groupMessages) {
-                const result = await fetchJSON(`${ENDPOINTS.message}/fetch`)
+                const result = await fetchJSON(`${ENDPOINTS.message}/fetch`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": token
+                    },
+                    body: JSON.stringify({
+                        sort: "createdAt",
+                        order: "DESC"
+                    })
+                });
+
+                if (result.response.status === 200) {
+                    const messages = result.obj;
+
+                    messages.forEach(m => {
+                        
+                    });
+                } else
+                    console.error(result.response.body, "\n", result.response);
             }
         }, 1000);
 
