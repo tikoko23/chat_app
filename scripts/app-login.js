@@ -27,7 +27,11 @@ export async function appLogin() {
         window.thisUser = result.obj;
         
         progress.innerText = "Setting up groups...";
-        await setupGroups(token);
+        const success = await setupGroups(token);
+
+        if (!success)
+            console.error("Setting up groups failed");
+
         progress.innerText = "Moving away...";
         await moveAway();
         return token;

@@ -1,3 +1,4 @@
 .vscode
 data/*
 html_gen/*
+cdn/user_upload/*

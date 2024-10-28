@@ -1,5 +1,5 @@
 import { getJoinedGroups } from "../../group.ts";
-import { fetchMessage } from "../../message.ts";
+import { fetchMessage, messageToResponse } from "../../message.ts";
 import { BatchMessageFetchOptions, EndpointMeta, JSONValue, SQLiteDateRange } from "../../types.d.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
@@ -80,7 +80,9 @@ const requestMeta: EndpointMeta = {
 
         const userGroups = getJoinedGroups(requestingUser);
 
-        const allowed = messages.filter(m => (m.author.id === requestingUser.id || userGroups.some(g => g.id === m.group.id)));
+        const allowed = messages
+            .filter(m => (m.author.id === requestingUser.id || userGroups.some(g => g.id === m.group.id)))
+            .map(m => messageToResponse(m));
 
         if (allowed.length === 0)
             return new Response("Not found", { status: 404 });

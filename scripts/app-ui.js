@@ -25,10 +25,9 @@ export async function setupGroups(token) {
     if (result.response.status === 200) {
         result.obj.forEach(g => {
             addGroup(g.name, g.owner, g.id);
-            const div = document.createElement("div");
-            div.classList.add("glassify");
-            div.id = "message-display";
         });
-
-    }
+        
+        return true;
+    } else
+        return false;
 }

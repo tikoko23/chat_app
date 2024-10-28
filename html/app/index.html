@@ -93,6 +93,7 @@
         import { appLogin } from "/scripts/app-login.js";
         import { switchActiveGroup } from "/scripts/group-ui.js";
         import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
+        import { addMessage } from "/scripts/message-ui.js";
 
         const tokenPromise = appLogin();
 
@@ -111,15 +112,16 @@
 
             const newGroupId = parseInt(e.target.id.substring(4));
 
-            console.log(newGroupId);
-
             switchActiveGroup(newGroupId);
         });
 
         /* TESTING */
-        setTimeout(async () => {
+        (async () => {
             const token = await tokenPromise;
-            for (const [ groupId, holder ] of window.groupMessages) {
+            console.log(window.groupMessages);
+
+            for (const [ groupId, holder ] of Object.entries(window.groupMessages)) {
+                console.log(groupId, holder);
                 const result = await fetchJSON(`${ENDPOINTS.message}/fetch`, {
                     method: "POST",
                     headers: {
@@ -135,12 +137,13 @@
                     const messages = result.obj;
 
                     messages.forEach(m => {
-                        
+                        addMessage(m.author.name, m.content.body, m.id, holder);
+                        console.log(m);
                     });
                 } else
                     console.error(result.response.body, "\n", result.response);
             }
-        }, 1000);
+        })();
 
     </script>
 </body>
