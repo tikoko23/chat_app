@@ -1,11 +1,12 @@
 from .exceptions import MissingKeyException
 
 class User:
-    def __init__(self, id: int, name: str, createdAt: str, /, *, displayName: str | None = None):
+    def __init__(self, id: int, name: str, createdAt: str, /, *, displayName: str | None = None, email: str | None = None):
         self.id = id
         self.name = name
         self.createdAt = createdAt
         self.displayName = displayName
+        self.email = email
 
     @staticmethod
     def fromDict(object: dict):
@@ -25,5 +26,6 @@ class User:
             raise MissingKeyException("Key 'createdAt' is missing from dictionary argument")
 
         displayName = object.get("displayName")
+        email = object.get("email")
 
-        return User(id, name, createdAt, displayName=displayName)
+        return User(id, name, createdAt, displayName=displayName, email=email)
