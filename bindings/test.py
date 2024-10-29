@@ -1,6 +1,8 @@
 from python.client import Client
+from python.user import User
 
-client = Client("2bb54a77cc694fee81cf1b309568853a9f98e7ddd056fd8ab412e63d10cff78d")
+# The token that was previously here was a troll
+client = Client(User.get_access_token("no free", "account for you"))
 
 print(client.user.name)
 print(client.user.displayName)

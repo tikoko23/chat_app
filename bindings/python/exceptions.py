@@ -5,3 +5,7 @@ class EndpointResponseException(Exception):
 class MissingKeyException(Exception):
     def __init__(self, *args):
         super().__init__(*args)
+
+class TokenException(Exception):
+    def __init__(self, *args):
+        super().__init__(*args)
