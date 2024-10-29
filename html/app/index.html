@@ -101,6 +101,17 @@
         window.groupMessages = {};
         window.activeGroup = -1;
 
+        (async () => {
+            const token = await tokenPromise;
+            const url = new URL(window.location.href);
+            const landingGroup = url.searchParams.get("landingGroupId") ?? -1;
+
+            const groupDOM = document.getElementById(`grp_${landingGroup}`);
+
+            if (groupDOM !== null)
+                switchActiveGroup(landingGroup);
+        })();
+
         const groupList = document.getElementById("group-list");
 
         groupList.addEventListener("click", e => {
