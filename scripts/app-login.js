@@ -1,5 +1,4 @@
-// deno-lint-ignore-file no-window
-
+// deno-lint-ignore-file
 import { getCookie } from "./cookie.js";
 import { ENDPOINTS, fetchJSON } from "./api-endpoints.js";
 import { LINKS } from "./links.js";
