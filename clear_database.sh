@@ -1,1 +1,0 @@
-printf "" > data/main.db
