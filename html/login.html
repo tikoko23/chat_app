@@ -30,7 +30,7 @@
         <h1>Login to Your Account</h1>
 
         <div class="msg" style="width: 90%;">
-            <span class="tiny-label">Don't have an account? <a href="/register">Register!</a></span>
+            <span class="tiny-label">Don't have an account? <a id="redirect" href="/register">Register!</a></span>
         </div>
         <div style="width: 90%;">
             <span class="tiny-label">Username:</span>
@@ -61,6 +61,14 @@
 
                 if (result.obj)
                     window.location.href = LINKS.home;
+            }
+
+            const url = new URL(window.location.href);
+            const redirectAfter = url.searchParams.get("redirect");
+
+            if (redirectAfter !== null) {
+                const anchor = document.getElementById("redirect");
+                anchor.href += `?redirect=${redirectAfter}`;
             }
 
             const button = document.getElementById("login");
@@ -115,7 +123,7 @@
 
                         setCookie("auth_token", token);
 
-                        window.location.href = LINKS.home;
+                        window.location.href = redirectAfter ?? LINKS.home;
 
                     } catch (_e) {
                         errorDisplay.innerText = "Server returned faulty data";

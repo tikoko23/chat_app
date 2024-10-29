@@ -84,6 +84,9 @@
                     window.location.href = LINKS.home;
             }
 
+            const url = new URL(window.location.href);
+            const redirectAfter = url.searchParams.get("redirect");
+
             const username = document.getElementById("username");
             const displayName = document.getElementById("display-name");
             const email = document.getElementById("email");
@@ -174,7 +177,7 @@
 
                         setCookie("auth_token", token);
 
-                        window.location.href = LINKS.home;
+                        window.location.href = redirectAfter ?? LINKS.home;
                     } else
                         error.innerText = `Token: ${tokenResult.body}`;
                 } else

@@ -46,7 +46,7 @@
         const token = getCookie("auth_token");
 
         if (token === null)
-            window.location.href = LINKS.login;
+            window.location.href = `${LINKS.login}?redirect=${window.location.href}`;
 
         (async () => {
             const result = await fetchJSON(`${ENDPOINTS.user}/fetch-self`, {
@@ -55,7 +55,7 @@
             });
 
             if (result.response.status !== 200)
-                window.location.href = LINKS.login;
+                window.location.href = `${LINKS.login}?redirect=${window.location.href}`;
 
         })();
 
