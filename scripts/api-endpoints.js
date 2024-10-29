@@ -1,6 +1,6 @@
 import { readAll } from "./read-all.js";
 
-export const API_PATH = "https://tikoko-dev.site/api";
+export const API_PATH = "/api";
 
 export const ENDPOINTS = {
     group: `${API_PATH}/group`,

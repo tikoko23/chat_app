@@ -1,4 +1,4 @@
-export const SITE_URL = "https://tikoko-dev.site";
+export const SITE_URL = ""; //Left empty to use relative paths
 export const LINKS = {
     home: `${SITE_URL}/app`,
     login: `${SITE_URL}/login`,
