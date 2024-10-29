@@ -26,7 +26,7 @@ const requestMeta: EndpointMeta = {
 
         if (group === null)
             return new Response("Invalid invite", { status: 400 });
-        
+
         const response = groupToResponse(group);
 
         return new Response(JSON.stringify(response), { status: 200 });

@@ -20,8 +20,8 @@ export const MOTD = [
 export function displayMOTD() {
     const message = MOTD[Math.floor(Math.random() * (MOTD.length))];
     const parsedMessage = marked.parse(message);
-    
+
     const motdDisplay = document.getElementById("motd");
-    
+
     motdDisplay.innerHTML = parsedMessage;
 }

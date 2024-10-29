@@ -14,7 +14,7 @@ export function switchActiveGroup(newId) {
 
     if (currentListItem !== null)
         currentListItem.classList.remove("active");
-    
+
     const newHolder = getMessageHolder(newId) ?? createMessageHolder(newId);
 
     holderContainer.appendChild(newHolder);

@@ -16,12 +16,12 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
     console.log("Activating API");
     {
         const count = await loadApi(true, "   ");
-    
+
         console.log(`Successfully activated ${count} endpoints`);
     }
-    
+
     await parseHtml();
-    
+
     const dynamicPages = await loadDynamicPages();
 
     return Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo): Promise<Response> => {
@@ -73,7 +73,7 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
 
         if (dynamicPages[url.pathname] !== undefined)
             return await dynamicPages[url.pathname].exec(req);
-        
+
         return new Response(getHtml(url.pathname), {
             headers: {
                 "Content-Type": "text/html; charset=utf-8"

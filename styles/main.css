@@ -84,7 +84,7 @@ a {
 .glassify {
     border: 2px solid rgba(200, 200, 200, 0.1);
     border-radius: 5px;
-    
+
     background-color: rgba(200, 200, 200, 0.1);
     backdrop-filter: blur(100px);
 

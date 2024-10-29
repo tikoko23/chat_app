@@ -19,7 +19,7 @@ export async function readAll(stream: ReadableStream<Uint8Array>): Promise<Uint8
     const reader = stream.getReader();
 
     let fullData = new Uint8Array();
-    
+
     while (true) {
         const { value, done } = await reader.read();
 

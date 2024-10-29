@@ -41,11 +41,11 @@
 
         const url = new URL(window.location.href);
         const invite = url.searchParams.get("invite");
-        
+
         const topText = document.getElementById("top-text");
         const button = document.getElementById("join");
         const title = document.getElementById("title");
-        
+
         if (invite === null)
             title.textContent = "Invite parameter should be provided";
         else (async () => {

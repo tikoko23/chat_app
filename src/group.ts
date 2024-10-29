@@ -9,7 +9,7 @@ export function createGroup(name: string, owner: Optional<User>): Group {
         owner = null;
 
     const inviteLink = `${name}_${generateSalt(8)}`;
-    
+
     DB.query(
         "INSERT OR IGNORE INTO groups (name, ownerId, inviteLink, createdAt) VALUES (?, ?, ?, datetime('now'))",
         [
@@ -57,7 +57,7 @@ export function fetchGroup(how: "name", getter: string): Nullable<Group>;
 export function fetchGroup(how: "invite", getter: string): Nullable<Group>;
 export function fetchGroup(how: "id" | "name" | "invite", getter: number | string): Nullable<Group> {
     let query: string = "";
-    
+
     switch (how) {
         case "id":
             query = "SELECT * FROM groups WHERE id = ?";
@@ -73,7 +73,7 @@ export function fetchGroup(how: "id" | "name" | "invite", getter: number | strin
         query,
         [ getter ]
     );
-    
+
     if (!result || result.length === 0)
         return null;
 

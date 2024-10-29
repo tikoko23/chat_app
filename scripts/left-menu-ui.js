@@ -7,10 +7,10 @@ let enabled = true;
 export function toggleMenu() {
     if (enabled) {
         button.disabled = true;
-        
+
         panel.style.marginRight = `-${panel.clientWidth}px`
         panel.style.transform = "translateX(-100%)";
-        
+
         svg.style.transform = "rotate(90deg)";
     } else {
         button.disabled = true;
@@ -18,8 +18,8 @@ export function toggleMenu() {
         panel.style.removeProperty("margin-right");
         panel.style.removeProperty("transform");
 
-        svg.style.transform = "rotate(0deg)"; 
-    
+        svg.style.transform = "rotate(0deg)";
+
     }
 
     setTimeout(() => button.disabled = false, 1000);

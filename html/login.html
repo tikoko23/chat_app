@@ -28,7 +28,7 @@
 <body>
     $$large_msg_box {
         <h1>Login to Your Account</h1>
-        
+
         <div class="msg" style="width: 90%;">
             <span class="tiny-label">Don't have an account? <a href="/register">Register!</a></span>
         </div>
@@ -114,9 +114,9 @@
                         const token = object.token;
 
                         setCookie("auth_token", token);
-                        
+
                         window.location.href = LINKS.home;
-                        
+
                     } catch (_e) {
                         errorDisplay.innerText = "Server returned faulty data";
                     }

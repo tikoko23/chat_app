@@ -52,7 +52,7 @@ export interface ResponseGroup {
     owner: Nullable<ResponseUser>
 }
 
-export type AttachmentType = 
+export type AttachmentType =
     | "video"
     | "audio"
     | "image"

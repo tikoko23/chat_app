@@ -6,7 +6,7 @@ import { generateAccessToken } from "./api/user/get-access-token.ts";
 
 export function getTokenFromRequest(req: Request, cookie: boolean = false): Nullable<string> {
     const authHeader = req.headers.get("Authorization");
-    
+
     if (authHeader !== null)
         return authHeader;
 
@@ -92,14 +92,14 @@ export async function createUser(
     displayName: Optional<string> = username,
     email: Optional<string> = null
 ): Promise<User | null> {
-            
+
     if (fetchUser("name", username) !== null)
         return null;
-    
+
     const salt = generateSalt();
     const hashed = await getHashedPassword(password, salt);
     const token = await generateAccessToken(username, password, true);
-    
+
     DB.query(
         "INSERT INTO users (name, displayName, email, password, passwordSalt, token, createdAt) VALUES (?, ?, ?, ?, ?, ?, datetime('now'))",
         [

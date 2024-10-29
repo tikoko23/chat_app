@@ -50,14 +50,14 @@ function getBetweenBrackets(
 
 export async function parseHtml() {
     await Deno.remove("./html_gen", { recursive: true }).catch(() => {});
-    
+
     const variables = await loadHtmlVariables();
     const descendents = getDescendants("./html").filter(p => p.endsWith(".html"));
-    
+
     for (const path of descendents) {
         const varRegex = /\$\$(?<var>[a-zA-Z_][a-zA-Z0-9_]*)/g;
         let text = await Deno.readTextFile(path);
-        
+
         let match;
         while ((match = varRegex.exec(text)) !== null) {
             const variableName = match.groups?.var || "";
@@ -140,7 +140,7 @@ export async function loadDynamicPages(): Promise<Record<string, DynamicPageMeta
     for (const path of descendents) {
         const module = await import(path);
         const sanitizedPath = path.replace(/^\.\/dynamic_pages/g, "");
-        
+
         loaded[sanitizedPath] = module.default;
     }
 

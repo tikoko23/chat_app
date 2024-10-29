@@ -11,7 +11,7 @@ const requestMeta: EndpointMeta = {
 
         if (typeof name !== "string")
             return new Response("Group name must be string");
-        
+
         if (token === null)
             return new Response("Authorization header must be provided", { status: 401 });
 

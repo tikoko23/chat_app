@@ -20,7 +20,7 @@ export async function serveFile(req: Request, path: string, root: string = CDN_R
     const forcedMIME = url.searchParams.get("mime");
 
     const contentPath = `${root}${path}`;
-    
+
     try {
         const lstat = await Deno.lstat(contentPath);
 
@@ -38,7 +38,7 @@ export async function serveFile(req: Request, path: string, root: string = CDN_R
 
 export async function addFile(req: Request): Promise<Response> {
     const url = new URL(req.url);
-    
+
     if (req.method !== "POST")
         return new Response("Method not allowed", { status: 405 });
 
@@ -94,7 +94,7 @@ export async function addFile(req: Request): Promise<Response> {
 
             if (data.done)
                 break;
-            
+
             if (!data.value)
                 continue;
 

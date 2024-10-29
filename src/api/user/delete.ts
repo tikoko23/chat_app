@@ -6,7 +6,7 @@ const requestMeta: EndpointMeta = {
     method: "GET",
     exec: (req: Request): Response => {
         const token = getTokenFromRequest(req);
-        
+
         if (token === null)
             return new Response("Authorization header must include a token", { status: 400 });
 

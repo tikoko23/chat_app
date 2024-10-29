@@ -55,7 +55,7 @@ Deno.test({
             const stream = response.body;
 
             assert(stream !== null, "body must be returned");
-            
+
             const string = await extractStringFromStream(stream);
 
             assert(response.status === 200, string);

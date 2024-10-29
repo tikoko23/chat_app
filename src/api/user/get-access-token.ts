@@ -10,7 +10,7 @@ const requestMeta: EndpointMeta = {
 
         if (!username)
             return new Response("Username is required", { status: 400 });
-        
+
         if (!password)
             return new Response("Password is required", { status: 400 });
 
@@ -21,7 +21,7 @@ const requestMeta: EndpointMeta = {
             return new Response("Password must be a string", { status: 400 });
 
         let generatedToken: string
-        
+
         try {
             generatedToken = await pullTokenFromDatabase(username, password);
         } catch (e) {

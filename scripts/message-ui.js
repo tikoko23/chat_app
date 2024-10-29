@@ -15,7 +15,7 @@ export function getMessageHolder(groupId) {
 export function addMessage(sender, content, id, messageContainer) {
     const holder = document.createElement("div");
     const nameDisplay = document.createElement("span");
-    
+
     const parsed = marked.parse(content);
     const sanitized = DOMPurify.sanitize(parsed);
 

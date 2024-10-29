@@ -13,7 +13,7 @@ export function createMessage(group: Group, sender: User, content: MessageConten
 
     if (replyTo !== null) {
         const repliedMsg = fetchMessage("id", replyTo);
-        
+
         if (repliedMsg === null)
             throw new Error("Replied message must be a valid id");
 
@@ -73,7 +73,7 @@ export function fetchMessage(how: "id" | "batch", getter: number | BatchMessageF
 
             if (getter.limit > MAXIMUM_DB_FETCH_SIZE)
                 throw new Error(`Limit mustn't be greater than ${MAXIMUM_DB_FETCH_SIZE}`);
-            
+
             const filterRegex = /^[a-zA-Z0-9_]+$/;
 
             for (const value of [ getter.sortColumn, getter.order ]) {
@@ -83,7 +83,7 @@ export function fetchMessage(how: "id" | "batch", getter: number | BatchMessageF
                 if (!filterRegex.test(value))
                     throw new Error("Arguments must be alphanumerical");
             }
-            
+
             let query = "SELECT * FROM messages";
             const args: QueryParameterSet = [];
 
@@ -97,7 +97,7 @@ export function fetchMessage(how: "id" | "batch", getter: number | BatchMessageF
 
             if (iterator.length > 0) {
                 query += " WHERE ";
-    
+
                 iterator.forEach((v, i) => {
                     switch (v.type) {
                         case "g":
@@ -164,7 +164,7 @@ export function parseMessageFromResult(result: MessageQueryResult): Message {
             attachments = null
         }
     }
-    
+
     return {
         id: Number(result.id),
         group: group,

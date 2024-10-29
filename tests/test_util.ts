@@ -19,7 +19,7 @@ async function endTest(server: Deno.HttpServer<Deno.NetAddr>): Promise<void> {
 
 export async function test(callback: (server?: Deno.HttpServer<Deno.NetAddr>) => Promise<void> | void): Promise<void> {
     const server = await beginTest();
-    
+
     try {
         await callback(server);
     } catch (e) {

@@ -173,7 +173,7 @@
                         const token = tokenResult.obj.token;
 
                         setCookie("auth_token", token);
-                        
+
                         window.location.href = LINKS.home;
                     } else
                         error.innerText = `Token: ${tokenResult.body}`;

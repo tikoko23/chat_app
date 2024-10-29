@@ -58,7 +58,7 @@ export function makeDB(path: string, args?: SQLite.SqliteOptions): SQLite.DB {
         exists = false;
     }
 
-    if (!exists) {   
+    if (!exists) {
         Deno.mkdirSync(dirname(path), { recursive: true });
         Deno.openSync(path, { write: true });
     }
@@ -110,7 +110,7 @@ export function initDefaultTables(DB: SQLite.DB): void {
             userId INTEGER NOT NULL,
             permissionLevel INTEGER NOT NULL,
             joinedAt TEXT NOT NULL
-        ) 
+        )
     `);
 
     DB.query(`
@@ -124,6 +124,6 @@ export function initDefaultTables(DB: SQLite.DB): void {
             fullJson TEXT NOT NULL,
             attachments TEXT,
             editedAt TEXT
-        ) 
+        )
     `);
 }

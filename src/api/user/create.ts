@@ -12,7 +12,7 @@ const requestMeta: EndpointMeta = {
 
         if (!username)
             return new Response("Username is required", { status: 400 });
-        
+
         if (!password)
             return new Response("Password is required", { status: 400 });
 
