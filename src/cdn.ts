@@ -14,7 +14,7 @@ export async function serveFile(req: Request, path: string, root: string = CDN_R
     if (req.method !== "GET")
         return new Response("Method not allowed", { status: 405 });
 
-    if (path.replace(/\/\.\.\/|\/\.\.|\.{2}\//, "") !== path)
+    if (path.replace(/\.\.\/|\/\.\./, "") !== path)
         return new Response("Cannot target parent directory", { status: 400 });
 
     const forcedMIME = url.searchParams.get("mime");
@@ -167,7 +167,7 @@ function getContentType(path: string): MIMEType {
 
 export function sanitizeFilename(name: string): string {
     return name
-        .replace(/\.\.\/|\/\.\.|\\|\.\.\\/g, "")
+        .replace(/\.\.\/|\/\.\./g, "")
         .replace(/[<>:"/\\|?*]/g, "_")
         .replace(/^\.+|\.+$/g, "")
         .substring(0, MAX_FILENAME_LENGTH);

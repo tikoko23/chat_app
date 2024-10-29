@@ -30,22 +30,7 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
 
         const url = new URL(req.url);
 
-        if (KILL_SWITCH)
-            return new Response(null, {
-                status: 302,
-                headers: {
-                    "Location": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                }
-            });
-
-        if (url.pathname === "/")
-            return new Response(getHtml("/index.html"), {
-                headers: {
-                    "Content-Type": "text/html; charset=utf-8"
-                }
-            });
-
-        if (url.pathname.startsWith("/info") || rickrollDetector.test(url.pathname))
+        if (url.pathname.startsWith("/info") || rickrollDetector.test(url.pathname) || KILL_SWITCH)
             return new Response(null, {
                 status: 302,
                 headers: {
@@ -63,7 +48,7 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
             return serveFile(req, url.pathname.replace(/^\/asset/g, ""), "./asset");
 
         if (url.pathname.startsWith("/styles")) {
-            if (url.pathname !== url.pathname.replace(/\.\.\/|\/\.\.|\\|\.\.\\/g, ""))
+            if (url.pathname !== url.pathname.replace(/\.\.\/|\/\.\./g, ""))
                 return new Response("Forbidden", { status: 403 });
 
             try {
@@ -75,7 +60,7 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
         }
 
         if (url.pathname.startsWith("/scripts")) {
-            if (url.pathname !== url.pathname.replace(/\.\.\/|\/\.\.|\\|\.\.\\/g, ""))
+            if (url.pathname !== url.pathname.replace(/\.\.\/|\/\.\./g, ""))
                 return new Response("Forbidden", { status: 403 });
 
             try {

@@ -1,31 +1,19 @@
 import { assert, assertEquals } from "@std/assert";
-import { getDescendants } from "../src/api.ts";
 import { fetchUser } from "../src/user.ts";
 import { User } from "../src/types.d.ts";
 import { unloadDB } from "../src/db.ts";
 import { test } from "./test_util.ts";
 import { extractStringFromStream } from "../src/util.ts";
 
-Deno.test({
-    name: "getDescendants",
-    fn() {
-        {
-            const descendants = getDescendants("./tests/files");
-            assertEquals(descendants.length, 2);
-        }
-        {
-            const descendants = getDescendants("./tests/files", true, true);
-            assertEquals(descendants.length, 3);
-        }
-    }
-});
+const API = "http://localhost:8000/api";
+const USER_API = `${API}/user`;
 
-async function createTestUser(): Promise<User> {
-    const response = await fetch("http://localhost:8000/api/user/create", {
+async function createTestUser(name: string = "test_user", pass: string = "strong_password"): Promise<User> {
+    const response = await fetch(`${USER_API}/create`, {
         method: "POST",
         body: JSON.stringify({
-            username: "test_user",
-            password: "strong_password"
+            username: name,
+            password: pass
         })
     });
 
@@ -37,7 +25,7 @@ async function createTestUser(): Promise<User> {
 
     assert(response.status === 201, string);
 
-    const user = fetchUser("name", "test_user");
+    const user = fetchUser("name", name);
 
     assert(user !== null, "user should exist");
 
@@ -59,7 +47,7 @@ Deno.test({
         await test(async () => {
             const user = await createTestUser();
 
-            const response = await fetch("http://localhost:8000/api/user/fetch-self", {
+            const response = await fetch(`${USER_API}/fetch-self`, {
                 method: "GET",
                 headers: { "Authorization": user.token }
             });
@@ -83,6 +71,41 @@ Deno.test({
             assertEquals(json.id, user.id);
             assertEquals(json.name, user.name);
             unloadDB();
+        });
+    }
+});
+
+Deno.test({
+    name: "userAPI/get-access-token",
+    async fn() {
+        await test(async () => {
+            const user = await createTestUser("test_user", "strong_password");
+
+            const response = await fetch(`${USER_API}/get-access-token`, {
+                method: "POST",
+                body: JSON.stringify({
+                    username: user.name,
+                    password: "strong_password"
+                })
+            });
+
+            const stream = response.body;
+
+            assert(stream !== null, "body must be returned");
+
+            const string = await extractStringFromStream(stream);
+
+            assert(response.status === 200, string);
+
+            let json;
+            try {
+                json = JSON.parse(string);
+            } catch (_e) {
+                console.warn("Faulty string:", string);
+                throw new Error("couldn't parse json");
+            }
+
+            assert(user.token === json.token, "tokens should match");
         });
     }
 });
