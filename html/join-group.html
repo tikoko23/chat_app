@@ -36,11 +36,28 @@
     }
 
     <script type="module">
-        import { ENDPOINTS } from "/scripts/api-endpoints.js";
-        import { readAll } from "/scripts/read-all.js";
+        import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
+        import { LINKS } from "/scripts/links.js";
+        import { getCookie } from "/scripts/cookie.js";
 
         const url = new URL(window.location.href);
         const invite = url.searchParams.get("invite");
+
+        const token = getCookie("auth_token");
+
+        if (token === null)
+            window.location.href = LINKS.login;
+
+        (async () => {
+            const result = await fetchJSON(`${ENDPOINTS.user}/fetch-self`, {
+                method: "GET",
+                headers: { "Authorization": token }
+            });
+
+            if (result.response.status !== 200)
+                window.location.href = LINKS.login;
+
+        })();
 
         const topText = document.getElementById("top-text");
         const button = document.getElementById("join");
@@ -49,30 +66,26 @@
         if (invite === null)
             title.textContent = "Invite parameter should be provided";
         else (async () => {
-            const response = await fetch(`${ENDPOINTS.group}/fetch?invite=${invite}`);
+            const result = await fetchJSON(`${ENDPOINTS.group}/fetch?invite=${invite}`);
 
-            const text = String.fromCharCode(...(await readAll(response.body)));
-
-            switch (response.status) {
-                case 200:
-                    try {
-                        const group = JSON.parse(text);
-
-                        title.innerText = group.name;
-                        topText.innerText = "You have been invited to join";
-
-                        button.removeAttribute("disabled")
-                    } catch (e) {
-                        console.error(e);
-                        title.textContent = "Server returned faulty data";
-                        console.warn("Faulty data:\n", text);
-                    }
-                    break;
-                case 404:
-                    title.textContent = "Group not found";
-                    break;
+            if (result.response.status !== 200) {
+                title.textContent = "Group not found";
+                return;
             }
+
+            const group = result.obj;
+
+            topText.textContent = "You have been invited to join";
+            title.textContent = group.name;
+            button.disabled = false;
         })();
+
+        button.addEventListener("click", async () => {
+            const result = await fetchJSON(`${ENDPOINTS.group}/join`, {
+                method: "GET",
+                headers: { "Authorization": token }
+            })
+        });
 
     </script>
 </body>
