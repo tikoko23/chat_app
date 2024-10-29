@@ -60,7 +60,7 @@ export function makeDB(path: string, args?: SQLite.SqliteOptions): SQLite.DB {
 
     if (!exists) {
         Deno.mkdirSync(dirname(path), { recursive: true });
-        Deno.openSync(path, { write: true });
+        Deno.createSync(path).close();
     }
 
     return new SQLite.DB(path, args);

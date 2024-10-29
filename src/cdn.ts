@@ -2,27 +2,19 @@ import { MIMEType, Nullable, User } from "./types.d.ts";
 import { extname, dirname } from "https://deno.land/std@0.202.0/path/mod.ts";
 import { writeAll } from "https://deno.land/std@0.224.0/io/write_all.ts";
 import { fetchUser } from "./user.ts";
+import { Optional } from "./types.d.ts";
 
 const CDN_ROOT = "./cdn";
 const USER_UPLOAD_SUBDIR = "user_upload";
 const MAX_UPLOAD_SIZE_BYTES = 8388608;
 const MAX_FILENAME_LENGTH = 255;
 
-export async function serveFile(req: Request, path: string, root: string = CDN_ROOT): Promise<Response> {
-    const url = new URL(req.url);
-
-    if (req.method !== "GET")
-        return new Response("Method not allowed", { status: 405 });
-
-    if (path.replace(/\.\.\/|\/\.\./, "") !== path)
+export async function serveFile(path: string, forcedMIME?: Optional<string>): Promise<Response> {
+    if (/\.\.\/|\/\.\./.test(path))
         return new Response("Cannot target parent directory", { status: 400 });
 
-    const forcedMIME = url.searchParams.get("mime");
-
-    const contentPath = `${root}${path}`;
-
     try {
-        const lstat = await Deno.lstat(contentPath);
+        const lstat = await Deno.lstat(path);
 
         if (!lstat.isFile)
             return new Response("Resource isn't a regular file", { status: 403 });
@@ -31,9 +23,20 @@ export async function serveFile(req: Request, path: string, root: string = CDN_R
         return new Response("Resource not found", { status: 404 });
     }
 
-    const data = await Deno.readFile(contentPath);
+    const data = await Deno.readFile(path);
 
-    return new Response(data, { headers: { "Content-Type": forcedMIME ?? getContentType(contentPath) }});
+    return new Response(data, { headers: { "Content-Type": forcedMIME ?? getContentType(path) }, status: 200 });
+}
+
+export async function serveRequest(req: Request, root: string = CDN_ROOT): Promise<Response> {
+    if (req.method !== "GET")
+        return new Response("Method not allowed", { status: 405 });
+
+    const url = new URL(req.url);
+
+    const forcedMIME = url.searchParams.get("mime");
+
+    return await serveFile(`${root}${url.pathname}`, forcedMIME);
 }
 
 export async function addFile(req: Request): Promise<Response> {

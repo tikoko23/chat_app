@@ -1,6 +1,7 @@
 import { dirname } from "https://deno.land/std@0.202.0/path/dirname.ts";
 import { getDescendants } from "./api.ts";
 import { DynamicPageMeta, Nullable } from "./types.d.ts";
+import { serveFile } from "./cdn.ts";
 
 function getBetweenBrackets(
     str: string, brackets: "[]" | "()" | "{}", startingPosition: number = 0, stopAtNewLine: boolean = true
@@ -112,17 +113,18 @@ const checkedFileSuffixes: readonly string[] = [
     "/index.html"
 ];
 
-export function getHtml(path: string, internal: boolean = false): string {
+export async function serveHtml(path: string, internal: boolean = false): Promise<Response> {
     if (!internal && path.includes("/hide/"))
-        return Deno.readTextFileSync("./html_gen/404.html");
+        return await serveFile("./html_gen/404.html");
 
     for (const suffix of checkedFileSuffixes) {
-        try {
-            return Deno.readTextFileSync(`./html_gen/${path}${suffix}`);
-        } catch (_e) { /**/ }
+        const fileResponse = await serveFile(`./html_gen${path}${suffix}`);
+
+        if (fileResponse.status === 200)
+            return fileResponse;
     }
 
-    return Deno.readTextFileSync("./html_gen/404.html");
+    return await serveFile("./html_gen/404.html");
 }
 
 export function serveMessage(message: { title: string, text: string }): string {
