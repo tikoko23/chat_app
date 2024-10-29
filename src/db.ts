@@ -1,5 +1,6 @@
 import * as SQLite from "https://deno.land/x/sqlite@v3.9.1/mod.ts";
 import { Nullable } from "./types.d.ts";
+import { dirname } from "https://deno.land/std@0.202.0/path/dirname.ts";
 
 export const MAXIMUM_DB_FETCH_SIZE = 32;
 
@@ -43,9 +44,41 @@ export type MessageQueryResult = {
 
 export let DB: SQLite.DB;
 
-export function initDefaultTables(): void {
-    DB = new SQLite.DB("./data/main.db");
+export function makeDB(path: string, args?: SQLite.SqliteOptions): SQLite.DB {
+    let exists;
+    try {
+        Deno.lstatSync(path);
+        exists = true;
 
+    } catch (err) {
+        if (!(err instanceof Deno.errors.NotFound)) {
+            throw err;
+        }
+
+        exists = false;
+    }
+
+    if (!exists) {   
+        Deno.mkdirSync(dirname(path), { recursive: true });
+        Deno.openSync(path, { write: true });
+    }
+
+    return new SQLite.DB(path, args);
+}
+
+export function loadDefaultDB(): void {
+    DB = makeDB("./data/main.db");
+}
+
+export function loadCustomDB(db: SQLite.DB): void {
+    DB = db;
+}
+
+export function unloadDB(): void {
+    DB.close();
+}
+
+export function initDefaultTables(DB: SQLite.DB): void {
     DB.query(`
         CREATE TABLE IF NOT EXISTS groups (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -1,7 +1,7 @@
 /**
  * Reads all data in the stream and returns it
  * @param {ReadableStream<Uint8Array>} stream 
- * @returns {Uint8Array}
+ * @returns {Promise<Uint8Array>}
  */
 export async function readAll(stream) {
     const reader = stream.getReader();
