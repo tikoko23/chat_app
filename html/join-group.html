@@ -63,6 +63,8 @@
         const button = document.getElementById("join");
         const title = document.getElementById("title");
 
+        let group = null;
+
         if (invite === null)
             title.textContent = "Invite parameter should be provided";
         else (async () => {
@@ -73,7 +75,7 @@
                 return;
             }
 
-            const group = result.obj;
+            group = result.obj;
 
             topText.textContent = "You have been invited to join";
             title.textContent = group.name;
@@ -93,7 +95,12 @@
                 return;
             }
 
-            window.location.href = LINKS.home;
+            let link = LINKS.home;
+
+            if (group !== null)
+                link += `?landingGroupId=${group.id}`;
+
+            window.location.href = link;
         });
 
     </script>
