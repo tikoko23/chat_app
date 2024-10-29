@@ -1,18 +1,20 @@
 import requests
 
-from endpoints import Endpoints
-from exceptions import EndpointResponseException
+from .endpoints import Endpoints
+from .exceptions import EndpointResponseException
+from .user import User
 
 class Client:
     def __init__(self, token: str, /):
-        self.token = str(token)
+        self.token = token
+        self.user = None
         self.update_user()
 
     def update_user(self) -> None:
         response = self.request("GET", Endpoints.U_FETCH_SELF)
         json = response.json()
 
-        
+        self.user = User.fromDict(json)
 
     def request(self, method: str | bytes, endpoint: str | bytes, request_args: dict = {}, /, *, excludeAuthToken: bool = False) -> requests.Response:
         if not excludeAuthToken:

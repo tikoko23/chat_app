@@ -1,4 +1,4 @@
-from exceptions import MissingKeyException
+from .exceptions import MissingKeyException
 
 class User:
     def __init__(self, id: int, name: str, createdAt: str, /, *, displayName: str | None = None):
