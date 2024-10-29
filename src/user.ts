@@ -120,7 +120,6 @@ export function userToResponse(user: User): ResponseUser {
         id: user.id,
         name: user.name,
         displayName: user.displayName,
-        email: user.email,
         createdAt: user.createdAt
     };
 }
