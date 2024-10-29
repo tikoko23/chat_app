@@ -115,11 +115,12 @@ export async function createUser(
     return fetchUser("name", username) as User;
 }
 
-export function userToResponse(user: User): ResponseUser {
+export function userToResponse(user: User, privateEmail: boolean = true): ResponseUser {
     return {
         id: user.id,
         name: user.name,
         displayName: user.displayName,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        email: privateEmail ? undefined : user.email ?? undefined
     };
 }

@@ -14,7 +14,7 @@ const requestMeta: EndpointMeta = {
         if (user === null)
             return new Response("Invalid token", { status: 404 });
 
-        const result = userToResponse(user);
+        const result = userToResponse(user, false);
 
         return new Response(JSON.stringify(result), { status: 200, headers: { "Content-Type": "appliaction/json" } });
     }

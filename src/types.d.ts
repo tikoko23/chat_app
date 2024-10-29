@@ -33,7 +33,8 @@ export interface ResponseUser {
     id: number,
     name: string,
     displayName: Nullable<string>,
-    createdAt?: string
+    createdAt?: string,
+    email?: string
 }
 
 
