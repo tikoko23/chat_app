@@ -118,12 +118,10 @@ export async function serveHtml(path: string, internal: boolean = false): Promis
         return await serveFile("./html_gen/404.html");
 
     for (const suffix of checkedFileSuffixes) {
-        try {
-            const fileResponse = await serveFile(`./html_gen${path}${suffix}`);
+        const fileResponse = await serveFile(`./html_gen${path}${suffix}`);
 
-            if (fileResponse.status === 200)
-                return fileResponse;
-        } catch (_e) { /**/ }
+        if (fileResponse.status === 200)
+            return fileResponse;
     }
 
     return await serveFile("./html_gen/404.html");
