@@ -1,4 +1,5 @@
-import { fetchGroup, groupToResponse } from "../../group.ts";
+import { isInGroup } from "../../group.ts";
+import { fetchGroup, groupToResponse, joinGroup } from "../../group.ts";
 import { EndpointMeta } from "../../types.d.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
@@ -26,6 +27,11 @@ const requestMeta: EndpointMeta = {
 
         if (group === null)
             return new Response("Invalid invite", { status: 400 });
+
+        if (isInGroup(group, user))
+            return new Response("Already in group", { status: 400 });
+
+        joinGroup(group, user);
 
         const response = groupToResponse(group);
 
