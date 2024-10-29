@@ -1,4 +1,7 @@
-from .exceptions import MissingKeyException
+import requests
+
+from .exceptions import MissingKeyException, EndpointResponseException
+from .endpoints import Endpoints
 
 class User:
     def __init__(self, id: int, name: str, createdAt: str, /, *, displayName: str | None = None, email: str | None = None):
@@ -29,3 +32,16 @@ class User:
         email = object.get("email")
 
         return User(id, name, createdAt, displayName=displayName, email=email)
+
+    @staticmethod
+    def get_access_token(username: str, password: str, /) -> str:
+        response = requests.post(Endpoints.U_GET_ACCESS_TOKEN, json={
+            "username": username,
+            "password": password
+        })
+
+        if response.status_code != 200:
+            raise EndpointResponseException(f"Request failed with code {response.status_code}. Response content: {response.text}")
+
+        json = response.json()
+        return json["token"]
