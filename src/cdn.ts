@@ -36,7 +36,7 @@ export async function serveRequest(req: Request, root: string = CDN_ROOT): Promi
 
     const forcedMIME = url.searchParams.get("mime");
 
-    return await serveFile(root + url.pathname, forcedMIME);
+    return await serveFile(`${root}${url.pathname}`, forcedMIME);
 }
 
 export async function addFile(req: Request): Promise<Response> {
