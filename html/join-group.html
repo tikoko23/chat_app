@@ -81,10 +81,19 @@
         })();
 
         button.addEventListener("click", async () => {
-            const result = await fetchJSON(`${ENDPOINTS.group}/join`, {
+            const result = await fetchJSON(`${ENDPOINTS.group}/join?invite=${invite}`, {
                 method: "GET",
                 headers: { "Authorization": token }
-            })
+            });
+
+            if (result.response.status !== 200) {
+                topText.textContent = "Error";
+                title.textContent = result.body;
+                button.disabled = true;
+                return;
+            }
+
+            window.location.href = LINKS.home;
         });
 
     </script>
