@@ -24,7 +24,7 @@ export async function setupGroups(token) {
 
     if (result.response.status === 200) {
         result.obj.forEach(g => {
-            addGroup(g.name, g.owner, g.id);
+            addGroup(g.name, g.owner?.id || null, g.id);
         });
 
         return true;
