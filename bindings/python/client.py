@@ -1,8 +1,10 @@
+from typing import List
 import requests
 
 from .endpoints import Endpoints
 from .exceptions import EndpointResponseException
 from .user import User
+from .group import Group
 
 class Client:
     def __init__(self, token: str, /):
@@ -14,7 +16,13 @@ class Client:
         response = self.request("GET", Endpoints.U_FETCH_SELF)
         json = response.json()
 
-        self.user = User.fromDict(json)
+        self.user = User.from_dict(json)
+
+    def fetch_joined_groups(self) -> List[Group]:
+        response = self.request("GET", Endpoints.G_FETCH_JOINED)
+        json = response.json()
+
+        return [Group.from_dict(g) for g in json]
 
     def request(self, method: str | bytes, endpoint: str | bytes, request_args: dict = {}, /, *, excludeAuthToken: bool = False) -> requests.Response:
         if not excludeAuthToken:

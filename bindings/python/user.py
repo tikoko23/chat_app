@@ -9,7 +9,7 @@ class User:
         self.email = email
 
     @staticmethod
-    def fromDict(object: dict):
+    def from_dict(object: dict):
         id = object.get("id")
 
         if id is None:

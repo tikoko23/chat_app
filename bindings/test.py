@@ -7,3 +7,5 @@ print(client.user.displayName)
 print(client.user.createdAt)
 print(client.user.email)
 
+for group in client.fetch_joined_groups():
+    print(group.name)
