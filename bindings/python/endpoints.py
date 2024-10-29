@@ -1,10 +1,6 @@
-from enum import Enum
-
 API_URL = "https://tikoko-dev.site/api"
 
-class Endpoints(Enum):
-    def __init__(self):
-        super().__init__()
+class Endpoints():
 
     # User enums
 

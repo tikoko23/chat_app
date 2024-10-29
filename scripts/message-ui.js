@@ -1,3 +1,4 @@
+// deno-lint-ignore-file
 export function createMessageHolder(groupId) {
     const element = document.createElement("div");
 

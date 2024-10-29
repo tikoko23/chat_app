@@ -1,0 +1,11 @@
+from python.client import Client
+
+client = Client("2bb54a77cc694fee81cf1b309568853a9f98e7ddd056fd8ab412e63d10cff78d")
+
+print(client.user.name)
+print(client.user.displayName)
+print(client.user.createdAt)
+print(client.user.email)
+
+for group in client.fetch_joined_groups():
+    print(group.name)
