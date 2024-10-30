@@ -1,8 +1,9 @@
 import { QueryParameterSet } from "https://deno.land/x/sqlite@v3.9.1/src/query.ts";
 import { DB, MessageQueryResult, MAXIMUM_DB_FETCH_SIZE } from "./db.ts";
-import { fetchGroup, groupToResponse, isInGroup } from "./group.ts";
+import { fetchGroup, getMembersOfGroup, groupToResponse, isInGroup } from "./group.ts";
 import { Attachment, AttachmentType, BatchMessageFetchOptions, Group, Message, MessageContent, Nullable, Optional, User, SQLiteDateRange, JSONValue, ResponseMessage } from "./types.d.ts";
 import { fetchUser, userToResponse } from "./user.ts";
+import { sendSocketEvent, SOCKETS } from "./websocket.ts";
 
 export function createMessage(group: Group, sender: User, content: MessageContent, replyTo?: Optional<number>, attachments?: Attachment[]): Message {
     if (!isInGroup(group, sender))
@@ -42,7 +43,11 @@ export function createMessage(group: Group, sender: User, content: MessageConten
     if (!result || result.length === 0)
         throw new Error("Could not get last inserted message");
 
-    return parseMessageFromResult(result[0]);
+    const message = parseMessageFromResult(result[0]);
+
+    notifyMessageCreate(message);
+
+    return message;
 }
 
 export function editMessage(message: Message, newContent: MessageContent): void {
@@ -220,4 +225,21 @@ export function messageToResponse(message: Message): ResponseMessage {
         editedAt: message.editedAt,
         attachments: message.attachments
     };
+}
+
+export function notifyMessageCreate(message: Message): void {
+    const group = message.group;
+    const members = getMembersOfGroup(group);
+
+    members.forEach(u => {
+        const sockets = SOCKETS[u.id];
+
+        if (sockets === undefined)
+            return;
+
+        sockets.forEach(s => sendSocketEvent(s, {
+            type: "message.create",
+            object: messageToResponse(message)
+        }));
+    });
 }

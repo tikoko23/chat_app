@@ -128,3 +128,8 @@ export interface BatchMessageFetchOptions {
     userId?: number,
     groupId?: number
 }
+
+export interface WebSocketEvent {
+    type: string,
+    object: object
+}

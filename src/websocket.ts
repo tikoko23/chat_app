@@ -1,3 +1,4 @@
+import type { WebSocketEvent } from "./types.d.ts";
 import { fetchUser } from "./user.ts";
 
 export const SOCKETS: Record<string, WebSocket[]> = {};
@@ -34,4 +35,8 @@ export function processSocketRequest(req: Request): Response {
     socket.addEventListener("close", () => SOCKETS[user.id] = SOCKETS[user.id].filter(s => s !== socket));
 
     return response;
+}
+
+export function sendSocketEvent(socket: WebSocket, event: WebSocketEvent) {
+    socket.send(JSON.stringify(event));
 }
