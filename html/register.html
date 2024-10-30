@@ -128,14 +128,14 @@
                 valid.forEach(e => {
                     e.classList.remove("invalid");
 
-                    if (e.id === "password-repeat" && error.innerText === "Passwords do not match")
+                    if (e.id === "password-repeat" && error.textContent === "Passwords do not match")
                         error.innerHTML = "&nbsp;";
                 });
                 invalid.forEach(e => {
                     e.classList.add("invalid");
 
                     if (e.id === "password-repeat")
-                        error.innerText = "Passwords do not match";
+                        error.textContent = "Passwords do not match";
                 });
 
                 if (invalid.length === 0)
@@ -179,9 +179,9 @@
 
                         window.location.href = redirectAfter ?? LINKS.home;
                     } else
-                        error.innerText = `Token: ${tokenResult.body}`;
+                        error.textContent = `Token: ${tokenResult.body}`;
                 } else
-                    error.innerText = result.body;
+                    error.textContent = result.body;
             });
         })();
     </script>

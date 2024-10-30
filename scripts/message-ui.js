@@ -44,7 +44,7 @@ export function addMessage(sender, content, id, messageContainer) {
     holder.classList.add("message");
     nameDisplay.classList.add("name-display");
 
-    nameDisplay.innerText = sender;
+    nameDisplay.textContent = sender;
     holder.appendChild(nameDisplay);
     holder.innerHTML += sanitized;
 

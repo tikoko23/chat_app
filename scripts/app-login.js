@@ -11,16 +11,16 @@ export const progress = document.getElementById("progress-display");
  * @returns {Promise<string|void>} Token if the fetch was successful
  */
 export async function appLogin() {
-    progress.innerText = "Getting cookie...";
+    progress.textContent = "Getting cookie...";
     const token = getCookie("auth_token");
 
     if (token === null) {
-        progress.innerText = "Your cookie has a skill issue";
+        progress.textContent = "Your cookie has a skill issue";
         window.location.href = LINKS.login;
         return;
     }
 
-    progress.innerText = "Fetching self...";
+    progress.textContent = "Fetching self...";
     const result = await fetchJSON(`${ENDPOINTS.user}/fetch-self`, {
         headers: { "Authorization": token }
     });
@@ -29,17 +29,17 @@ export async function appLogin() {
     if (result.response.status === 200 && result.obj) {
         window.thisUser = result.obj;
 
-        progress.innerText = "Setting up groups...";
+        progress.textContent = "Setting up groups...";
         const success = await setupGroups(token);
 
         if (!success)
             console.error("Setting up groups failed");
 
-        progress.innerText = "Moving away...";
+        progress.textContent = "Moving away...";
         await moveAway();
         return token;
     } else {
-        progress.innerText = "Your token has a skill issue";
+        progress.textContent = "Your token has a skill issue";
         window.location.href = LINKS.login;
     }
 }

@@ -126,10 +126,10 @@
                         window.location.href = redirectAfter ?? LINKS.home;
 
                     } catch (_e) {
-                        errorDisplay.innerText = "Server returned faulty data";
+                        errorDisplay.textContent = "Server returned faulty data";
                     }
                 } else
-                    errorDisplay.innerText = text;
+                    errorDisplay.textContent = text;
             });
         })();
     </script>

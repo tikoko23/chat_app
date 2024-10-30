@@ -49,7 +49,7 @@ export function addGroup(name, ownerId, id) {
 
     groupsContainer.appendChild(holder);
     holder.appendChild(nameDisplay);
-    nameDisplay.innerText = name;
+    nameDisplay.textContent = name;
 
     holder.id = `grp_${id}`;
 
