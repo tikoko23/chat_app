@@ -22,9 +22,15 @@
     text-overflow: ellipsis;
 }
 
-.message > *:not(.name-display) {
+.message > .paragraph-holder {
     flex-grow: 14;
-    font-weight: normal;
+}
+
+.message > .paragraph-holder > p {
+    margin: 0;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
 }
 
 #message-flex {

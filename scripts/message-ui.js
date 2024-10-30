@@ -35,20 +35,24 @@ export function getMessageHolder(groupId) {
 export function addMessage(sender, content, id, messageContainer) {
     const holder = document.createElement("div");
     const nameDisplay = document.createElement("span");
+    const paragraphHolder = document.createElement("div");
 
-    const parsed = marked.parse(content);
+    const parsed = marked.parse(content).replace("\n", "<br>").replace(/\<br\>$/g, "");
     const sanitized = DOMPurify.sanitize(parsed);
 
     holder.id = `msg_${id}`;
 
     holder.classList.add("message");
     nameDisplay.classList.add("name-display");
+    paragraphHolder.classList.add("paragraph-holder");
 
     nameDisplay.textContent = sender;
     holder.appendChild(nameDisplay);
-    holder.innerHTML += sanitized;
+    holder.appendChild(paragraphHolder);
 
-    const messageContent = Array.from(holder.children).filter(e => e.tagName === "P");
+    paragraphHolder.innerHTML = sanitized;
+
+    const messageContent = Array.from(paragraphHolder.children).filter(e => e.tagName === "P");
 
     messageContent.forEach(e => e.classList.add("no-margin"));
 

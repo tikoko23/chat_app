@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Mono:wght@100..900&display=swap');
+
 * {
     font-family: "Inter", sans-serif;
     outline: none;
@@ -5,6 +8,13 @@
 
 a {
     color: #2B98FF;
+}
+
+code {
+    font-family: "Noto Sans Mono", serif;
+    background-color: rgba(104, 104, 104, 0.5);
+    border-radius: 4px;
+    padding: 4px;
 }
 
 ::-webkit-scrollbar {
