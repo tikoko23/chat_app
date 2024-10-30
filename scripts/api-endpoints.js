@@ -8,6 +8,12 @@ export const ENDPOINTS = {
     message: `${API_PATH}/message`
 };
 
+/**
+ * Fetches an API endpoint and parses the JSON result as an object
+ * @param {string} url
+ * @param {RequestInit|undefined} param
+ * @returns {Promise<{response: Response, obj?: object, body?: string}>}
+ */
 export async function fetchJSON(url, param) {
     const response = await fetch(url, param);
 

@@ -1,4 +1,10 @@
 // deno-lint-ignore-file
+
+/**
+ * Creates a message holder for the given group (This will overwrite the previous holder if it exists!)
+ * @param {number} groupId
+ * @returns {HTMLElement}
+ */
 export function createMessageHolder(groupId) {
     const element = document.createElement("div");
 
@@ -9,10 +15,23 @@ export function createMessageHolder(groupId) {
     return element;
 }
 
+/**
+ * Returns an already existing message holder or null if not found
+ * @param {number} groupId
+ * @returns {HTMLElement|null}
+ */
 export function getMessageHolder(groupId) {
     return window.groupMessages[groupId] || null;
 }
 
+/**
+ * Adds a message to the UI
+ * @param {string} sender Name to display in the UI
+ * @param {string} content Supports markdown (will be converted to XML formatting)
+ * @param {number} id
+ * @param {HTMLElement} messageContainer Container to put the message in
+ * @returns {{holder: HTMLElement, nameDisplay: HTMLElement, HTMLElement[]}}
+ */
 export function addMessage(sender, content, id, messageContainer) {
     const holder = document.createElement("div");
     const nameDisplay = document.createElement("span");

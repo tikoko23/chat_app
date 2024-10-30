@@ -6,6 +6,10 @@ import { setupGroups, moveAway } from "./app-ui.js";
 
 export const progress = document.getElementById("progress-display");
 
+/**
+ * Calls other functions to ready the initial UI state and get the token
+ * @returns {Promise<string|void>} Token if the fetch was successful
+ */
 export async function appLogin() {
     progress.innerText = "Getting cookie...";
     const token = getCookie("auth_token");

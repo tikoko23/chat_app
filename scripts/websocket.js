@@ -30,6 +30,11 @@ export function getWebSocket(token, eventHandler) {
     return socket;
 }
 
+/**
+ * Creates a socket with the default event handler and returns it
+ * @param {string|Promise<string>} token
+ * @returns {Promise<WebSocket>}
+ */
 export async function setupClientListener(token) {
     token = await token;
 

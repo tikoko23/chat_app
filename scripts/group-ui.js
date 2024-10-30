@@ -5,6 +5,11 @@ import { getMessageHolder, createMessageHolder } from "./message-ui.js";
 const groupsContainer = document.getElementById("group-list");
 const holderContainer = document.getElementById("message-holder");
 
+/**
+ * Switches the active group along with the displayed message holder and updates the left panel
+ * @param {number} newId
+ * @returns {HTMLElement}
+ */
 export function switchActiveGroup(newId) {
     const currentHolder = getMessageHolder(window.activeGroup);
     const currentListItem = document.getElementById(`grp_${window.activeGroup}`);
@@ -29,6 +34,12 @@ export function switchActiveGroup(newId) {
     return newHolder;
 }
 
+/**
+ * Adds a group to the UI
+ * @param {string} name
+ * @param {number} ownerId Used for highlighting owned groups
+ * @param {number} id
+ */
 export function addGroup(name, ownerId, id) {
     const holder = document.createElement("div");
     const nameDisplay = document.createElement("span");

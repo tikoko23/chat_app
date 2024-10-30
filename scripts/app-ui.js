@@ -14,6 +14,11 @@ export async function moveAway() {
     luiRoot.innerHTML = "";
 }
 
+/**
+ * Adds the joined groups of the token owner to the UI
+ * @param {string} token
+ * @returns {Promise<boolean>} If the response was successful (true -> successful, false -> failed)
+ */
 export async function setupGroups(token) {
     const result = await fetchJSON(`${ENDPOINTS.group}/fetch-joined`, {
         method: "GET",
