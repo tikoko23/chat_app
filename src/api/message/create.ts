@@ -1,6 +1,6 @@
 import { fetchGroup, getJoinedGroups } from "../../group.ts";
 import { isAttachment } from "../../literals.ts";
-import { createMessage, isMessageContent } from "../../message.ts";
+import { createMessage, isMessageContent, messageToResponse } from "../../message.ts";
 import { EndpointMeta, Attachment, JSONValue, MessageContent } from "../../types.d.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
@@ -57,7 +57,7 @@ const requestMeta: EndpointMeta = {
             attachments as unknown as Attachment[]
         );
 
-        return new Response(JSON.stringify(message), { status: 200 });
+        return new Response(JSON.stringify(messageToResponse(message)), { status: 200 });
     }
 };
 
