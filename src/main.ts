@@ -43,6 +43,9 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
         if (path.startsWith("/api"))
             return await processApiRequest(req, url);
 
+        if (path.startsWith("/socket"))
+            return processSocketRequest(req);
+
         if (path.startsWith("/cdn") || path.startsWith("/asset") || path.startsWith("/styles") || path.startsWith("/scripts"))
             return await serveRequest(req, ".");
 
