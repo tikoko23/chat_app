@@ -24,7 +24,7 @@ const requestMeta: EndpointMeta = {
 
         const response = groupToResponse(group);
 
-        return new Response(JSON.stringify(response), { status: 200 });
+        return new Response(JSON.stringify(response), { status: 201 });
     }
 };
 

@@ -57,7 +57,7 @@ const requestMeta: EndpointMeta = {
             attachments as unknown as Attachment[]
         );
 
-        return new Response(JSON.stringify(messageToResponse(message)), { status: 200 });
+        return new Response(JSON.stringify(messageToResponse(message)), { status: 201 });
     }
 };
 
