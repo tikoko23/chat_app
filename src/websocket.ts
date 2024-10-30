@@ -1,3 +1,5 @@
+import { fetchUser } from "./user.ts";
+
 export const SOCKETS: Record<string, WebSocket[]> = {};
 
 const MAX_CONNECTIONS_PER_ACCOUNT = 16;
@@ -9,6 +11,11 @@ export function processSocketRequest(req: Request): Response {
     if (token === null)
         return new Response("Authorization header must be provided", { status: 401 });
 
+    const user = fetchUser("token", token);
+
+    if (user === null)
+        return new Response("Invalid token", { status: 401 });
+
     const requestSocketKey = req.headers.get("Sec-WebSocket-Key");
 
     if (requestSocketKey === null)
@@ -16,15 +23,15 @@ export function processSocketRequest(req: Request): Response {
 
     const { socket, response } = Deno.upgradeWebSocket(req);
 
-    if (SOCKETS[token] === undefined)
-        SOCKETS[token] = [];
+    if (SOCKETS[user.id] === undefined)
+        SOCKETS[user.id] = [];
 
-    if (SOCKETS[token].length >= MAX_CONNECTIONS_PER_ACCOUNT)
+    if (SOCKETS[user.id].length >= MAX_CONNECTIONS_PER_ACCOUNT)
         return new Response(`Maximum connections per account is reached (${MAX_CONNECTIONS_PER_ACCOUNT})`, { status: 503 });
 
-    SOCKETS[token].push(socket);
+    SOCKETS[user.id].push(socket);
 
-    socket.addEventListener("close", () => SOCKETS[token] = SOCKETS[token].filter(s => s !== socket));
+    socket.addEventListener("close", () => SOCKETS[user.id] = SOCKETS[user.id].filter(s => s !== socket));
 
     return response;
 }
