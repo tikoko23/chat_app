@@ -2,6 +2,7 @@ import { loadApi, processApiRequest } from "./api.ts";
 import { serveRequest } from "./cdn.ts";
 import { DB, initDefaultTables, loadDefaultDB } from "./db.ts";
 import { serveHtml, loadDynamicPages, parseHtml } from "./html.ts";
+import { processSocketRequest } from "./websocket.ts";
 
 const KILL_SWITCH = false;
 
@@ -24,7 +25,7 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
 
     const dynamicPages = await loadDynamicPages();
 
-    return Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo): Promise<Response> => {
+    return Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo<Deno.NetAddr>): Promise<Response> => {
         const now = new Date(Date.now());
         console.log(`${(now.toUTCString())} @${(now.getMilliseconds() / 1e3).toFixed(3)} | ${req.method} ${info.remoteAddr.hostname}:${info.remoteAddr.port} -> ${req.url}`);
 
