@@ -62,7 +62,7 @@
                     </div> -->
                 </div>
                 <div id="message-input">
-                    <textarea class="fill-text-box highlight-text-box glass-text-box"></textarea>
+                    <textarea id="msg-box" class="fill-text-box highlight-text-box glass-text-box"></textarea>
                     <button id="send-message" class="color-button glass-bright-button">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -93,8 +93,9 @@
         import { appLogin } from "/scripts/app-login.js";
         import { switchActiveGroup } from "/scripts/group-ui.js";
         import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
-        import { addMessage } from "/scripts/message-ui.js";
+        import { addMessage, getMessageHolder, createMessageHolder } from "/scripts/message-ui.js";
         import { setupClientListener } from "/scripts/websocket.js";
+        import { sendMessage } from "/scripts/app-message.js";
 
         const tokenPromise = appLogin();
 
@@ -125,6 +126,32 @@
             const newGroupId = parseInt(e.target.id.substring(4));
 
             switchActiveGroup(newGroupId);
+        });
+
+        const messageBox = document.getElementById("msg-box");
+        const sendButton = document.getElementById("send-message");
+
+        async function parseAndSendMessage() {
+            const token = await tokenPromise;
+            const contentBody = messageBox.value.trim();
+
+            messageBox.value = "";
+
+            const message = await sendMessage(token, window.activeGroup, { body: contentBody }, undefined, undefined);
+
+            addMessage(
+                message.author.displayName ?? message.author.name,
+                contentBody,
+                getMessageHolder(window.activeGroup) ?? createMessageHolder(window.activeGroup)
+            );
+        }
+
+        sendButton.addEventListener("click", parseAndSendMessage);
+        messageBox.addEventListener("keydown", e => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                parseAndSendMessage();
+            }
         });
 
         setupClientListener(tokenPromise);
