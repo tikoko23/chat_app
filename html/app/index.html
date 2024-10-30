@@ -94,6 +94,7 @@
         import { switchActiveGroup } from "/scripts/group-ui.js";
         import { ENDPOINTS, fetchJSON } from "/scripts/api-endpoints.js";
         import { addMessage } from "/scripts/message-ui.js";
+        import { setupClientListener } from "/scripts/websocket.js";
 
         const tokenPromise = appLogin();
 
@@ -125,6 +126,8 @@
 
             switchActiveGroup(newGroupId);
         });
+
+        setupClientListener(tokenPromise);
 
         /* TESTING */
         (async () => {
