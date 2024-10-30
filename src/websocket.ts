@@ -24,5 +24,7 @@ export function processSocketRequest(req: Request): Response {
 
     SOCKETS[token].push(socket);
 
+    socket.addEventListener("close", () => SOCKETS[token] = SOCKETS[token].filter(s => s !== socket));
+
     return response;
 }
