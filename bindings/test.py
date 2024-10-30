@@ -9,5 +9,7 @@ print(client.user.displayName)
 print(client.user.createdAt)
 print(client.user.email)
 
+client.create_group("shrug")
+
 for group in client.fetch_joined_groups():
     print(group.name)

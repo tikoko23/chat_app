@@ -32,6 +32,11 @@ class Client:
 
         return [Group.from_dict(g) for g in json]
 
+    def create_group(self, name: str):
+        response = self.request("POST", Endpoints.G_CREATE, {"json": {"name": name}})
+
+        return Group.from_dict(response.json())
+
     # Util request method
     def request(self, method: str | bytes, endpoint: str | bytes, request_args: dict = {}, /, *, excludeAuthToken: bool = False) -> requests.Response:
         if self.token is None:

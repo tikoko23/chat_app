@@ -21,7 +21,7 @@ class Group:
 
         owner = object.get("owner")
 
-        if not (owner is None):
+        if not (owner is None) and not isinstance(owner, User):
             owner = User.from_dict(owner)
 
         return Group(id, name, owner)
