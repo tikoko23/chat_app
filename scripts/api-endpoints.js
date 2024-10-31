@@ -17,7 +17,8 @@ export const ENDPOINTS = {
 export async function fetchJSON(url, param) {
     const response = await fetch(url, param);
 
-    const responseString = String.fromCharCode(...(await readAll(response.body)));
+    const decoder = new TextDecoder("utf-8");
+    const responseString = decoder.decode(await readAll(response.body));
 
     try {
         const obj = JSON.parse(responseString);

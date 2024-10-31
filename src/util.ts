@@ -12,7 +12,8 @@ export async function extractStringFromStream(stream: Nullable<ReadableStream<Ui
         return stream;
 
     const bytes = await readAll(stream);
-    return String.fromCharCode(...bytes);
+    const decoder = new TextDecoder("utf-8");
+    return decoder.decode(bytes);
 }
 
 export async function readAll(stream: ReadableStream<Uint8Array>): Promise<Uint8Array> {
