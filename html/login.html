@@ -104,32 +104,22 @@
                 const username = usernameField.value;
                 const password = passwordField.value;
 
-                const response = await fetch(`${ENDPOINTS.user}/get-access-token`, {
+                const result = await fetchJSON(`${ENDPOINTS.user}/get-access-token`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         username: username,
                         password: password
                     })
                 });
-                const text = String.fromCharCode(...(await readAll(response.body)));
 
-                if (response.status === 200) {
-                    try {
-                        const object = JSON.parse(text);
-                        const token = object.token;
+                if (result.response.status === 200) {
+                    const token = result.obj.token;
+                    setCookie("auth_token", token);
 
-                        setCookie("auth_token", token);
-
-                        window.location.href = redirectAfter ?? LINKS.home;
-
-                    } catch (_e) {
-                        errorDisplay.textContent = "Server returned faulty data";
-                    }
+                    window.location.href = redirectAfter ?? LINKS.home;
                 } else
-                    errorDisplay.textContent = text;
+                    errorDisplay.textContent = result.response.body;
             });
         })();
     </script>
