@@ -1,5 +1,19 @@
 // deno-lint-ignore-file
 
+const contextHTML = `
+<button id="reply-button">
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+    >
+        <path d="M 35 35 C 35 17 35 17 17 17 L 5 17" fill="transparent" stroke="white" stroke-width="3"/>
+        <path d="M 15 7 L 5 17 L 15 27" fill="transparent" stroke="white" stroke-width="3"/>
+    </svg>
+</button>`
+
 /**
  * Creates a message holder for the given group (This will overwrite the previous holder if it exists!)
  * @param {number} groupId
@@ -36,6 +50,7 @@ export function addMessage(sender, content, id, messageContainer) {
     const holder = document.createElement("div");
     const nameDisplay = document.createElement("span");
     const paragraphHolder = document.createElement("div");
+    const context = document.createElement("div");
 
     const parsed = marked.parse(content).replace("\n", "<br>").replace(/\<br\>$/g, "");
     const sanitized = DOMPurify.sanitize(parsed);
@@ -45,12 +60,15 @@ export function addMessage(sender, content, id, messageContainer) {
     holder.classList.add("message");
     nameDisplay.classList.add("name-display");
     paragraphHolder.classList.add("paragraph-holder");
+    context.classList.add("context");
 
     nameDisplay.textContent = sender;
     holder.appendChild(nameDisplay);
     holder.appendChild(paragraphHolder);
+    holder.appendChild(context);
 
     paragraphHolder.innerHTML = sanitized;
+    context.innerHTML = contextHTML;
 
     const messageContent = Array.from(paragraphHolder.children).filter(e => e.tagName === "P");
 

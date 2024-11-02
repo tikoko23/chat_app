@@ -10,6 +10,40 @@
     backdrop-filter: brightness(75%);
 }
 
+.message:hover > .context {
+    visibility: visible;
+}
+
+.message > .context {
+    position: absolute;
+    visibility: hidden;
+    width: fit-content;
+    height: 2em;
+    border-radius: 0.25em;
+    transform: translateY(-50%);
+    right: 10px;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.message > .context > * {
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border: none;
+    border-radius: 0.25em;
+    margin: 0;
+    display: inline;
+}
+
+.message > .context > * > svg {
+    width: 100%;
+    height: 100%;
+}
+
+.message > .context > *:hover {
+    filter: brightness(150%);
+}
+
 .message > * {
     display: inline;
     color: white;
@@ -77,4 +111,8 @@
     max-height: calc(100% - 40px);
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+#reply-button {
+    background-color: #353535;
 }
