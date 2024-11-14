@@ -4,7 +4,7 @@ import { DB, initDefaultTables, loadDefaultDB } from "./db.ts";
 import { serveHtml, loadDynamicPages, parseHtml } from "./html.ts";
 import { processSocketRequest } from "./websocket.ts";
 
-const KILL_SWITCH = false;
+const RICKROLL_REDIRECT = false;
 
 const rickrollDetector = /never.*gonna.*give.*you.*up/gi;
 
@@ -37,7 +37,7 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
         const url = new URL(req.url);
         const path = url.pathname;
 
-        if (path.startsWith("/info") || rickrollDetector.test(url.pathname) || KILL_SWITCH)
+        if (path.startsWith("/info") || rickrollDetector.test(url.pathname) || RICKROLL_REDIRECT)
             return new Response(null, {
                 status: 302,
                 headers: {
