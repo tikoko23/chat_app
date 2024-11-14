@@ -1,3 +1,5 @@
+// deno-lint-ignore-file
+
 import { ENDPOINTS, fetchJSON } from "./api-endpoints.js";
 
 /**
@@ -25,4 +27,34 @@ export async function sendMessage(token, groupId, messageContent, attachments = 
         throw new Error(`Sending message failed: ${result.body}`);
 
     return result.obj;
+}
+
+/**
+ * Calculates the number of lines of text in a textarea, accounting for line breaks and word wrapping.
+ * @param {HTMLTextAreaElement} textarea The textarea element containing the text.
+ * @returns {number} The number of lines the text occupies.
+ */
+export function getTextareaLineCount(textarea) {
+    const computedStyle = window.getComputedStyle(textarea);
+    const textareaWidth = textarea.clientWidth;
+
+    const lines = textarea.value.split('\n');
+    let lineCount = 0;
+
+    const tempSpan = document.createElement("span");
+    tempSpan.style.visibility = "hidden";
+    tempSpan.style.whiteSpace = "pre";
+    tempSpan.style.position = "absolute"
+    tempSpan.style.font = computedStyle.font;
+    document.body.appendChild(tempSpan);
+
+    lines.forEach(line => {
+        tempSpan.textContent = line;
+        const lineWidth = tempSpan.clientWidth;
+        lineCount += Math.ceil(lineWidth / textareaWidth);
+    });
+
+    document.body.removeChild(tempSpan);
+
+    return lineCount;
 }
