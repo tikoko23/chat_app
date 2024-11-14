@@ -54,7 +54,14 @@ export function closeApi() {
 }
 
 export function getDescendants(path: string, followSymlink: boolean = true, countDirectiories: boolean = false): string[] {
-    const dirContents = Deno.readDirSync(path);
+    let dirContents;
+
+    try {
+        dirContents = Deno.readDirSync(path);
+    } catch (_e) {
+        return [];
+    }
+
     const desc: string[] = [];
 
     for (const entry of dirContents) {
