@@ -19,6 +19,7 @@ The mobile UI is very broken. But this will be fixed *later*.
 * ### UI:
 
     - Dynamic message box
+    - Notifications
 
 * ### API:
 
