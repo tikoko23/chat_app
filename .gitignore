@@ -3,3 +3,4 @@ data/*
 html_gen/*
 cdn/user_upload/*
 **/__pycache__/*
+cdn/*
