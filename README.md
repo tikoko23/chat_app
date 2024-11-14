@@ -20,14 +20,23 @@ The mobile UI is very broken. But this will be fixed *later*.
 
 ### Partially implemented:
 
-* ### None
+* ### UI:
+
+    - Notifications
+
+* ### API:
+
+    - None
+
+* ### Server:
+
+    - None
 
 ### In progress:
 
 * ### UI:
 
     - Dynamic message box
-    - Notifications
 
 * ### API:
 
