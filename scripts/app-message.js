@@ -1,5 +1,7 @@
 // deno-lint-ignore-file
 
+/** @module types */
+
 import { ENDPOINTS, fetchJSON } from "./api-endpoints.js";
 
 /**
