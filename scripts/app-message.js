@@ -11,7 +11,7 @@ import { ENDPOINTS, fetchJSON } from "./api-endpoints.js";
  * @param {{body: string}} messageContent
  * @param {string[]} [attachments=undefined]
  * @param {number} [replyTo=undefined]
- * @returns {ResponseMessage}
+ * @returns {Promise<ResponseMessage>}
  */
 export async function sendMessage(token, groupId, messageContent, attachments = undefined, replyTo = undefined) {
     const result = await fetchJSON(`${ENDPOINTS.message}/create`, {
