@@ -4,6 +4,8 @@ import { writeAll } from "https://deno.land/std@0.224.0/io/write_all.ts";
 import { fetchUser } from "./user.ts";
 import { Optional } from "./types.d.ts";
 
+const DISABLE_FILE_CACHE = true;
+
 const CDN_ROOT = "./cdn";
 const USER_UPLOAD_SUBDIR = "user_upload";
 const MAX_UPLOAD_SIZE_BYTES = 8388608;
@@ -25,7 +27,12 @@ export async function serveFile(path: string, forcedMIME?: Optional<string>): Pr
 
     const data = await Deno.readFile(path);
 
-    return new Response(data, { headers: { "Content-Type": forcedMIME ?? getContentType(path) }, status: 200 });
+    const responseHeaders: Record<string, string> = { "Content-Type": forcedMIME ?? getContentType(path) }
+
+    if (DISABLE_FILE_CACHE)
+        responseHeaders["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0";
+
+    return new Response(data, { headers: responseHeaders, status: 200 });
 }
 
 export async function serveRequest(req: Request, root: string = CDN_ROOT): Promise<Response> {
