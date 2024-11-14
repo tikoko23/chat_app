@@ -1,8 +1,7 @@
 import { createMessageHolder } from "./message-ui.js";
 import { getMessageHolder } from "./message-ui.js";
 import { addMessage } from "./message-ui.js";
-
-const SOCKET_URL = `/socket`;
+import { ENDPOINTS } from "./api-endpoints.js";
 
 /**
  * Creates a WebSocket with a wrapper function to parse messages
@@ -11,7 +10,7 @@ const SOCKET_URL = `/socket`;
  * @returns {WebSocket}
  */
 export function getWebSocket(token, eventHandler) {
-    const socket = new WebSocket(`${SOCKET_URL}?token=${token}`);
+    const socket = new WebSocket(`${ENDPOINTS.socket}?token=${token}`);
 
     if (typeof eventHandler === "function") {
         socket.addEventListener("message", event => {

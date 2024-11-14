@@ -5,7 +5,8 @@ export const API_PATH = "/api";
 export const ENDPOINTS = {
     group: `${API_PATH}/group`,
     user: `${API_PATH}/user`,
-    message: `${API_PATH}/message`
+    message: `${API_PATH}/message`,
+    socket: "/socket"
 };
 
 /**
