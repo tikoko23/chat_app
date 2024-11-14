@@ -1,7 +1,7 @@
 #group-list {
+    flex-grow: 1;
     margin-top: 10px;
     margin-right: 20px;
-    height: 100%;
 }
 
 .group {
