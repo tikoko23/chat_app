@@ -42,7 +42,12 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
 
     return Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo<Deno.NetAddr>): Promise<Response> => {
         const now = new Date(Date.now());
-        console.log(`${(now.toUTCString())} @${(now.getMilliseconds() / 1e3).toFixed(3)} | ${req.method} ${info.remoteAddr.hostname}:${info.remoteAddr.port} -> ${req.url}`);
+
+        const fullAddress = `${info.remoteAddr.hostname}:${info.remoteAddr.port}`;
+        const seconds = `${(now.getMilliseconds() / 1e3).toFixed(3)}`;
+        const timestamp = `${(now.toUTCString())} @${seconds}`;
+
+        console.log(`${timestamp} | ${req.method} ${fullAddress} -> ${req.url}`);
 
         const url = new URL(req.url);
         const path = url.pathname;
