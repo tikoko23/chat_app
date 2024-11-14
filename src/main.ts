@@ -1,3 +1,4 @@
+import { dirname } from "https://deno.land/std@0.202.0/path/mod.ts";
 import { loadApi, processApiRequest } from "./api.ts";
 import { serveRequest } from "./cdn.ts";
 import { DB, initDefaultTables, loadDefaultDB } from "./db.ts";
@@ -9,6 +10,15 @@ const RICKROLL_REDIRECT = false;
 const rickrollDetector = /never.*gonna.*give.*you.*up/gi;
 
 if (import.meta.main) {
+    const scriptPath = new URL(import.meta.url).pathname;
+    const rootDir = `${dirname(scriptPath)}/..`;
+
+    Deno.chdir(rootDir);
+
+    const newCwd = Deno.cwd();
+
+    console.log(`Serving from ${newCwd}`);
+
     loadMainDB();
     serve();
 }
