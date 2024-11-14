@@ -44,7 +44,7 @@ export function getMessageHolder(groupId) {
  * @param {string} content Supports markdown (will be converted to XML formatting)
  * @param {number} id
  * @param {HTMLElement} messageContainer Container to put the message in
- * @returns {{holder: HTMLElement, nameDisplay: HTMLElement, HTMLElement[]}}
+ * @returns {{holder: HTMLElement, nameDisplay: HTMLElement, messageContent: HTMLElement[]}}
  */
 export function addMessage(sender, content, id, messageContainer) {
     const holder = document.createElement("div");
