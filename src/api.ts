@@ -65,25 +65,32 @@ export function getDescendants(path: string, followSymlink: boolean = true, coun
     const desc: string[] = [];
 
     for (const entry of dirContents) {
+        const entryFullPath = `${path}/${entry.name}`;
+
         if (entry.isDirectory) {
             if (countDirectiories)
-                desc.push(`${path}/${entry.name}`);
+                desc.push(entryFullPath);
 
-            desc.push(...getDescendants(`${path}/${entry.name}`, followSymlink, countDirectiories));
+            const subDescendants = getDescendants(entryFullPath, followSymlink, countDirectiories);
+
+            desc.push(...subDescendants);
         } else if (followSymlink && entry.isSymlink) {
-            const targetPath: string = Deno.readLinkSync(`${path}/${entry.name}`);
+            const targetPath = Deno.readLinkSync(entryFullPath);
+
             const stat = Deno.statSync(targetPath);
 
             if (stat.isFile)
                 desc.push(targetPath);
             else {
                 if (countDirectiories)
-                    desc.push(`${path}/${entry.name}`);
+                    desc.push(entryFullPath);
 
-                desc.push(...getDescendants(targetPath, followSymlink, countDirectiories));
+                const linkDescendants = getDescendants(targetPath, followSymlink, countDirectiories);
+
+                desc.push(...linkDescendants);
             }
         } else
-            desc.push(`${path}/${entry.name}`);
+            desc.push(entryFullPath);
     }
 
     return desc;
