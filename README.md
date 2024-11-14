@@ -24,27 +24,11 @@ The mobile UI is very broken. But this will be fixed *later*.
 
     - Notifications
 
-* ### API:
-
-    - None
-
-* ### Server:
-
-    - None
-
 ### In progress:
 
 * ### UI:
 
     - Dynamic message box
-
-* ### API:
-
-    - None
-
-* ### Server:
-
-    - None
 
 ### Planned:
 
