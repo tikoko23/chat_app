@@ -8,6 +8,11 @@ const KILL_SWITCH = false;
 
 const rickrollDetector = /never.*gonna.*give.*you.*up/gi;
 
+if (import.meta.main) {
+    loadMainDB();
+    serve();
+}
+
 export function loadMainDB() {
     loadDefaultDB();
     initDefaultTables(DB);
@@ -54,9 +59,4 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
 
         return await serveHtml(url.pathname);
     })
-}
-
-if (import.meta.main) {
-    loadMainDB();
-    serve();
 }
