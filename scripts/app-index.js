@@ -49,11 +49,13 @@ async function parseAndSendMessage() {
     messageBox.value = "";
 
     const message = await sendMessage(token, window.activeGroup, { body: contentBody }, undefined, undefined);
+    const messageHolder = getMessageHolder(window.activeGroup) ?? createMessageHolder(window.activeGroup);
 
     addMessage(
         message.author.displayName ?? message.author.name,
         contentBody,
-        getMessageHolder(window.activeGroup) ?? createMessageHolder(window.activeGroup)
+        message,
+        messageHolder
     );
 }
 
