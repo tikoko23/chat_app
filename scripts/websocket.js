@@ -40,6 +40,9 @@ export async function setupClientListener(token) {
     return getWebSocket(token, (type, data) => {
         switch (type) {
             case "message.create": {
+                if (data.author.name === window.thisUser.name)
+                    break;
+
                 const sender = data.author.displayName ?? data.author.name;
                 const content = data.content.body;
                 const id = data.id;
