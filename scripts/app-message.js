@@ -5,8 +5,8 @@ import { ENDPOINTS, fetchJSON } from "./api-endpoints.js";
  * @param {string} token
  * @param {number} groupId
  * @param {{body: string}} messageContent
- * @param {string[]|undefined} attachments
- * @param {number} replyTo
+ * @param {string[]} [attachments=undefined]
+ * @param {number} [replyTo=undefined]
  * @returns {ResponseMessage}
  */
 export async function sendMessage(token, groupId, messageContent, attachments = undefined, replyTo = undefined) {
