@@ -12,7 +12,15 @@ The mobile UI is very broken. But this will be fixed *later*.
 <br>
 <br>
 
-# **Planned Features**
+# **Features**
+
+### Fully implemented:
+
+* ### None
+
+### Partially implemented:
+
+* ### None
 
 ### In progress:
 
