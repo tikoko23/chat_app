@@ -83,7 +83,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    flex-shrink: 1;
+    flex-grow: 0;
 }
 
 #message-input > textarea {
