@@ -1,4 +1,4 @@
-import { parseArgs } from "@std/cli/parse-args";
+import { parseArgs } from "@std/cli";
 import { COMMAND_PREFIX_REGEX, CONSOLE_COMMANDS } from "./commands.ts";
 import { ArgCommand, ExecCommand, OutputCommand } from "./declarations/command-types.d.ts";
 

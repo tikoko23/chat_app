@@ -1,4 +1,4 @@
-import { dirname } from "https://deno.land/std@0.202.0/path/dirname.ts";
+import { dirname } from "@std/path";
 import { getDescendants } from "./api.ts";
 import { DynamicPageMeta } from "./types.ts";
 import { serveFile } from "./cdn.ts";

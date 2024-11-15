@@ -1,4 +1,4 @@
-import { getCookies } from "https://deno.land/std@0.224.0/http/cookie.ts";
+import { getCookies } from "@std/http";
 import { DB, UserQueryResult } from "./db.ts";
 import { generateSalt, hashString } from "./crypt.ts";
 import { User, Optional, ResponseUser } from "./types.ts";

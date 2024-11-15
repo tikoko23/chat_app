@@ -1,6 +1,12 @@
 {
     "imports": {
+        "@sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts",
+
         "@std/assert": "jsr:@std/assert@^1.0.8",
-        "@std/cli": "jsr:@std/cli"
+        "@std/cli": "jsr:@std/cli",
+        "@std/yaml": "jsr:@std/yaml",
+        "@std/http": "jsr:@std/http",
+        "@std/path": "jsr:@std/path",
+        "@std/io": "jsr:@std/io"
     }
 }

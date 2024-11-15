@@ -1,4 +1,4 @@
-import { parseArgs } from "@std/cli/parse-args";
+import { parseArgs } from "@std/cli";
 
 export type CommandStatus = number | void;
 export type CommandReturnType = Promise<CommandStatus> | CommandStatus;

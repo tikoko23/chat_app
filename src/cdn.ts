@@ -1,6 +1,6 @@
 import { MIMEType, User } from "./types.ts";
-import { extname, dirname } from "https://deno.land/std@0.202.0/path/mod.ts";
-import { writeAll } from "https://deno.land/std@0.224.0/io/write_all.ts";
+import { extname, dirname } from "@std/path";
+import { writeAll } from "@std/io";
 import { fetchUser } from "./user.ts";
 import { Optional } from "./types.ts";
 

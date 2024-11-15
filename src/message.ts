@@ -1,4 +1,4 @@
-import { QueryParameterSet } from "https://deno.land/x/sqlite@v3.9.1/src/query.ts";
+import { QueryParameterSet } from "@sqlite";
 import { DB, MessageQueryResult, MAXIMUM_DB_FETCH_SIZE } from "./db.ts";
 import { fetchUser, userToResponse } from "./user.ts";
 import { sendSocketEvent, SOCKETS } from "./websocket.ts";

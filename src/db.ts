@@ -1,5 +1,5 @@
 import * as SQLite from "https://deno.land/x/sqlite@v3.9.1/mod.ts";
-import { dirname } from "https://deno.land/std@0.202.0/path/dirname.ts";
+import { dirname } from "@std/path";
 
 export const MAXIMUM_DB_FETCH_SIZE = 32;
 
