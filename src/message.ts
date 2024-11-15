@@ -1,9 +1,14 @@
 import { QueryParameterSet } from "https://deno.land/x/sqlite@v3.9.1/src/query.ts";
 import { DB, MessageQueryResult, MAXIMUM_DB_FETCH_SIZE } from "./db.ts";
-import { fetchGroup, getMembersOfGroup, groupToResponse, isInGroup } from "./group.ts";
-import { Attachment, AttachmentType, BatchMessageFetchOptions, Group, Message, MessageContent, Nullable, Optional, User, SQLiteDateRange, JSONValue, ResponseMessage } from "./types.d.ts";
 import { fetchUser, userToResponse } from "./user.ts";
 import { sendSocketEvent, SOCKETS } from "./websocket.ts";
+import { fetchGroup, getMembersOfGroup, groupToResponse, isInGroup } from "./group.ts";
+
+import { Attachment, AttachmentType } from "./declarations/file-types.d.ts";
+import { BatchMessageFetchOptions, SQLiteDateRange } from "./declarations/db-types.d.ts";
+import { Group, Message, MessageContent, User } from "./declarations/object-types.d.ts";
+import { ResponseMessage } from "./declarations/response-types.d.ts";
+import { Optional } from "./types.ts";
 
 export function createMessage(group: Group, sender: User, content: MessageContent, replyTo?: Optional<number>, attachments?: Attachment[]): Message {
     if (!isInGroup(group, sender))
@@ -61,9 +66,9 @@ export function editMessage(message: Message, newContent: MessageContent): void 
     );
 }
 
-export function fetchMessage(how: "batch", getter: BatchMessageFetchOptions): Nullable<Message[]>;
-export function fetchMessage(how: "id", getter: number): Nullable<Message>;
-export function fetchMessage(how: "id" | "batch", getter: number | BatchMessageFetchOptions): Nullable<Message> | Nullable<Message[]> {
+export function fetchMessage(how: "batch", getter: BatchMessageFetchOptions): Message[] | null;
+export function fetchMessage(how: "id", getter: number): Message | null;
+export function fetchMessage(how: "id" | "batch", getter: number | BatchMessageFetchOptions): Message | Message[] | null {
     switch (how) {
         case "id": {
             const result = DB.queryEntries<MessageQueryResult>("SELECT * FROM messages WHERE id = ?", [ getter as number ]);
@@ -158,7 +163,7 @@ export function parseMessageFromResult(result: MessageQueryResult): Message {
         };
     }
 
-    let attachments: Nullable<Attachment[]> = null;
+    let attachments: Attachment[] | null = null;
 
     if (result.attachments !== null) {
         try {
@@ -210,8 +215,8 @@ export function getAttachmentTypeFromFilename(name: string): AttachmentType {
     }
 }
 
-export function isMessageContent(object: JSONValue): boolean {
-    return typeof object === "object" && object !== null && !Array.isArray(object) && object.body !== undefined;
+export function isMessageContent(object: unknown): object is MessageContent {
+    return typeof object === "object" && object !== null && !Array.isArray(object) && (object as Record<string, unknown>).body !== undefined;
 }
 
 export function messageToResponse(message: Message): ResponseMessage {

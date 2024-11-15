@@ -1,4 +1,4 @@
-import { EndpointMeta, JSONValue } from "../../types.d.ts";
+import { EndpointMeta, JSONValue } from "../../types.ts";
 import { createUser } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {

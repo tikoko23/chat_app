@@ -1,5 +1,5 @@
 import { addFile } from "../cdn.ts";
-import { EndpointMeta } from "../types.d.ts";
+import { EndpointMeta } from "../types.ts";
 
 const requestMeta: EndpointMeta = {
     method: "POST",

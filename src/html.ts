@@ -1,11 +1,11 @@
 import { dirname } from "https://deno.land/std@0.202.0/path/dirname.ts";
 import { getDescendants } from "./api.ts";
-import { DynamicPageMeta, Nullable } from "./types.d.ts";
+import { DynamicPageMeta } from "./types.ts";
 import { serveFile } from "./cdn.ts";
 
 function getBetweenBrackets(
     str: string, brackets: "[]" | "()" | "{}", startingPosition: number = 0, stopAtNewLine: boolean = true
-): Nullable<{ start: number; end: number; match: string }> {
+): { start: number; end: number; match: string } | null {
 
     let depth = 0;
     let seen = false;

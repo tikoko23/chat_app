@@ -1,6 +1,6 @@
 import { DB } from "./db.ts"
-import { EndpointMeta } from "./types.d.ts";
-import { JSONValue } from "./types.d.ts";
+import { EndpointMeta } from "./types.ts";
+import { JSONValue } from "./types.ts";
 
 export let API: Record<string, EndpointMeta> = {};
 

@@ -1,4 +1,4 @@
-import { EndpointMeta } from "../../types.d.ts";
+import { EndpointMeta } from "../../types.ts";
 import { fetchUser, getTokenFromRequest, userToResponse } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {

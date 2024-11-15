@@ -1,5 +1,4 @@
 import * as SQLite from "https://deno.land/x/sqlite@v3.9.1/mod.ts";
-import { Nullable } from "./types.d.ts";
 import { dirname } from "https://deno.land/std@0.202.0/path/dirname.ts";
 
 export const MAXIMUM_DB_FETCH_SIZE = 32;
@@ -7,8 +6,8 @@ export const MAXIMUM_DB_FETCH_SIZE = 32;
 export type UserQueryResult = {
     id: number,
     name: string,
-    displayName: Nullable<string>,
-    email: Nullable<string>,
+    displayName: string | null,
+    email: string | null,
     createdAt: string,
     password: string,
     passwordSalt: string,
@@ -38,8 +37,8 @@ export type MessageQueryResult = {
     createdAt: string,
     body: string,
     fullJson: string,
-    attachments: Nullable<string>,
-    editedAt: Nullable<string>
+    attachments: string | null,
+    editedAt: string | null
 }
 
 export let DB: SQLite.DB;

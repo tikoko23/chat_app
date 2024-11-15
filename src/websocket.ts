@@ -1,4 +1,4 @@
-import type { WebSocketEvent } from "./types.d.ts";
+import type { WebSocketEvent } from "./types.ts";
 import { fetchUser } from "./user.ts";
 
 export const SOCKETS: Record<string, WebSocket[]> = {};

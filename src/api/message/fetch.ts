@@ -1,6 +1,6 @@
 import { getJoinedGroups } from "../../group.ts";
 import { fetchMessage, messageToResponse } from "../../message.ts";
-import { BatchMessageFetchOptions, EndpointMeta, JSONValue, SQLiteDateRange } from "../../types.d.ts";
+import { BatchMessageFetchOptions, EndpointMeta, JSONValue, SQLiteDateRange } from "../../types.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {

@@ -1,10 +1,10 @@
 import { getCookies } from "https://deno.land/std@0.224.0/http/cookie.ts";
 import { DB, UserQueryResult } from "./db.ts";
 import { generateSalt, hashString } from "./crypt.ts";
-import { User, Optional, Nullable, ResponseUser } from "./types.d.ts";
+import { User, Optional, ResponseUser } from "./types.ts";
 import { generateAccessToken } from "./api/user/get-access-token.ts";
 
-export function getTokenFromRequest(req: Request, cookie: boolean = false): Nullable<string> {
+export function getTokenFromRequest(req: Request, cookie: boolean = false): string | null {
     const authHeader = req.headers.get("Authorization");
 
     if (authHeader !== null)
@@ -39,9 +39,9 @@ export function getHashSource(password: string, salt: string): string {
     return `${password}@${salt}`;
 }
 
-export function fetchUser(how: "token" | "name", getter: string): Nullable<User>;
-export function fetchUser(how: "id", getter: number): Nullable<User>;
-export function fetchUser(how: "token" | "name" | "id", getter: string | number): Nullable<User> {
+export function fetchUser(how: "token" | "name", getter: string): User | null;
+export function fetchUser(how: "id", getter: number): User | null;
+export function fetchUser(how: "token" | "name" | "id", getter: string | number): User | null {
     let query: string = "";
 
     switch (how) {

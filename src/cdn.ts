@@ -1,8 +1,8 @@
-import { MIMEType, Nullable, User } from "./types.d.ts";
+import { MIMEType, User } from "./types.ts";
 import { extname, dirname } from "https://deno.land/std@0.202.0/path/mod.ts";
 import { writeAll } from "https://deno.land/std@0.224.0/io/write_all.ts";
 import { fetchUser } from "./user.ts";
-import { Optional } from "./types.d.ts";
+import { Optional } from "./types.ts";
 
 const DISABLE_FILE_CACHE = true;
 
@@ -60,7 +60,7 @@ export async function addFile(req: Request): Promise<Response> {
 
     const token = req.headers.get("Authorization");
 
-    let data: Nullable<User>;
+    let data: User | null;
 
     if (token === null || (data = fetchUser("token", token)) === null)
         return new Response("Invalid token", { status: 401 });
@@ -87,7 +87,7 @@ export async function addFile(req: Request): Promise<Response> {
         return new Response("Malformed request body", { status: 400 });
     }
 
-    let writer: Nullable<Deno.FsFile> = null;
+    let writer: Deno.FsFile | null = null;
 
     try {
         writer = await Deno.open(filePath, { write: true, create: true });

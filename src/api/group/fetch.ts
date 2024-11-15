@@ -1,5 +1,5 @@
 import { fetchGroup, groupToResponse } from "../../group.ts";
-import { EndpointMeta } from "../../types.d.ts";
+import { EndpointMeta } from "../../types.ts";
 
 const requestMeta: EndpointMeta = {
     method: "GET",

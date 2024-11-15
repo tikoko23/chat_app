@@ -1,6 +1,6 @@
 import { isInGroup } from "../../group.ts";
 import { fetchGroup, groupToResponse, joinGroup } from "../../group.ts";
-import { EndpointMeta } from "../../types.d.ts";
+import { EndpointMeta } from "../../types.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {

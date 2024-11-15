@@ -1,6 +1,6 @@
 import { DB, GroupQueryResult } from "./db.ts";
-import { Optional, ResponseGroup } from "./types.d.ts";
-import { Group, User, Nullable } from "./types.d.ts";
+import { Optional, ResponseGroup } from "./types.ts";
+import { Group, User } from "./types.ts";
 import { fetchUser, userToResponse } from "./user.ts";
 import { generateSalt } from "./crypt.ts";
 
@@ -43,7 +43,7 @@ export function createGroup(name: string, owner: Optional<User>): Group {
     return group;
 }
 
-export function changeGroupOwner(group: Group, newOwner: Nullable<User>): void {
+export function changeGroupOwner(group: Group, newOwner: User | null): void {
     if (newOwner !== null && !isInGroup(group, newOwner))
         throw new Error("New owner must be in the group or null");
 
@@ -52,10 +52,10 @@ export function changeGroupOwner(group: Group, newOwner: Nullable<User>): void {
     DB.query("UPDATE groups SET ownerId = ? WHERE id = ?", [ newOwnerId, group.id ]);
 }
 
-export function fetchGroup(how: "id", getter: number): Nullable<Group>;
-export function fetchGroup(how: "name", getter: string): Nullable<Group>;
-export function fetchGroup(how: "invite", getter: string): Nullable<Group>;
-export function fetchGroup(how: "id" | "name" | "invite", getter: number | string): Nullable<Group> {
+export function fetchGroup(how: "id", getter: number): Group | null;
+export function fetchGroup(how: "name", getter: string): Group | null;
+export function fetchGroup(how: "invite", getter: string): Group | null;
+export function fetchGroup(how: "id" | "name" | "invite", getter: number | string): Group | null {
     let query: string = "";
 
     switch (how) {

@@ -1,5 +1,5 @@
 import { createGroup, groupToResponse } from "../../group.ts";
-import { EndpointMeta, JSONValue } from "../../types.d.ts";
+import { EndpointMeta, JSONValue } from "../../types.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {

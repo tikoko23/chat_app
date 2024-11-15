@@ -1,5 +1,5 @@
 import { hashString } from "../../crypt.ts";
-import { EndpointMeta, JSONValue } from "../../types.d.ts";
+import { EndpointMeta, JSONValue } from "../../types.ts";
 import { fetchUser, isValidUser } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {
@@ -25,7 +25,7 @@ const requestMeta: EndpointMeta = {
         try {
             generatedToken = await pullTokenFromDatabase(username, password);
         } catch (e) {
-            switch (e.message) {
+            switch ((e as Record<string, unknown>).message) {
             case "Invalid credentials":
                 return new Response("Invalid credentials", { status: 401 });
             case "Token is not a string":

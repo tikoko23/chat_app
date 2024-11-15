@@ -1,4 +1,4 @@
-import { JSONValue } from "./types.d.ts";
+import { Attachment } from "./types.ts";
 
 export const AttachmentTypeLiterals: readonly string[] = [
     "video",
@@ -9,13 +9,13 @@ export const AttachmentTypeLiterals: readonly string[] = [
     "binary"
 ];
 
-export function isAttachment(object: JSONValue): boolean {
+export function isAttachment(object: unknown): object is Attachment {
     return (
         !Array.isArray(object) &&
         typeof object === "object" &&
         object !== null &&
-        typeof object.path === "string" &&
-        typeof object.type === "string" &&
-        AttachmentTypeLiterals.includes(object.type)
+        typeof (object as Record<string, unknown>).path === "string" &&
+        typeof (object as Record<string, unknown>).type === "string" &&
+        AttachmentTypeLiterals.includes((object as Record<string, unknown>).type as string)
     );
 }

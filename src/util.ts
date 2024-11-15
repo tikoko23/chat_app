@@ -1,15 +1,13 @@
-import { Nullable } from "./types.d.ts";
-
 export function runCmd(cmd_str: string, args: Deno.CommandOptions = {}): Promise<Deno.CommandOutput> {
     const cmd = new Deno.Command(cmd_str, args);
     return cmd.output();
 }
 
-export async function extractStringFromStream(steam: ReadableStream<Uint8Array>): Promise<string>
-export async function extractStringFromStream(steam: Nullable<ReadableStream<Uint8Array>>): Promise<null>
-export async function extractStringFromStream(stream: Nullable<ReadableStream<Uint8Array>>): Promise<Nullable<string>> {
+export async function extractStringFromStream(stream: null): Promise<null>
+export async function extractStringFromStream(stream: ReadableStream<Uint8Array>): Promise<string>
+export async function extractStringFromStream(stream: ReadableStream<Uint8Array> | null): Promise<string | null> {
     if (stream === null)
-        return stream;
+        return null;
 
     const bytes = await readAll(stream);
     const decoder = new TextDecoder("utf-8");

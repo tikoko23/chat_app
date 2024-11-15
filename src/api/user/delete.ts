@@ -1,5 +1,5 @@
 import { deleteUser, getTokenFromRequest } from "../../user.ts";
-import { EndpointMeta } from "../../types.d.ts";
+import { EndpointMeta } from "../../types.ts";
 import { fetchUser } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {

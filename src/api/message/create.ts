@@ -1,7 +1,7 @@
 import { fetchGroup, getJoinedGroups } from "../../group.ts";
 import { isAttachment } from "../../literals.ts";
 import { createMessage, isMessageContent, messageToResponse } from "../../message.ts";
-import { EndpointMeta, Attachment, JSONValue, MessageContent } from "../../types.d.ts";
+import { EndpointMeta, Attachment, JSONValue } from "../../types.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {
@@ -52,7 +52,7 @@ const requestMeta: EndpointMeta = {
         const message = createMessage(
             group,
             user,
-            messageContent as unknown as MessageContent,
+            messageContent,
             replyTo,
             attachments as unknown as Attachment[]
         );
