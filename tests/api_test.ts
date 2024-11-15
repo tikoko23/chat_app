@@ -1,3 +1,5 @@
+import "../src/init.ts";
+
 import { assert, assertEquals } from "@std/assert";
 import { fetchUser } from "../src/user.ts";
 import { User } from "../src/types.ts";
@@ -8,8 +10,9 @@ import { createMessage } from "../src/message.ts";
 import { createGroup, joinGroup } from "../src/group.ts";
 import { ResponseMessage } from "../src/declarations/response-types.d.ts";
 import { WebSocketEvent } from "../src/declarations/event-types.d.ts";
+import { getConfig } from "../src/config.ts";
 
-const HOST = "http://localhost:8000";
+const HOST = getConfig<string>("tests/host") ?? "http://localhost:8000";
 const API = `${HOST}/api`;
 const USER_API = `${API}/user`;
 const SOCKET_ENDPOINT = `${HOST}/socket`;

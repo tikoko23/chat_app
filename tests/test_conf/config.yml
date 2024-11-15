@@ -1,0 +1,46 @@
+## import{./other_config.yml}
+
+recipes:
+  - name: brownie
+    servings    : 16
+    total-time  : 10 # minutes
+    ingredients :
+      - sugar
+      - flour
+      - butter
+      - eggs
+      - cocoa powder
+      - vanilla
+      - baking powder
+      - salt
+      - walnuts
+    instructions: >
+      Mix the ingredients together in a bowl, then spread the batter into a prepared brownie pan.
+      Bake in the preheated oven until the top is dry.
+      Cool, then cut into squares.
+  - name: lemonade
+    servings    : 5 # glasses
+    total-time  : 2 # minutes
+    ingredients :
+      - lemons
+      - water
+      - sugar
+    instructions: >
+      Squeeze some lemons into 1L of water.
+      Add sugar to taste.
+      Mix everything together.
+      Pour into glasses.
+  - name: omelette
+    servings    : 1
+    total-time  : 5 # minutes
+    ingredients :
+      - eggs
+      - butter
+      - salt
+      - other preferred fillings
+    instructions: >
+      In a bowl, crack two eggs and add a pinch of salt. Mix until it's mixed.
+      Spread some butter in a pan over medium heat. Melt the butter until it melts.
+      Pour the mixture into the pan. Let them cook for 1-2 minutes.
+      Add your desired fillings to the omelette. Cook until it's cooked.
+      Slide the omelette onto a plate and serve.

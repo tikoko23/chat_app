@@ -1,9 +1,11 @@
+import { CFG_PATHS } from "./config-paths.ts";
+import { getConfig } from "./config.ts";
 import type { WebSocketEvent } from "./types.ts";
 import { fetchUser } from "./user.ts";
 
 export const SOCKETS: Record<string, WebSocket[]> = {};
 
-const MAX_CONNECTIONS_PER_ACCOUNT = 16;
+const MAX_CONNECTIONS_PER_ACCOUNT = getConfig<number>(`${CFG_PATHS.socket}/max_connections_per_account`) ?? 16;
 
 export function processSocketRequest(req: Request): Response {
     const url = new URL(req.url);

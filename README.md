@@ -16,7 +16,11 @@ The mobile UI is very broken. But this will be fixed *later*.
 
 ### Fully implemented:
 
-* ### None
+* ### Server:
+    - Config system
+    - Argument parsing
+    - Command system
+    - Configurable serve root
 
 ### Partially implemented:
 
@@ -24,10 +28,15 @@ The mobile UI is very broken. But this will be fixed *later*.
 
     - Notifications
 
-* ### Server:
+* ### API:
 
-    - Command system
-    - Argument parsing
+    - Message API
+    - Group API
+    - File upload API
+
+* ### Bindings:
+
+    - Python
 
 ### In progress:
 
@@ -47,11 +56,6 @@ The mobile UI is very broken. But this will be fixed *later*.
 * ### API:
 
     - User profile API
-
-* ### Server:
-
-    - Configurable asset root
-    - Runtime configuration (with config files)
 
 # **License**
 

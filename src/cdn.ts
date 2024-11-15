@@ -3,13 +3,15 @@ import { extname, dirname } from "@std/path";
 import { writeAll } from "@std/io";
 import { fetchUser } from "./user.ts";
 import { Optional } from "./types.ts";
+import { getConfig } from "./config.ts";
+import { CFG_PATHS } from "./config-paths.ts";
 
 const DISABLE_FILE_CACHE = true;
 
-const CDN_ROOT = "./cdn";
-const USER_UPLOAD_SUBDIR = "user_upload";
-const MAX_UPLOAD_SIZE_BYTES = 8388608;
-const MAX_FILENAME_LENGTH = 255;
+const CDN_ROOT              = getConfig<string>(`${CFG_PATHS.cdn}/root`)                ?? "./cdn";
+const USER_UPLOAD_SUBDIR    = getConfig<string>(`${CFG_PATHS.cdn}/user_upload_subdir`)  ?? "user_upload";
+const MAX_UPLOAD_SIZE_BYTES = getConfig<number>(`${CFG_PATHS.cdn}/max_upload_bytes`)    ?? 8388608;
+const MAX_FILENAME_LENGTH   = getConfig<number>(`${CFG_PATHS.cdn}/max_filename_length`) ?? 255;
 
 export async function serveFile(path: string, forcedMIME?: Optional<string>): Promise<Response> {
     if (/\.\.\/|\/\.\./.test(path))

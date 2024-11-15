@@ -1,0 +1,15 @@
+server:
+  serve_root: "."
+  rickroll_redirect: false
+
+cdn:
+  root: ./cdn
+  user_upload_subdir: user_upload
+  max_upload_bytes: 8388608
+  max_filename_length: 255
+
+database:
+  max_fetch_size: 32
+
+socket:
+  max_connections_per_account: 16

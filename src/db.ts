@@ -1,7 +1,9 @@
-import * as SQLite from "https://deno.land/x/sqlite@v3.9.1/mod.ts";
+import * as SQLite from "@sqlite";
 import { dirname } from "@std/path";
+import { getConfig } from "./config.ts";
+import { CFG_PATHS } from "./config-paths.ts";
 
-export const MAXIMUM_DB_FETCH_SIZE = 32;
+export const MAXIMUM_DB_FETCH_SIZE = getConfig<number>(`${CFG_PATHS.db}/max_fetch_size`) ?? 32;
 
 export type UserQueryResult = {
     id: number,

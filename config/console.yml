@@ -1,0 +1,6 @@
+console:
+  prompt: "> "
+
+  commands:
+    prefix: "!"
+    prefix_regex: ""

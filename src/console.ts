@@ -1,13 +1,15 @@
 import { parseArgs } from "@std/cli";
 import { COMMAND_PREFIX_REGEX, CONSOLE_COMMANDS } from "./commands.ts";
 import { ArgCommand, ExecCommand, OutputCommand } from "./declarations/command-types.d.ts";
+import { getConfig } from "./config.ts";
+import { CFG_PATHS } from "./config-paths.ts";
+import { ARGS } from "./args.ts";
 
-export const CONSOLE_PROMPT = new TextEncoder().encode("> ");
-export let ARGS: ReturnType<typeof parseArgs>;
+export const CONSOLE_PROMPT_STR = getConfig<string>(`${CFG_PATHS.console}/prompt`) ?? "> ";
+
+export const CONSOLE_PROMPT = new TextEncoder().encode(CONSOLE_PROMPT_STR);
 
 export function initConsole() {
-    ARGS = parseArgs(Deno.args);
-
     if (!Deno.stdin.isTerminal() && !ARGS["any-stdin"]) {
         console.error("Stdin is not a terminal (use '--any-stdin' to ignore)");
         Deno.exit(1);

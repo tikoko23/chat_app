@@ -1,8 +1,11 @@
+import { CFG_PATHS } from "./config-paths.ts";
+import { getConfig } from "./config.ts";
 import { CommandArgs, CommandWriter } from "./declarations/command-types.d.ts";
 import { ConsoleCommandMeta } from "./declarations/meta-types.d.ts";
 
-export const COMMAND_PREFIX_REGEX = "";
-export const COMMAND_PREFIX = "!";
+export const COMMAND_PREFIX_REGEX = getConfig<string>(`${CFG_PATHS.commands}/prefix_regex`) ?? "";
+export const COMMAND_PREFIX       = getConfig<string>(`${CFG_PATHS.commands}/prefix`)       ?? "!";
+
 export const CONSOLE_COMMANDS: Record<string, ConsoleCommandMeta> = {};
 
 CONSOLE_COMMANDS["help"] = {

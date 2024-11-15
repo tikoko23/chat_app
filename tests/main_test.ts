@@ -1,8 +1,11 @@
-import { assertEquals, assertNotEquals } from "@std/assert";
+import "../src/init.ts";
+
+import { assert, assertEquals, assertNotEquals } from "@std/assert";
 import { getDescendants } from "../src/api.ts";
 import { extractStringFromStream } from "../src/util.ts";
 import { hashString } from "../src/crypt.ts";
 import { newSplitPromise } from "./test_util.ts";
+import { getConfig, loadConfig, updateConfigPaths } from "../src/config.ts";
 
 Deno.test({
     name: "floatingPointImprecision",
@@ -76,4 +79,29 @@ Deno.test({
 
         assertEquals(result, 23);
     }
-})
+});
+
+Deno.test({
+    name: "configTest",
+    async fn() {
+        updateConfigPaths([ "$SRC/tests/test_conf/config.yml" ]);
+        await loadConfig();
+
+        const all = getConfig<Record<string, object>>("/") ?? {};
+        const keys = Object.keys(all);
+
+        assert(keys.includes("stats") && keys.includes("recipes"));
+
+        assertEquals(getConfig<number>("stats/0/meals-served"), 23);
+
+        const expectedRecipes = [ "brownie", "lemonade", "omelette" ];
+        const recipes = getConfig<Record<string, unknown>[]>("recipes") ?? [];
+
+        assertEquals(recipes.map(r => r.name), expectedRecipes);
+
+        const expectedIngredients = [ "sugar", "flour", "butter", "eggs", "cocoa powder", "vanilla", "baking powder", "salt", "walnuts" ];
+        const brownieIngredients = getConfig<string[]>("recipes/0/ingredients");
+
+        assertEquals(brownieIngredients, expectedIngredients);
+    }
+});

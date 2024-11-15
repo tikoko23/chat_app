@@ -1,26 +1,21 @@
-import { dirname } from "https://deno.land/std@0.202.0/path/mod.ts";
+import "./init.ts";
+
 import { loadApi, processApiRequest } from "./api.ts";
 import { serveRequest } from "./cdn.ts";
 import { DB, initDefaultTables, loadDefaultDB } from "./db.ts";
 import { serveHtml, loadDynamicPages, parseHtml } from "./html.ts";
 import { processSocketRequest } from "./websocket.ts";
 import { CONSOLE_PROMPT, initConsole } from "./console.ts";
+import { getConfig } from "./config.ts";
+import { CFG_PATHS } from "./config-paths.ts";
 
-const RICKROLL_REDIRECT = false;
+const SERVE_ROOT        = getConfig<string>(`${CFG_PATHS.server}/serve_root`)         ?? ".";
+const RICKROLL_REDIRECT = getConfig<boolean>(`${CFG_PATHS.server}/rickroll_redirect`) ?? false;
 
 const rickrollDetector = /never.*gonna.*give.*you.*up/gi;
 
 if (import.meta.main) {
-    const scriptPath = new URL(import.meta.url).pathname;
-    const rootDir = `${dirname(scriptPath)}/..`;
-
     initConsole();
-
-    Deno.chdir(rootDir);
-
-    const newCwd = Deno.cwd();
-
-    console.log(`Serving from ${newCwd}`);
 
     loadMainDB();
     serve().then(() => {
@@ -72,7 +67,7 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
             return processSocketRequest(req);
 
         if (path.startsWith("/cdn") || path.startsWith("/asset") || path.startsWith("/styles") || path.startsWith("/scripts"))
-            return await serveRequest(req, ".");
+            return await serveRequest(req, SERVE_ROOT);
 
         if (dynamicPages[url.pathname] !== undefined)
             return await dynamicPages[url.pathname].exec(req);
