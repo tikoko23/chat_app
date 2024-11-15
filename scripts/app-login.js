@@ -8,7 +8,7 @@ export const progress = document.getElementById("progress-display");
 
 /**
  * Calls other functions to ready the initial UI state and get the token
- * @returns {Promise<string|void>} Token if the fetch was successful
+ * @returns {Promise<string | void>} Token if the fetch was successful
  */
 export async function appLogin() {
     progress.textContent = "Getting cookie...";

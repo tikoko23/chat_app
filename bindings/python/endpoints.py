@@ -1,6 +1,6 @@
 API_URL = "https://tikoko-dev.site/api"
 
-class Endpoints():
+class Endpoints:
 
     # User enums
 

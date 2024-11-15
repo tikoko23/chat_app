@@ -1,7 +1,7 @@
 /**
  * Gets a cookie by name.
  * @param {string} name - The name of the cookie.
- * @returns {string|null} - The value of the cookie, or null if not found.
+ * @returns {string | null} - The value of the cookie, or null if not found.
  */
 export function getCookie(name) {
     const match = document.cookie.match(`(?:^|; )${name}=([^;]*)`);

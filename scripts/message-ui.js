@@ -32,7 +32,7 @@ export function createMessageHolder(groupId) {
 /**
  * Returns an already existing message holder or null if not found
  * @param {number} groupId
- * @returns {HTMLElement|null}
+ * @returns {HTMLElement | null}
  */
 export function getMessageHolder(groupId) {
     return window.groupMessages[groupId] || null;
