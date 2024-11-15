@@ -52,3 +52,7 @@ The mobile UI is very broken. But this will be fixed *later*.
 
     - Configurable asset root
     - Runtime configuration (with config files)
+
+# **License**
+
+This software is licensed under the [GNU General Public License](https://www.gnu.org/licenses/gpl-3.0.txt)
