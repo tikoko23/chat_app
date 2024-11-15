@@ -29,3 +29,16 @@ export async function test(callback: (server?: Deno.HttpServer<Deno.NetAddr>) =>
 
     await endTest(server);
 }
+
+export async function newSplitPromise<P>(): Promise<{ promise: Promise<P>, resolver: (arg0: P) => void }> {
+    let resolver: (arg0: P) => void = (_: P) => {};
+
+    const promise = new Promise<P>(res => {
+        resolver = res;
+    });
+
+    // Wait for the next event loop tick, (hopefully) guarantees assignment to `resolver`
+    await new Promise(r => setTimeout(r, 0));
+
+    return { promise, resolver };
+}

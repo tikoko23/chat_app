@@ -1,12 +1,18 @@
 import { assert, assertEquals } from "@std/assert";
 import { fetchUser } from "../src/user.ts";
-import { User } from "../src/types.d.ts";
+import { User } from "../src/types.ts";
 import { unloadDB } from "../src/db.ts";
-import { test } from "./test_util.ts";
+import { newSplitPromise, test } from "./test_util.ts";
 import { extractStringFromStream } from "../src/util.ts";
+import { createMessage } from "../src/message.ts";
+import { createGroup, joinGroup } from "../src/group.ts";
+import { ResponseMessage } from "../src/declarations/response-types.d.ts";
+import { WebSocketEvent } from "../src/declarations/event-types.d.ts";
 
-const API = "http://localhost:8000/api";
+const HOST = "http://localhost:8000";
+const API = `${HOST}/api`;
 const USER_API = `${API}/user`;
+const SOCKET_ENDPOINT = `${HOST}/socket`;
 
 async function createTestUser(name: string = "test_user", pass: string = "strong_password"): Promise<User> {
     const response = await fetch(`${USER_API}/create`, {
@@ -106,6 +112,83 @@ Deno.test({
             }
 
             assert(user.token === json.token, "tokens should match");
+        });
+    }
+});
+
+Deno.test({
+    name: "socketEventMessageCreate",
+    async fn() {
+        await test(async () => {
+            const user1 = await createTestUser("user1");
+            const user2 = await createTestUser("user2");
+
+            const group = createGroup("group", user1);
+            joinGroup(group, user2);
+
+            const user1Socket = new WebSocket(`${SOCKET_ENDPOINT}?token=${user1.token}`);
+            const user2Socket = new WebSocket(`${SOCKET_ENDPOINT}?token=${user2.token}`);
+
+            const socket1Split = await newSplitPromise<void>();
+            const socket2Split = await newSplitPromise<void>();
+
+            user1Socket.onopen = function() {
+                socket1Split.resolver();
+            }
+
+            user2Socket.onopen = function() {
+                socket2Split.resolver();
+            }
+
+            await socket1Split.promise;
+            await socket2Split.promise;
+
+            const testMessageContent = { body: "message_body" };
+
+            const user1Split = await newSplitPromise<boolean>();
+            const user2Split = await newSplitPromise<boolean>();
+
+            user1Socket.onerror = function(er) {
+                throw er;
+            }
+
+            user2Socket.onerror = function(er) {
+                throw er;
+            }
+
+            user1Socket.onmessage = function(m) {
+                const event = JSON.parse(m.data) as WebSocketEvent;
+
+                switch (event.type) {
+                    case "message.create": {
+                        const message = event.object as ResponseMessage;
+
+                        user1Split.resolver(message.content.body === testMessageContent.body);
+                    }
+                }
+            }
+
+            user2Socket.onmessage = function(m) {
+                const event = JSON.parse(m.data) as WebSocketEvent;
+
+                switch (event.type) {
+                    case "message.create": {
+                        const message = event.object as ResponseMessage;
+
+                        user2Split.resolver(message.content.body === testMessageContent.body);
+                    }
+                }
+            }
+
+            createMessage(group, user1, testMessageContent);
+
+            const [ user1Recieved, user2Recieved ] = await Promise.all([ user1Split.promise, user2Split.promise ]);
+
+            assert(user1Recieved);
+            assert(user2Recieved);
+
+            user1Socket.close();
+            user2Socket.close();
         });
     }
 });
