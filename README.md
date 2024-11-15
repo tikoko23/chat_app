@@ -24,6 +24,11 @@ The mobile UI is very broken. But this will be fixed *later*.
 
     - Notifications
 
+* ### Server:
+
+    - Command system
+    - Argument parsing
+
 ### In progress:
 
 * ### UI:

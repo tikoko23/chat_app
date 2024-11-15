@@ -4,6 +4,7 @@ import { serveRequest } from "./cdn.ts";
 import { DB, initDefaultTables, loadDefaultDB } from "./db.ts";
 import { serveHtml, loadDynamicPages, parseHtml } from "./html.ts";
 import { processSocketRequest } from "./websocket.ts";
+import { CONSOLE_PROMPT, initConsole } from "./console.ts";
 
 const RICKROLL_REDIRECT = false;
 
@@ -13,6 +14,8 @@ if (import.meta.main) {
     const scriptPath = new URL(import.meta.url).pathname;
     const rootDir = `${dirname(scriptPath)}/..`;
 
+    initConsole();
+
     Deno.chdir(rootDir);
 
     const newCwd = Deno.cwd();
@@ -20,7 +23,9 @@ if (import.meta.main) {
     console.log(`Serving from ${newCwd}`);
 
     loadMainDB();
-    serve();
+    serve().then(() => {
+        Deno.stdout.write(CONSOLE_PROMPT);
+    });
 }
 
 export function loadMainDB() {

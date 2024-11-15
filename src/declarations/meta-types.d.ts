@@ -1,3 +1,4 @@
+import { ArgCommand, CommandType, OutputCommand } from "./command-types.d.ts";
 import { JSONValue } from "./util-types.d.ts"
 
 export interface EndpointMeta {
@@ -7,4 +8,13 @@ export interface EndpointMeta {
 
 export interface DynamicPageMeta {
     exec: (req: Request) => Response | Promise<Response>
+}
+
+export interface ConsoleCommandMeta {
+    commandType: CommandType,
+    exec: ArgCommand | OutputCommand,
+    summary: string,
+    description?: string,
+    argumentsDescription?: string,
+    examples?: string[]
 }
