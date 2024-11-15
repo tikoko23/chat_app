@@ -1,7 +1,8 @@
 {
   "importMap": "./import_map.json",
   "tasks": {
-    "dev": "deno run --watch src/main.ts",
+    "run" : "deno run --allow-all src/main.ts",
+    "dev" : "deno run --allow-all --watch src/main.ts",
     "test": "deno test --allow-all --trace-leaks"
   }
 }

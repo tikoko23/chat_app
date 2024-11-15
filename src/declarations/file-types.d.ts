@@ -16,7 +16,7 @@ export type MIMEType =
     | "audio/aac"
     | "video/mp4"
     | "video/mpeg"
-    | "application/octet-stream"
+    | "application/octet-stream";
 
 export type AttachmentType =
     | "video"
