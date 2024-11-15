@@ -140,8 +140,10 @@ Deno.test({
                 socket2Split.resolver();
             }
 
-            await socket1Split.promise;
-            await socket2Split.promise;
+            if (user1Socket.readyState === WebSocket.CONNECTING)
+                await socket1Split.promise;
+            if (user2Socket.readyState === WebSocket.CONNECTING)
+                await socket2Split.promise;
 
             const testMessageContent = { body: "message_body" };
 
