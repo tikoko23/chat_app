@@ -6,5 +6,7 @@
 }
 
 #right-spacer {
-    flex-grow: 0.5;
+    height: 10px;
+    min-height: 10px;
+    max-height: 10px;
 }

@@ -52,7 +52,7 @@ export function addMessage(sender, content, id, messageContainer) {
     const paragraphHolder = document.createElement("div");
     const context = document.createElement("div");
 
-    const parsed = marked.parse(content).replace("\n", "<br>").replace(/\<br\>$/g, "");
+    const parsed = marked.parse(content).replaceAll("\n", "<br>").replace(/\<br\>$/g, "");
     const sanitized = DOMPurify.sanitize(parsed);
 
     holder.id = `msg_${id}`;

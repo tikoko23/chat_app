@@ -54,12 +54,24 @@ async function parseAndSendMessage() {
     addMessage(
         message.author.displayName ?? message.author.name,
         contentBody,
-        message,
+        message.id,
         messageHolder
     );
 }
 
+function updateMessageBoxHeight() {
+    const lineCount = getTextareaLineCount(messageBox);
+
+    const lineCountFactor = Math.max(0, Math.min(1.5, lineCount / 4)) * 2;
+    const flexGrow = lineCountFactor <= 0.5 ? 0 : lineCountFactor;
+
+    messageInputFrame.style.flexGrow = `${flexGrow}`;
+}
+
 sendButton.addEventListener("click", parseAndSendMessage);
+messageBox.addEventListener("mouseenter", updateMessageBoxHeight);
+messageBox.addEventListener("mousemove", updateMessageBoxHeight);
+messageBox.addEventListener("input", updateMessageBoxHeight);
 messageBox.addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
@@ -67,15 +79,7 @@ messageBox.addEventListener("keydown", e => {
         return;
     }
 
-    const lineCount = getTextareaLineCount(messageBox);
-    console.log("c", lineCount);
-
-    const lineCountFactor = Math.max(0, Math.min(1, lineCount / 4));
-    const flexGrow = lineCountFactor <= 0.5 ? 0 : lineCountFactor;
-
-    console.log("f", flexGrow);
-
-    messageInputFrame.style.flexGrow = `${flexGrow}`;
+    updateMessageBoxHeight();
 });
 
 setupClientListener(tokenPromise);

@@ -78,6 +78,10 @@
     min-width: 50vw;
 }
 
+#message-flex > * {
+    flex-basis: 0;
+}
+
 #message-input {
     width: 100%;
     display: flex;
@@ -97,11 +101,13 @@
 #message-holder {
     flex-grow: 18;
     width: 100%;
+    overflow: hidden;
 }
 
 #message-display {
-    width: calc(100% - 40px);
-    height: calc(100% - 40px);
+    width: calc(100% - 40px - 4px);
+    height: calc(100% - 40px - 4px);
+    max-height: calc(100% - 40px - 4px);
 
     padding: 20px;
 
@@ -113,13 +119,24 @@
     background-color: #353535;
 }
 
-#send-message {
-    border-radius: 25%;
+#send-frame {
     height: 100%;
-    aspect-ratio: 1 / 1;
     flex-grow: 1;
 
     margin-left: 10px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    justify-content: center;
+    align-items: center;
+}
+
+#send-message {
+    aspect-ratio: 1 / 1;
+
+    border-radius: 25%;
     border-style: solid;
     border-color: rgba(0, 0, 0, 0.2);
 }

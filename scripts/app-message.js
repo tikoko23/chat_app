@@ -40,7 +40,12 @@ export function getTextareaLineCount(textarea) {
     const computedStyle = window.getComputedStyle(textarea);
     const textareaWidth = textarea.clientWidth;
 
-    const lines = textarea.value.split('\n');
+    const text = textarea.value;
+
+    if (text.length === 0)
+        return 1;
+
+    const lines = text.split('\n');
     let lineCount = 0;
 
     const tempSpan = document.createElement("span");
@@ -55,6 +60,9 @@ export function getTextareaLineCount(textarea) {
         const lineWidth = tempSpan.clientWidth;
         lineCount += Math.ceil(lineWidth / textareaWidth);
     });
+
+    if (text[text.length - 1] === "\n")
+        ++lineCount;
 
     document.body.removeChild(tempSpan);
 
