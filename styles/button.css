@@ -21,7 +21,7 @@
 
 .glass-bright-button {
     background-color: rgba(84, 255, 90, 0.6);
-    backdrop-filter: blur(100px);
+    backdrop-filter: blur(10px);
 
     box-shadow: 0px 0px 5px black;
 
