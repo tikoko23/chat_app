@@ -33,3 +33,21 @@ export async function readAll(stream: ReadableStream<Uint8Array>): Promise<Uint8
 
     return fullData;
 }
+
+/**
+ * Adds an empty line above the cursor; then prints `message` and puts the cursor back where it was, keeping the current line of text.
+ * Any text that would overflow after shifting the lines down will be scrolled away. This is done by creating two new lines to be overwritten and this hasn't been thoroughly tested.
+ * @param message
+ * @param fd Can be `Deno.stdout` or `Deno.stderr`
+ */
+export function logAbove(message: string, fd: typeof Deno.stdout | typeof Deno.stderr = Deno.stdout) {
+    const escapeSequenceStart = "\x1b7\x1b\n\n\x1b[2A\x1b[1L\r";
+    const escapeSequenceEnd = "\x1b8\x1b[1B";
+
+    const final = `${escapeSequenceStart}${message}${escapeSequenceEnd}`;
+
+    const encoder = new TextEncoder();
+    const bytes = encoder.encode(final);
+
+    fd.writeSync(bytes);
+}

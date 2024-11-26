@@ -1,4 +1,5 @@
 server:
+  use_cloudflare: true
   serve_root: "."
   rickroll_redirect: false
 

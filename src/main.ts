@@ -8,7 +8,9 @@ import { processSocketRequest } from "./websocket.ts";
 import { CONSOLE_PROMPT, initConsole } from "./console.ts";
 import { getConfig } from "./config.ts";
 import { CFG_PATHS } from "./config-paths.ts";
+import { logAbove } from "./util.ts";
 
+const USE_CLOUDFLARE    = getConfig<boolean>(`${CFG_PATHS.server}/use_cloudflare`)    ?? true;
 const SERVE_ROOT        = getConfig<string>(`${CFG_PATHS.server}/serve_root`)         ?? ".";
 const RICKROLL_REDIRECT = getConfig<boolean>(`${CFG_PATHS.server}/rickroll_redirect`) ?? false;
 
@@ -43,11 +45,17 @@ export async function serve(): Promise<Deno.HttpServer<Deno.NetAddr>> {
     return Deno.serve(async (req: Request, info: Deno.ServeHandlerInfo<Deno.NetAddr>): Promise<Response> => {
         const now = new Date(Date.now());
 
-        const fullAddress = `${info.remoteAddr.hostname}:${info.remoteAddr.port}`;
+        let fullAddress;
+
+        if (USE_CLOUDFLARE)
+            fullAddress = `(${req.headers.get('cf-ipcountry')}) ${req.headers.get('cf-connecting-ip') ?? info.remoteAddr.hostname}`;
+        else
+            fullAddress = `${info.remoteAddr.hostname}:${info.remoteAddr.port}`;
+
         const seconds = `${(now.getMilliseconds() / 1e3).toFixed(3)}`;
         const timestamp = `${(now.toUTCString())} @${seconds}`;
 
-        console.log(`${timestamp} | ${req.method} ${fullAddress} -> ${req.url}`);
+        logAbove(`${timestamp} | ${fullAddress} -> ${req.method} ${req.url}`);
 
         const url = new URL(req.url);
         const path = url.pathname;
