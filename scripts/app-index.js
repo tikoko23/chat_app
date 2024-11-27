@@ -4,19 +4,21 @@ import { appLogin } from "./app-login.js";
 import { switchActiveGroup } from "./group-ui.js";
 import { ENDPOINTS, fetchJSON } from "./api-endpoints.js";
 import { addMessage, getMessageHolder, createMessageHolder } from "./message-ui.js";
-import { setupClientListener } from "./websocket.js";
-import { sendMessage } from "./app-message.js";
-import { getTextareaLineCount } from "./app-message.js"
-
-const tokenPromise = appLogin();
+import { addClientEventListener, setupClientListener } from "./websocket.js";
+import { sendMessage, getTextareaLineCount } from "./app-message.js";
+import { sendNotification } from "./app-notify.js";
+import { pingRegex } from "./regex.js";
 
 window.thisUser = null;
 window.groupMessages = {};
 window.activeGroup = -1;
 
+const tokenPromise = appLogin();
+
 (async () => {
+    await tokenPromise;
     const url = new URL(window.location.href);
-    const landingGroup = url.searchParams.get("landingGroupId") ?? -1;
+    const landingGroup = Number(url.searchParams.get("landingGroupId") ?? -1);
 
     const groupDOM = document.getElementById(`grp_${landingGroup}`);
 
@@ -38,7 +40,7 @@ groupList.addEventListener("click", e => {
     switchActiveGroup(newGroupId);
 });
 
-const messageInputFrame = document.getElementById("message-input");
+const messageInputFrame = document.getElementById("message-frame");
 const messageBox = document.getElementById("msg-box");
 const sendButton = document.getElementById("send-message");
 
@@ -82,7 +84,29 @@ messageBox.addEventListener("keydown", e => {
     updateMessageBoxHeight();
 });
 
+const newMessageSound = new Audio("/asset/aud/message.wav");
+const pingSound = new Audio("/asset/aud/ping.wav");
+
 setupClientListener(tokenPromise);
+addClientEventListener("message.create", data => {
+    if (data.author.id === window.thisUser.id)
+        return;
+
+    let content = data.content.body;
+
+    const soundToPlay = pingRegex(window.thisUser).test(content) ? pingSound : newMessageSound;
+
+    if (content.length > 100)
+        content = content.substring(0, 100);
+
+    const senderName = data.author.displayName ?? data.author.name;
+    const groupName = data.group.name;
+
+    sendNotification(`#${groupName} | @${senderName}`, content, {
+        time: 3,
+        sound: soundToPlay
+    });
+});
 
 /* TESTING */
 (async () => {

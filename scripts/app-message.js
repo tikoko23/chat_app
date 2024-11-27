@@ -3,6 +3,18 @@
 /** @module types */
 
 import { ENDPOINTS, fetchJSON } from "./api-endpoints.js";
+import { pingRegex } from "./regex.js";
+
+/**
+ * Parses markdown to innerHTML
+ * @param {string} text
+ * @returns {string}
+ */
+export function parseMarkdown(text) {
+    const parsedText = marked.parse(text).replaceAll("\n", "<br>").replace(/\<br\>$/g, "");
+    const sanitized = DOMPurify.sanitize(parsedText);
+    return sanitized.replaceAll(pingRegex(), "");
+}
 
 /**
  * Sends a message and returns the response (This will throw if sending fails!)

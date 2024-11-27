@@ -4,6 +4,23 @@ import { addMessage } from "./message-ui.js";
 import { ENDPOINTS } from "./api-endpoints.js";
 
 /**
+ * @type {Record<string, Array<(data: any) => void>}
+ */
+const clientEvents = {};
+
+/**
+ * Adds an event listener to be handled by the web socket
+ * @param {string} type
+ * @param {(data: any) => void} f
+ */
+export function addClientEventListener(type, f) {
+    if (clientEvents[type] === undefined)
+        clientEvents[type] = [];
+
+    clientEvents[type].push(f);
+}
+
+/**
  * Creates a WebSocket with a wrapper function to parse messages
  * @param {string} token
  * @param {(type: string, data: object) => void} eventHandler
@@ -37,10 +54,13 @@ export function getWebSocket(token, eventHandler) {
 export async function setupClientListener(token) {
     token = await token;
 
+    if (token === undefined)
+        return;
+
     return getWebSocket(token, (type, data) => {
         switch (type) {
             case "message.create": {
-                if (data.author.name === window.thisUser.name)
+                if (data.author.id === window.thisUser.id)
                     break;
 
                 const sender = data.author.displayName ?? data.author.name;
@@ -53,5 +73,8 @@ export async function setupClientListener(token) {
                 break;
             }
         }
-    })
+
+        if (clientEvents[type] !== undefined)
+            clientEvents[type].forEach(f => f(data));
+    });
 }

@@ -1,5 +1,7 @@
 // deno-lint-ignore-file
 
+import { parseMarkdown } from "./app-message.js";
+
 /**
  * @type {Record<string, {card: HTMLDivElement, id: string, timeoutId: number}>}
  */
@@ -9,11 +11,14 @@ const NOTIFICATIONS = {};
  * Creates and sends a notification
  * @param {string} title The title of the notification
  * @param {string} content The text to display (supports markdown)
- * @param {string} [icon=""] The icon to display with the notification (as innerHTML format)
- * @param {number} [time=5] The amount of seconds the message should be displayed for
+ * @param {{time?: number, icon?: string, sound?: HTMLAudioElement}} [options={}]
  * @returns {{card: HTMLDivElement, id: string}} The notification id. This can be used to destroy the notification later
  */
-export function sendNotification(title, content, time, icon = "") {
+export function sendNotification(title, content, options = {}) {
+    const time = options.time || 5;
+    const icon = options.icon || null;
+    const sound = options.sound || null;
+
     const notificationId = `${time}-${Date.now()}-${title[0]}${content[0]}`;
 
     const notificationHolder = document.getElementById("notification-holder");
@@ -22,11 +27,13 @@ export function sendNotification(title, content, time, icon = "") {
     notificationCard.id = `notification-${notificationId}`;
     notificationCard.classList.add("notification", "glassify", "dark-glass");
 
-    const notificationIconHolder = document.createElement("div");
-    notificationIconHolder.classList.add("n-symbol");
-    notificationIconHolder.innerHTML = icon;
+    if (icon !== null) {
+        const notificationIconHolder = document.createElement("div");
+        notificationIconHolder.classList.add("n-symbol");
+        notificationIconHolder.innerHTML = icon;
 
-    notificationCard.appendChild(notificationIconHolder);
+        notificationCard.appendChild(notificationIconHolder);
+    }
 
     const notificationBody = document.createElement("div");
     notificationBody.classList.add("n-body");
@@ -37,13 +44,16 @@ export function sendNotification(title, content, time, icon = "") {
 
     notificationBody.appendChild(notificationTitle);
 
-    const parsedText = marked.parse(content).replace("\n", "<br>").replace(/\<br\>$/g, "");
-    const sanitized = DOMPurify.sanitize(parsedText);
+    const sanitized = parseMarkdown(content);
     notificationBody.innerHTML += sanitized;
 
     notificationCard.appendChild(notificationBody);
 
     notificationHolder.appendChild(notificationCard);
+
+    if (sound !== null)
+        // Will throw if no user input occurs, added empty catch
+        sound.play().catch(() => {});
 
     const timeoutId = setTimeout(() => {
         NOTIFICATIONS[notificationId].timeoutId = -1;
