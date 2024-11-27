@@ -15,7 +15,7 @@ export async function processApiRequest(req: Request, url: URL): Promise<Respons
 
     let postArgs: Record<string, JSONValue> | undefined = undefined;
 
-    if (req.method === "POST") {
+    if (req.method === "POST" && !url.pathname.startsWith("/api/upload")) {
         try {
             postArgs = await req.json();
             if (Array.isArray(postArgs))

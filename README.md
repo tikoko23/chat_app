@@ -16,6 +16,9 @@ The mobile UI is very broken. But this will be fixed *later*.
 
 ### Fully implemented:
 
+* ### UI:
+    - Dynamic message box
+
 * ### Server:
     - Config system
     - Argument parsing
@@ -41,8 +44,8 @@ The mobile UI is very broken. But this will be fixed *later*.
 ### In progress:
 
 * ### UI:
-
-    - Dynamic message box
+    - Replying to messages
+    - Attachments
 
 ### Planned:
 
@@ -50,8 +53,6 @@ The mobile UI is very broken. But this will be fixed *later*.
 
     - Mobile UI actually being usable
     - User profiles (includes profile photos)
-    - Replying to messages
-    - Attachments
 
 * ### API:
 

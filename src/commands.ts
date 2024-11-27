@@ -2,6 +2,7 @@ import { CFG_PATHS } from "./config-paths.ts";
 import { getConfig } from "./config.ts";
 import { CommandArgs, CommandWriter } from "./declarations/command-types.d.ts";
 import { ConsoleCommandMeta } from "./declarations/meta-types.d.ts";
+import { parseHtml } from "./html.ts";
 
 export const COMMAND_PREFIX_REGEX = getConfig<string>(`${CFG_PATHS.commands}/prefix_regex`) ?? "";
 export const COMMAND_PREFIX       = getConfig<string>(`${CFG_PATHS.commands}/prefix`)       ?? "!";
@@ -22,7 +23,7 @@ CONSOLE_COMMANDS["help"] = {
                     return;
                 }
 
-                finalStr += `==== ${commandName} ====`;
+                finalStr += `==== ${commandName} ====\n`;
                 finalStr += `Summary:\n    ${meta.summary}\n`;
 
                 if (meta.argumentsDescription !== undefined)
@@ -72,4 +73,21 @@ CONSOLE_COMMANDS["clear"] = {
     },
     summary: "Clears the screen",
     argumentsDescription: "No arguments"
+}
+
+CONSOLE_COMMANDS["pages"] = {
+    commandType: "output",
+    exec: async (args: CommandArgs, output: CommandWriter) => {
+        if (args["r"] || args["reload"]) {
+            await output.write("Reloading HTML pages...\n");
+            await parseHtml();
+            await output.write("Reload finished\n");
+            return;
+        }
+    },
+    summary: "Utility for managing HTML pages during runtime",
+    argumentsDescription: "pages [-r, --reload]",
+    examples: [
+        "pages -r"
+    ]
 }
