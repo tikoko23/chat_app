@@ -69,7 +69,7 @@ export async function setupClientListener(token) {
 
                 const messageHolder = getMessageHolder(data.group.id) ?? createMessageHolder(data.group.id);
 
-                addMessage(sender, content, id, messageHolder);
+                addMessage(sender, content, id, messageHolder, data.replyId);
                 break;
             }
         }

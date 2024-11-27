@@ -8,7 +8,9 @@ import { addClientEventListener, setupClientListener } from "./websocket.js";
 import { sendMessage, getTextareaLineCount } from "./app-message.js";
 import { sendNotification } from "./app-notify.js";
 import { pingRegex } from "./regex.js";
+import { removeReplyPreview } from "./reply-ui.js";
 
+window.repliedMessageId = null;
 window.thisUser = null;
 window.groupMessages = {};
 window.activeGroup = -1;
@@ -48,17 +50,25 @@ async function parseAndSendMessage() {
     const token = await tokenPromise;
     const contentBody = messageBox.value.trim();
 
+    if (contentBody === "")
+        return;
+
     messageBox.value = "";
 
-    const message = await sendMessage(token, window.activeGroup, { body: contentBody }, undefined, undefined);
+    const message = await sendMessage(token, window.activeGroup, { body: contentBody }, undefined, window.repliedMessageId ?? undefined);
     const messageHolder = getMessageHolder(window.activeGroup) ?? createMessageHolder(window.activeGroup);
 
     addMessage(
         message.author.displayName ?? message.author.name,
         contentBody,
         message.id,
-        messageHolder
+        messageHolder,
+        window.repliedMessageId ?? undefined
     );
+
+    window.repliedMessageId = null;
+
+    removeReplyPreview();
 }
 
 function updateMessageBoxHeight() {

@@ -1,0 +1,71 @@
+.reply-preview {
+    width: 100%;
+    margin: 5px;
+    margin-bottom: 10px;
+
+    font-size: 0.9em;
+
+    display: flex;
+}
+
+.reply-preview > * {
+    color: #DDD;
+}
+
+.reply-preview > .name-display {
+    font-weight: bolder;
+    margin-right: 10px;
+    text-overflow: ellipsis;
+}
+
+.reply-preview > .paragraph-holder {
+    flex-grow: 1;
+    max-height: 5em;
+    overflow: scroll;
+}
+
+.reply-to-text {
+    color: white;
+    font-weight: bolder;
+    font-size: 1.11em;
+
+    margin-right: 20px;
+}
+
+.reply-close-button {
+    background-color: transparent;
+    border-style: none;
+    border-radius: 40%;
+
+    font-size: larger;
+    font-weight: bolder;
+
+    max-width: 2em;
+    max-height: 2em;
+
+    aspect-ratio: 1 / 1;
+}
+
+.reply-close-button:hover {
+    background-color: #404040;
+}
+
+.reply-embed {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    align-items: center;
+
+    color: #DDD;
+    font-size: 0.9em;
+}
+
+.reply-embed > .name-display {
+    font-weight: bolder;
+    margin-right: 10px;
+}

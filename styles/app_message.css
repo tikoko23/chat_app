@@ -4,17 +4,28 @@
     display: flex;
     padding: 5px;
     border-radius: 5px;
+
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.message > .body {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
 
 .message:hover {
     backdrop-filter: brightness(75%);
 }
 
-.message:hover > .context {
+.message:hover > .body > .context {
     visibility: visible;
 }
 
-.message > .context {
+.message > .body > .context {
     position: absolute;
     visibility: hidden;
     width: fit-content;
@@ -26,7 +37,7 @@
     overflow: hidden;
 }
 
-.message > .context > * {
+.message > .body > .context > * {
     height: 100%;
     aspect-ratio: 1 / 1;
     border: none;
@@ -35,12 +46,12 @@
     display: inline;
 }
 
-.message > .context > * > svg {
+.message > .body > .context > * > svg {
     width: 100%;
     height: 100%;
 }
 
-.message > .context > *:hover {
+.message > .body > .context > *:hover {
     filter: brightness(150%);
 }
 
@@ -49,18 +60,18 @@
     color: white;
 }
 
-.message > .name-display {
+.message > .body > .name-display {
     font-weight: bolder;
     min-width: 12em;
     max-width: 12em;
     text-overflow: ellipsis;
 }
 
-.message > .paragraph-holder {
-    flex-grow: 14;
+.message > .body > .paragraph-holder {
+    flex-grow: 1;
 }
 
-.message > .paragraph-holder > p {
+.message > .body > .paragraph-holder > p {
     margin: 0;
     flex-grow: 0;
     flex-shrink: 1;
@@ -82,15 +93,15 @@
     flex-basis: 0;
 }
 
-#message-input {
+#text-input {
     width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    flex-grow: 0;
+    flex-grow: 1;
 }
 
-#message-input > textarea {
+#text-input > textarea {
     resize: none;
     flex-grow: 10;
     width: 100%;
@@ -147,4 +158,20 @@
     width: 100%;
     height: 100%;
     aspect-ratio: 1 / 1;
+}
+
+#message-frame {
+    width: 100%;
+
+    padding: 10px;
+    padding-bottom: 10vh;
+    margin-bottom: -10vh;
+    border-radius: 10px;
+    background-color: #353535;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
 }
