@@ -30,6 +30,7 @@ The mobile UI is very broken. But this will be fixed *later*.
 * ### UI:
 
     - Notifications
+    - Replying to messages
 
 * ### API:
 
@@ -44,7 +45,7 @@ The mobile UI is very broken. But this will be fixed *later*.
 ### In progress:
 
 * ### UI:
-    - Replying to messages
+
     - Attachments
 
 ### Planned:
