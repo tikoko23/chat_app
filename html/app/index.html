@@ -16,6 +16,8 @@
     $$load_style[app_message]
     $$load_style[app_notification]
     $$load_style[app_reply]
+    $$load_style[app_msgbox_context]
+    $$load_style[app_attachment]
 </head>
 <body>
     <div id="load-ui-root" class="fully-fill dark-glass">
@@ -83,6 +85,9 @@
                 <div id="right-spacer"></div>
                 <div id="message-frame">
                     <div id="text-input">
+                        <div id="msg-box-context">
+                            <button id="upload-button">+</button>
+                        </div>
                         <textarea id="msg-box" class="fill-text-box highlight-text-box glass-text-box"></textarea>
                         <div id="send-frame">
                             <button id="send-message" class="color-button glass-bright-button">

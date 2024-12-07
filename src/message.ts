@@ -1,16 +1,15 @@
 import { QueryParameterSet } from "@sqlite";
-import { DB, MessageQueryResult, MAXIMUM_DB_FETCH_SIZE } from "./db.ts";
+import { DB, MAXIMUM_DB_FETCH_SIZE } from "./db.ts";
 import { fetchUser, userToResponse } from "./user.ts";
 import { sendSocketEvent, SOCKETS } from "./websocket.ts";
 import { fetchGroup, getMembersOfGroup, groupToResponse, isInGroup } from "./group.ts";
 
-import { Attachment, AttachmentType } from "./declarations/file-types.d.ts";
 import { BatchMessageFetchOptions, SQLiteDateRange } from "./declarations/db-types.d.ts";
 import { Group, Message, MessageContent, User } from "./declarations/object-types.d.ts";
 import { ResponseMessage } from "./declarations/response-types.d.ts";
-import { Optional } from "./types.ts";
+import { MessageQueryResult, Optional } from "./types.ts";
 
-export function createMessage(group: Group, sender: User, content: MessageContent, replyTo?: Optional<number>, attachments?: Attachment[]): Message {
+export function createMessage(group: Group, sender: User, content: MessageContent, replyTo?: Optional<number>, attachments: string[] = []): Message {
     if (!isInGroup(group, sender))
         throw new Error("Sender must be in the group");
 
@@ -27,11 +26,6 @@ export function createMessage(group: Group, sender: User, content: MessageConten
             throw new Error("Replied message must be in the same channel");
     }
 
-    let attachmentLinks: string[] = [];
-
-    if (attachments !== undefined)
-        attachmentLinks = attachments.map(a => a.path);
-
     const result = DB.queryEntries<MessageQueryResult>(
         "INSERT INTO messages (groupId, authorId, replyId, body, fullJson, attachments, editedAt, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now')) RETURNING *",
         [
@@ -40,7 +34,7 @@ export function createMessage(group: Group, sender: User, content: MessageConten
             replyTo,
             content.body,
             JSON.stringify(content),
-            JSON.stringify(attachmentLinks),
+            JSON.stringify(attachments),
             null
         ]
     );
@@ -163,17 +157,11 @@ export function parseMessageFromResult(result: MessageQueryResult): Message {
         };
     }
 
-    let attachments: Attachment[] | null = null;
+    let attachments: string[] = [];
 
-    if (result.attachments !== null) {
-        try {
-            const attachmentLinks: string[] = JSON.parse(result.attachments);
-
-            attachments = attachmentLinks.map(l => { return { path: l, type: getAttachmentTypeFromFilename(l) }; });
-        } catch (_e) {
-            attachments = null
-        }
-    }
+    try {
+        attachments = JSON.parse(result.attachments);
+    } catch (_) {/**/}
 
     return {
         id: Number(result.id),
@@ -185,34 +173,6 @@ export function parseMessageFromResult(result: MessageQueryResult): Message {
         attachments: attachments,
         editedAt: result.editedAt
     };
-}
-
-export function getAttachmentTypeFromFilename(name: string): AttachmentType {
-    const extension = name.substring(name.lastIndexOf("."));
-
-    switch (extension) {
-        case ".mp4":
-        case ".mov":
-            return "video";
-        case ".png":
-        case ".jpg":
-        case ".jpeg":
-            return "image";
-        case ".mp3":
-        case ".ogg":
-        case ".wav":
-            return "audio";
-        case ".txt":
-            return "text";
-        case ".zip":
-        case ".7z":
-        case ".rar":
-        case ".tar":
-        case ".gz":
-            return "archive";
-        default:
-            return "binary";
-    }
 }
 
 export function isMessageContent(object: unknown): object is MessageContent {

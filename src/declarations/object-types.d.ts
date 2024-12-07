@@ -1,5 +1,3 @@
-import { Attachment } from "./file-types.d.ts"
-
 export interface User {
     id: number,
     name: string,
@@ -30,6 +28,6 @@ export interface Message {
     replyId: number | null,
     content: MessageContent,
     createdAt: string | null,
-    attachments: Attachment[] | null,
+    attachments: string[],
     editedAt: string | null
 }

@@ -13,7 +13,7 @@ const USER_UPLOAD_SUBDIR    = getConfig<string>(`${CFG_PATHS.cdn}/user_upload_su
 const MAX_UPLOAD_SIZE_BYTES = getConfig<number>(`${CFG_PATHS.cdn}/max_upload_bytes`)    ?? 8388608;
 const MAX_FILENAME_LENGTH   = getConfig<number>(`${CFG_PATHS.cdn}/max_filename_length`) ?? 255;
 
-export async function serveFile(path: string, forcedMIME?: Optional<string>): Promise<Response> {
+export async function serveFile(path: string, forcedMIME?: Optional<string>, meta: boolean = false): Promise<Response> {
     if (/\.\.\/|\/\.\./.test(path))
         return new Response("Cannot target parent directory", { status: 400 });
 
@@ -27,9 +27,24 @@ export async function serveFile(path: string, forcedMIME?: Optional<string>): Pr
         return new Response("Resource not found", { status: 404 });
     }
 
+    if (meta) {
+        const stat = await Deno.lstat(path);
+        return new Response(
+            JSON.stringify({
+                length: stat.size
+            }),
+            {
+                status: 200
+            }
+        );
+    }
+
     const data = await Deno.readFile(path);
 
-    const responseHeaders: Record<string, string> = { "Content-Type": forcedMIME ?? getContentType(path) }
+    const responseHeaders: Record<string, string> = {
+        "Content-Type": forcedMIME ?? getContentType(path),
+        "Content-Length": String(data.length)
+    };
 
     if (DISABLE_FILE_CACHE)
         responseHeaders["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0";
@@ -45,7 +60,9 @@ export async function serveRequest(req: Request, root: string = CDN_ROOT): Promi
 
     const forcedMIME = url.searchParams.get("mime");
 
-    return await serveFile(`${root}${url.pathname}`, forcedMIME);
+    const filePath = `${root}${decodeURI(url.pathname)}`;
+
+    return await serveFile(filePath, forcedMIME, url.searchParams.get("meta") !== null);
 }
 
 export async function addFile(req: Request): Promise<Response> {
@@ -67,9 +84,9 @@ export async function addFile(req: Request): Promise<Response> {
     if (token === null || (data = fetchUser("token", token)) === null)
         return new Response("Invalid token", { status: 401 });
 
-    const path = url.searchParams.get("filename");
+    const path = url.searchParams.get("filename") ?? "upload";
 
-    const filename = sanitizeFilename(`${Date.now()}___${path ?? "upload"}`);
+    const filename = sanitizeFilename(`${Date.now()}___${decodeURIComponent(path)}`);
 
     const filePath = `${CDN_ROOT}/${USER_UPLOAD_SUBDIR}/${data.id}/${filename}`;
 
@@ -102,17 +119,17 @@ export async function addFile(req: Request): Promise<Response> {
     let totalBytes = 0;
     try {
         while (totalBytes <= MAX_UPLOAD_SIZE_BYTES) {
-            const data = await reader.read();
+            const { done, value } = await reader.read();
 
-            if (data.done)
+            if (done)
                 break;
 
-            if (!data.value)
+            if (!value)
                 continue;
 
-            totalBytes += data.value.byteLength;
+            totalBytes += value.byteLength;
 
-            await writeAll(writer, data.value);
+            await writeAll(writer, value);
         }
     } catch (error) {
         console.error(error);
@@ -124,13 +141,14 @@ export async function addFile(req: Request): Promise<Response> {
         writer.close();
     }
 
-
     if (totalBytes > MAX_UPLOAD_SIZE_BYTES) {
         await Deno.remove(filePath);
         return new Response("Maximum upload size is 8MiB", { status: 413 });
     }
 
-    return new Response(JSON.stringify({ path: filePath, status: "OK" }), { status: 200, headers: { "Location": filePath } });
+    const responsePath = encodeURI(filePath.replace(/^\./, ""));
+
+    return new Response(JSON.stringify({ path: responsePath, status: "OK" }), { status: 201, headers: { "Location": responsePath } });
 }
 
 function getContentType(path: string): MIMEType {

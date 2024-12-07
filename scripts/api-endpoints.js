@@ -6,6 +6,7 @@ export const ENDPOINTS = {
     group: `${API_PATH}/group`,
     user: `${API_PATH}/user`,
     message: `${API_PATH}/message`,
+    upload: `${API_PATH}/upload`,
     socket: "/socket"
 };
 

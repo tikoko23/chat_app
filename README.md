@@ -14,23 +14,19 @@ The mobile UI is very broken. But this will be fixed *later*.
 
 # **Features**
 
-### Fully implemented:
+### Implemented:
 
 * ### UI:
     - Dynamic message box
+    - Notifications
+    - Replying to messages
+    - Attachments
 
 * ### Server:
     - Config system
     - Argument parsing
     - Command system
     - Configurable serve root
-
-### Partially implemented:
-
-* ### UI:
-
-    - Notifications
-    - Replying to messages
 
 * ### API:
 
@@ -41,12 +37,6 @@ The mobile UI is very broken. But this will be fixed *later*.
 * ### Bindings:
 
     - Python
-
-### In progress:
-
-* ### UI:
-
-    - Attachments
 
 ### Planned:
 

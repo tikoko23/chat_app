@@ -17,19 +17,3 @@ export type MIMEType =
     | "video/mp4"
     | "video/mpeg"
     | "application/octet-stream";
-
-export type AttachmentType =
-    | "video"
-    | "audio"
-    | "image"
-    | "archive"
-    | "text"
-    | "binary";
-
-export interface File {
-    path: string
-}
-
-export interface Attachment extends File {
-    type: AttachmentType
-}

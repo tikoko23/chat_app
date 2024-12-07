@@ -1,7 +1,6 @@
 import { fetchGroup, getJoinedGroups } from "../../group.ts";
-import { isAttachment } from "../../literals.ts";
 import { createMessage, isMessageContent, messageToResponse } from "../../message.ts";
-import { EndpointMeta, Attachment, JSONValue } from "../../types.ts";
+import { EndpointMeta, JSONValue } from "../../types.ts";
 import { fetchUser, getTokenFromRequest } from "../../user.ts";
 
 const requestMeta: EndpointMeta = {
@@ -31,13 +30,10 @@ const requestMeta: EndpointMeta = {
         if (replyTo !== undefined && typeof replyTo !== "number")
             return new Response("Reply to must be a number if provided", { status: 400 });
 
-        if (!Array.isArray(attachments) || attachments.length === 0)
-            attachments = undefined;
+        if (!Array.isArray(attachments))
+            attachments = [];
 
-        const attachmentsInvalid = attachments !== undefined && !attachments.every(isAttachment);
-
-        if (attachmentsInvalid)
-            return new Response("Malformed attachment(s)", { status: 400 });
+        const sanitizedAttachments = attachments.filter(v => typeof v === "string");
 
         const group = fetchGroup("id", groupId);
 
@@ -54,7 +50,7 @@ const requestMeta: EndpointMeta = {
             user,
             messageContent,
             replyTo,
-            attachments as unknown as Attachment[]
+            sanitizedAttachments
         );
 
         return new Response(JSON.stringify(messageToResponse(message)), { status: 201 });

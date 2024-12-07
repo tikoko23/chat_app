@@ -1,6 +1,7 @@
 // deno-lint-ignore-file
 
 import { parseMarkdown } from "./app-message.js";
+import { getAttachmentHolder } from "./attachment-ui.js";
 import { getReplyEmbed, setRepliedMessage } from "./reply-ui.js";
 
 const contextHTML = `
@@ -71,9 +72,10 @@ export function getMessageHolder(groupId) {
  * @param {number} id
  * @param {HTMLElement} messageContainer Container to put the message in
  * @param {number?} replyTo
+ * @param {string[]} [attachments=[]]
  * @returns {{holder: HTMLElement, nameDisplay: HTMLElement, messageContent: HTMLElement[]}}
  */
-export function addMessage(sender, content, id, messageContainer, replyTo = undefined) {
+export function addMessage(sender, content, id, messageContainer, replyTo = undefined, attachments = []) {
     const holder = document.createElement("div");
     const body = document.createElement("div");
     const nameDisplay = document.createElement("span");
@@ -107,6 +109,11 @@ export function addMessage(sender, content, id, messageContainer, replyTo = unde
     }
 
     holder.appendChild(body);
+
+    if (attachments.length > 0)
+        getAttachmentHolder(attachments).then(h => {
+            holder.appendChild(h);
+        });
 
     paragraphHolder.innerHTML = sanitized;
     context.innerHTML = contextHTML;

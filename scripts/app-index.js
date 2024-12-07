@@ -9,6 +9,9 @@ import { sendMessage, getTextareaLineCount } from "./app-message.js";
 import { sendNotification } from "./app-notify.js";
 import { pingRegex } from "./regex.js";
 import { removeReplyPreview } from "./reply-ui.js";
+import "./msgbox-context-ui.js";
+import { attachments, clearAttachments } from "./attachment-ui.js";
+import { uploadFile } from "./app-file.js";
 
 window.repliedMessageId = null;
 window.thisUser = null;
@@ -55,7 +58,25 @@ async function parseAndSendMessage() {
 
     messageBox.value = "";
 
-    const message = await sendMessage(token, window.activeGroup, { body: contentBody }, undefined, window.repliedMessageId ?? undefined);
+    const uploadPromises = attachments.map(a => {
+        return uploadFile(a.file, token, e => {
+            const ratio = e.loaded / e.total;
+            const percent = ratio * 100;
+
+            a.progressBar.style.width = `${percent}%`;
+        });
+    });
+
+    const links = await Promise.all(uploadPromises);
+
+    const message = await sendMessage(
+        token,
+        window.activeGroup,
+        { body: contentBody },
+        links,
+        window.repliedMessageId ?? undefined,
+    );
+
     const messageHolder = getMessageHolder(window.activeGroup) ?? createMessageHolder(window.activeGroup);
 
     addMessage(
@@ -63,12 +84,14 @@ async function parseAndSendMessage() {
         contentBody,
         message.id,
         messageHolder,
-        window.repliedMessageId ?? undefined
+        window.repliedMessageId ?? undefined,
+        links
     );
 
     window.repliedMessageId = null;
 
     removeReplyPreview();
+    clearAttachments();
 }
 
 function updateMessageBoxHeight() {
