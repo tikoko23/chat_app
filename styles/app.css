@@ -38,3 +38,23 @@
     flex-direction: row;
     flex-wrap: nowrap;
 }
+
+.close-button {
+    background-color: transparent;
+    border-style: none;
+    border-radius: 40%;
+
+    font-size: larger;
+    font-weight: bolder;
+
+    max-width: 2em;
+    max-height: 2em;
+
+    line-height: 1em;
+
+    aspect-ratio: 1 / 1;
+}
+
+.close-button:hover {
+    background-color: #404040;
+}

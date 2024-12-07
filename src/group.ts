@@ -1,5 +1,5 @@
-import { DB, GroupQueryResult } from "./db.ts";
-import { Optional, ResponseGroup } from "./types.ts";
+import { DB } from "./db.ts";
+import { Optional, ResponseGroup, GroupQueryResult } from "./types.ts";
 import { Group, User } from "./types.ts";
 import { fetchUser, userToResponse } from "./user.ts";
 import { generateSalt } from "./crypt.ts";
@@ -145,4 +145,9 @@ export function groupToResponse(group: Group): ResponseGroup {
         name: group.name,
         owner: group.owner === null ? null : userToResponse(group.owner)
     };
+}
+
+export function deleteGroup(group: Group): void {
+    DB.query("DELETE FROM members WHERE groupId = ?", [ group.id ]);
+    DB.query("DELETE FROM groups WHERE id = ?", [ group.id ]);
 }

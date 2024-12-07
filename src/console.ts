@@ -57,7 +57,7 @@ export function initConsole() {
     })();
 }
 
-const commandNameRegex = RegExp(`^${COMMAND_PREFIX_REGEX}(?<commandName>[A-Za-z0-9_.]+)\\s*?(?<argString>.*)$`);
+const commandNameRegex = RegExp(`^${COMMAND_PREFIX_REGEX}(?<commandName>[A-Za-z0-9_.-]+)\\s*?(?<argString>.*)$`);
 export async function processCommand(line: string): Promise<number> {
     const result = commandNameRegex.exec(line);
 

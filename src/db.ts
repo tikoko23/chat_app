@@ -5,44 +5,6 @@ import { CFG_PATHS } from "./config-paths.ts";
 
 export const MAXIMUM_DB_FETCH_SIZE = getConfig<number>(`${CFG_PATHS.db}/max_fetch_size`) ?? 32;
 
-export type UserQueryResult = {
-    id: number,
-    name: string,
-    displayName: string | null,
-    email: string | null,
-    createdAt: string,
-    password: string,
-    passwordSalt: string,
-    token: string
-}
-
-export type GroupQueryResult = {
-    id: number,
-    name: string,
-    ownerId: number,
-    createdAt: string,
-    inviteLink: string
-}
-
-export type MemberQueryResult = {
-    groupId: number,
-    userId: number,
-    permissionLevel: number,
-    joinedAt: string
-}
-
-export type MessageQueryResult = {
-    id: number,
-    groupId: number,
-    authorId: number,
-    replyId: number,
-    createdAt: string,
-    body: string,
-    fullJson: string,
-    attachments: string | null,
-    editedAt: string | null
-}
-
 export let DB: SQLite.DB;
 
 export function makeDB(path: string, args?: SQLite.SqliteOptions): SQLite.DB {
@@ -123,7 +85,7 @@ export function initDefaultTables(DB: SQLite.DB): void {
             createdAt TEXT NOT NULL,
             body TEXT NOT NULL,
             fullJson TEXT NOT NULL,
-            attachments TEXT,
+            attachments TEXT NOT NULL,
             editedAt TEXT
         )
     `);

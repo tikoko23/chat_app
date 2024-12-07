@@ -32,9 +32,12 @@ export function getReplyPreview(name, content = "") {
     pHolder.innerHTML = content;
 
     const closeButton = document.createElement("button");
-    closeButton.classList.add("reply-close-button");
+    closeButton.classList.add("close-button");
     closeButton.textContent = "×";
-    closeButton.addEventListener("click", removeReplyPreview);
+    closeButton.addEventListener("click", () => {
+        removeReplyPreview();
+        window.repliedMessageId = null;
+    });
 
     replyPreview.appendChild(replyToLabel);
     replyPreview.appendChild(nameDisplay);

@@ -1,5 +1,4 @@
 export const MOTD = [
-    "I have no idea what the site name should be",
     "¯\\\\_(ツ)\\_/¯",
     "Uhh.. I have nothing else so here is a link for you: [tikoko-dev.site/info/groups](http://tikoko-dev.site/info/groups)",
     "Okay.",

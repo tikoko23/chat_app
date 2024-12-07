@@ -32,24 +32,6 @@
     margin-right: 20px;
 }
 
-.reply-close-button {
-    background-color: transparent;
-    border-style: none;
-    border-radius: 40%;
-
-    font-size: larger;
-    font-weight: bolder;
-
-    max-width: 2em;
-    max-height: 2em;
-
-    aspect-ratio: 1 / 1;
-}
-
-.reply-close-button:hover {
-    background-color: #404040;
-}
-
 .reply-embed {
     width: 100%;
     margin-top: 5px;

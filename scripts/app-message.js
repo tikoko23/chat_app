@@ -21,11 +21,11 @@ export function parseMarkdown(text) {
  * @param {string} token
  * @param {number} groupId
  * @param {{body: string}} messageContent
- * @param {string[]} [attachments=undefined]
+ * @param {string[]} [attachments=[]]
  * @param {number} [replyTo=undefined]
  * @returns {Promise<ResponseMessage>}
  */
-export async function sendMessage(token, groupId, messageContent, attachments = undefined, replyTo = undefined) {
+export async function sendMessage(token, groupId, messageContent, attachments = [], replyTo = undefined) {
     const result = await fetchJSON(`${ENDPOINTS.message}/create`, {
         method: "POST",
         headers: { "Authorization": token },

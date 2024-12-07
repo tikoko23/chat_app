@@ -27,7 +27,7 @@ export async function appLogin() {
 
     // Valid token
     if (result.response.status === 200 && result.obj) {
-        window.thisUser = result.obj;
+        window.thisUser = { token: token, ...result.obj };
 
         progress.textContent = "Setting up groups...";
         const success = await setupGroups(token);

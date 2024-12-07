@@ -3,6 +3,9 @@ import { getConfig } from "./config.ts";
 import { CommandArgs, CommandWriter } from "./declarations/command-types.d.ts";
 import { ConsoleCommandMeta } from "./declarations/meta-types.d.ts";
 import { parseHtml } from "./html.ts";
+import { createGroup, deleteGroup, fetchGroup } from "./group.ts";
+import { Group, User } from "./types.ts";
+import { fetchUser } from "./user.ts";
 
 export const COMMAND_PREFIX_REGEX = getConfig<string>(`${CFG_PATHS.commands}/prefix_regex`) ?? "";
 export const COMMAND_PREFIX       = getConfig<string>(`${CFG_PATHS.commands}/prefix`)       ?? "!";
@@ -55,7 +58,7 @@ CONSOLE_COMMANDS["help"] = {
         "help",
         "help help"
     ]
-}
+};
 
 CONSOLE_COMMANDS["exit"] = {
     commandType: "exec",
@@ -64,7 +67,7 @@ CONSOLE_COMMANDS["exit"] = {
     },
     summary: "Exits the program",
     argumentsDescription: "No arguments"
-}
+};
 
 CONSOLE_COMMANDS["clear"] = {
     commandType: "output",
@@ -73,7 +76,7 @@ CONSOLE_COMMANDS["clear"] = {
     },
     summary: "Clears the screen",
     argumentsDescription: "No arguments"
-}
+};
 
 CONSOLE_COMMANDS["pages"] = {
     commandType: "output",
@@ -89,5 +92,87 @@ CONSOLE_COMMANDS["pages"] = {
     argumentsDescription: "pages [-r, --reload]",
     examples: [
         "pages -r"
+    ]
+};
+
+CONSOLE_COMMANDS["mk-group"] = {
+    commandType: "output",
+    exec: async (args: CommandArgs, output: CommandWriter) => {
+        if (args._[0] === undefined) {
+            await output.write("Argument 1 must be provided\n");
+            return;
+        }
+
+        let owner: User | null = null;
+
+        if (args["-o"] || args["--owner"])
+            owner = fetchUser("id", args["-o"] || args["--owner"]);
+
+        createGroup(String(args._[0]), owner);
+    },
+    summary: "Creates a group with the first argument as the name and optionally the owner",
+    argumentsDescription: "mk-group <name> [-o, --owner] params...",
+    examples: [
+        "mk-group new_group",
+        "mk-group new_group -o 23",
+    ]
+};
+
+CONSOLE_COMMANDS["rm-group"] = {
+    commandType: "output",
+    exec: async (args: CommandArgs, output: CommandWriter) => {
+        const id = Number(args._[0]);
+
+        if (id === undefined || isNaN(id)) {
+            await output.write("Argument 1 must be provided\n");
+            return;
+        }
+
+        const group = fetchGroup("id", id);
+
+        if (group === null) {
+            await output.write("Group not found\n");
+            return;
+        }
+
+        deleteGroup(group);
+    },
+    summary: "Deletes a group",
+    argumentsDescription: "rm-group <id>",
+    examples: [
+        "rm-group 23"
+    ]
+};
+
+CONSOLE_COMMANDS["show-group"] = {
+    commandType: "output",
+    exec: async (args: CommandArgs, output: CommandWriter) => {
+        let group: Group | null = null;
+
+        if (args["n"] || args["name"])
+            group = fetchGroup("name", String(args["n"] || args["name"]))
+        else {
+            const id = Number(args._[0]) || -1;
+
+            if (id === -1) {
+                await output.write("First argument must be a number if name isn't provided\n");
+                return;
+            }
+
+            group = fetchGroup("id", id)
+        }
+
+        if (group === null) {
+            await output.write("Group not found\n");
+            return;
+        }
+
+        output.write(`Id: ${group.id}\nName: ${group.name}\nOwner: ${group.owner}\nInvite Link: ${group.inviteLink}\nCreated at: ${group.createdAt}\n`);
+    },
+    summary: "Returns the information about a group",
+    argumentsDescription: "show-group <id?> [-n, --name]?",
+    examples: [
+        "show-group 23",
+        "show-group -n group_name",
     ]
 }

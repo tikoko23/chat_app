@@ -1,5 +1,6 @@
 import { getCookies } from "@std/http";
-import { DB, UserQueryResult } from "./db.ts";
+import { DB } from "./db.ts";
+import { UserQueryResult } from "./types.ts";
 import { generateSalt, hashString } from "./crypt.ts";
 import { User, Optional, ResponseUser } from "./types.ts";
 import { generateAccessToken } from "./api/user/get-access-token.ts";
